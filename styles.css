@@ -2112,6 +2112,62 @@ body {
   justify-content: center;
 }
 
+/* Auth WhatsApp Registration Section */
+.auth-register-box {
+  margin-top: 1.3rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed var(--border-glass);
+  text-align: center;
+}
+
+.register-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.6rem;
+}
+
+.register-divider span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.register-note {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+  line-height: 1.45;
+}
+
+.btn-wa-register {
+  width: 100%;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #ffffff !important;
+  border: 1px solid rgba(37, 211, 102, 0.5);
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all var(--trans-normal);
+  cursor: pointer;
+}
+
+.btn-wa-register:hover {
+  background: linear-gradient(135deg, #2bf075, #15a594);
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.55);
+  transform: translateY(-2px);
+  color: #ffffff !important;
+}
+
 /* Auth Demo Badges */
 .auth-hints {
   margin-top: 1.5rem;

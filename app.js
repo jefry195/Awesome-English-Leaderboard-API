@@ -3239,11 +3239,11 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
 
       this.dom.result.submitBtn.disabled = false;
-      this.dom.result.submitBtn.textContent = '✓ Tersimpan di Google Sheets!';
+      this.dom.result.submitBtn.textContent = '✓ Tersimpan di Database!';
       this.dom.result.statusMsg.textContent = `${result.message} Skor Anda aman dan akan berlanjut besok.`;
       this.dom.result.statusMsg.className = 'status-message success';
 
-      this.showToast('✓ Progres berhasil disinkronkan ke Google Sheets!', 'success');
+      this.showToast('✓ Progres berhasil disinkronkan ke Cloud Database!', 'success');
     }
 
     /* ==========================================================================
@@ -3279,7 +3279,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     async loadLeaderboardData() {
-      this.dom.modals.tbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil ranking dari Google Sheets...</td></tr>';
+      this.dom.modals.tbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil ranking dari Cloud Database...</td></tr>';
 
       const res = await LeaderboardService.fetchLeaderboard();
       this.dom.modals.syncStatus.textContent = res.source;
@@ -3309,7 +3309,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     async loadMemoryData() {
-      this.dom.modals.memoryTbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil riwayat memori belajar dari Google Sheets...</td></tr>';
+      this.dom.modals.memoryTbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil riwayat memori belajar...</td></tr>';
 
       const res = await LeaderboardService.fetchMemory();
       this.dom.modals.syncStatus.textContent = res.source;

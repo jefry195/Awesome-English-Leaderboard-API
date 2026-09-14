@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Awesome English Arena - Interactive English Learning Game featuring Voice Shadowing with Mic, Listening Dictation, Grammar Quest, Gemini AI Teacher & Examiner, and Live Excel Leaderboard.">
-  <meta name="keywords" content="English learning game, shadowing speaking, speech recognition mic, Gemini AI English teacher, Google Sheets leaderboard, awesome english">
+  <meta name="description" content="Awesome English Arena - Interactive English Learning Game featuring Voice Shadowing with Mic, Listening Dictation, Grammar Quest, Smart AI Teacher & Examiner, and Live Global Leaderboard.">
+  <meta name="keywords" content="English learning game, shadowing speaking, speech recognition mic, AI English teacher, cloud leaderboard, awesome english">
   <meta name="author" content="Build With Jefri - Awesome English">
   <title>Awesome English Arena | Voice Shadowing & AI English Challenge</title>
   
@@ -63,13 +63,13 @@
     <section id="landing-view" class="view-section active">
       <div class="hero-content">
         <div class="pill-badge">
-          <span class="pill-dot"></span> Powered by Awesome English Curated Resources & Gemini AI
+          <span class="pill-dot"></span> Powered by Awesome English Curated Resources & Smart AI
         </div>
         <h1 class="hero-headline">
           Master Spoken English with <span class="gradient-text">Voice Mic & AI Teacher</span>
         </h1>
         <p class="hero-subline">
-          Train your accent through real-time <strong>Speech Shadowing</strong>, conquer <strong>Listening Dictation</strong>, and test your vocabulary with live feedback from <strong>Gemini AI Examiner</strong>. Compete on the global <strong>Google Sheets / Excel Leaderboard</strong>!
+          Train your accent through real-time <strong>Speech Shadowing</strong>, conquer <strong>Listening Dictation</strong>, and test your vocabulary with live feedback from <strong>Smart AI Examiner</strong>. Compete on the global <strong>Live Cloud Leaderboard</strong>!
         </p>
 
         <!-- Quick Stats Banner -->
@@ -87,8 +87,8 @@
             <span class="stat-label">Teacher & Examiner</span>
           </div>
           <div class="stat-card">
-            <span class="stat-number">📊 Sheets</span>
-            <span class="stat-label">Excel Live Database</span>
+            <span class="stat-number">🏆 Rank</span>
+            <span class="stat-label">Live Cloud Leaderboard</span>
           </div>
         </div>
 
@@ -319,7 +319,7 @@
             <!-- AI Teacher & Examiner Comments -->
             <div class="ai-comment-card" id="ai-comment-card">
               <div class="ai-card-title">
-                <span class="ai-sparkle">✨</span> Gemini AI Teacher Feedback:
+                <span class="ai-sparkle">✨</span> Smart AI Teacher Feedback:
               </div>
               <div class="ai-card-body" id="ai-feedback-text">
                 Analyzing your response...
@@ -380,8 +380,8 @@
 
         <!-- Submit to Leaderboard Form -->
         <div class="leaderboard-submit-box">
-          <h3 class="submit-box-title">Sinkronisasi ke Live Google Sheets</h3>
-          <p class="submit-box-desc">Skor tersimpan ke sheet <strong>Users</strong> (total akumulasi), <strong>Leaderboard</strong> (peringkat sesi), dan <strong>Memory</strong>.</p>
+          <h3 class="submit-box-title">Sinkronisasi ke Cloud Leaderboard</h3>
+          <p class="submit-box-desc">Skor tersimpan ke profil akumulasi, <strong>Leaderboard</strong> peringkat sesi, dan <strong>Memory Belajar</strong>.</p>
           <div class="submit-input-row">
             <input type="text" id="player-name-input" class="form-control" placeholder="Nama / Nickname Anda" maxlength="30" required>
             <button id="btn-submit-leaderboard" class="btn btn-primary">
@@ -410,7 +410,7 @@
           <span class="modal-icon">🔐</span>
           <div>
             <h3 class="modal-title">Akses Khusus Member</h3>
-            <p class="modal-subtitle">Login dengan email & password yang telah diberikan izin oleh Jefri (Admin)</p>
+            <p class="modal-subtitle">Login dengan email & password yang telah didaftarkan oleh Jefri (Admin)</p>
           </div>
         </div>
         <button class="btn-close-modal" id="btn-close-auth" aria-label="Close">&times;</button>
@@ -418,7 +418,7 @@
       <div class="modal-body">
         <div class="auth-info-banner">
           <span class="info-icon">💡</span>
-          <span>Hanya akun yang terdaftar di Google Sheets yang dapat bermain. Skor Anda diakumulasikan dan tidak akan hilang saat lanjut besok!</span>
+          <span>Hanya akun member terdaftar yang dapat bermain. Skor Anda otomatis tersimpan & diakumulasikan sehingga tidak akan hilang saat lanjut besok!</span>
         </div>
 
         <form id="auth-form" class="auth-form">
@@ -447,7 +447,18 @@
           </div>
         </form>
 
+        <!-- Registrasi / Kontak WhatsApp Jefri -->
+        <div class="auth-register-box">
+          <div class="register-divider">
+            <span>Belum Punya Akun?</span>
+          </div>
+          <p class="register-note">Untuk pendaftaran akun baru, hubungi langsung Jefri via WhatsApp:</p>
+          <a href="https://wa.me/6282354506569?text=Halo%20Jefri,%20saya%20ingin%20mendaftar%20akun%20member%20Awesome%20English%20Arena" target="_blank" rel="noopener noreferrer" class="btn btn-wa-register">
+            <span class="btn-icon">💬</span> Hubungi Jefri (WA: 082354506569)
+          </a>
         </div>
+
+      </div>
     </div>
   </div>
 
@@ -458,8 +469,8 @@
         <div class="modal-title-row">
           <span class="modal-icon">🏆</span>
           <div>
-            <h3 class="modal-title">Live Spreadsheet Database & Memory</h3>
-            <p class="modal-subtitle">Database synced with Google Sheets & Microsoft Excel (.xlsx)</p>
+            <h3 class="modal-title">Live Cloud Leaderboard & Memory</h3>
+            <p class="modal-subtitle">Peringkat global dan rekap rekaman latihan siswa secara real-time</p>
           </div>
         </div>
         <button class="btn-close-modal" id="btn-close-leaderboard" aria-label="Close">&times;</button>
@@ -468,14 +479,14 @@
         <!-- Tab Navigation -->
         <div class="modal-tabs">
           <button type="button" class="modal-tab-btn active" id="tab-leaderboard-btn">🏆 Top Leaderboard</button>
-          <button type="button" class="modal-tab-btn" id="tab-memory-btn">🧠 Memory Belajar (Google Sheets)</button>
+          <button type="button" class="modal-tab-btn" id="tab-memory-btn">🧠 Memory Belajar</button>
         </div>
 
         <div class="leaderboard-toolbar">
           <button id="btn-refresh-leaderboard" class="btn btn-secondary btn-sm">
             🔄 Refresh Data
           </button>
-          <span class="sync-indicator" id="leaderboard-sync-status">Connected to Sheets Database</span>
+          <span class="sync-indicator" id="leaderboard-sync-status">Connected to Cloud Database</span>
         </div>
         
         <!-- Table 1: Leaderboard Rankings -->
@@ -514,7 +525,7 @@
             </thead>
             <tbody id="memory-tbody">
               <tr>
-                <td colspan="6" class="loading-row">Loading learning memory from Google Sheets...</td>
+                <td colspan="6" class="loading-row">Loading learning memory from Cloud Database...</td>
               </tr>
             </tbody>
           </table>
@@ -531,7 +542,7 @@
           <span class="modal-icon">⚙️</span>
           <div>
             <h3 class="modal-title">Configuration & Integrations</h3>
-            <p class="modal-subtitle">Setup Google Apps Script URL & Gemini AI Free API Key</p>
+            <p class="modal-subtitle">Setup Database Webhook & AI Engine API</p>
           </div>
         </div>
         <button class="btn-close-modal" id="btn-close-settings" aria-label="Close">&times;</button>
@@ -541,22 +552,22 @@
           <!-- Apps Script URL -->
           <div class="form-group">
             <label for="cfg-appscript-url" class="form-label">
-              Google Apps Script Web App URL (Database & Memory):
+              Cloud Database API Webhook URL:
             </label>
             <input type="url" id="cfg-appscript-url" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
             <small class="form-hint">
-              Follow setup instructions in <code>game/appscript/README.md</code> to deploy your free Google Sheets backend. If left empty, local mock database is used.
+              Endpoint cloud database leaderboard & memory. Jika dikosongkan, local mock database akan digunakan.
             </small>
           </div>
 
-          <!-- Gemini API Key -->
+          <!-- AI Key -->
           <div class="form-group">
             <label for="cfg-gemini-key" class="form-label">
-              Google Gemini API Free Key (Optional In-Game AI Teacher & Examiner):
+              AI Engine API Key (Opsional untuk AI Teacher & Examiner):
             </label>
             <input type="password" id="cfg-gemini-key" class="form-control" placeholder="AIzaSy...">
             <small class="form-hint">
-              Optional: Uses model <code>gemini-3-flash-preview</code>. If left empty, offline phonetic matcher and your private Gemini Canvas memory workflow run 100% free!
+              Opsional: Jika dikosongkan, engine pengenal & penilai fonetik lokal bawaan tetap berjalan 100% gratis!
             </small>
           </div>
 
