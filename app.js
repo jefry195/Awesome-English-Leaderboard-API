@@ -2897,12 +2897,18 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         });
       });
 
+      // Baseline history state on load so phone back button has an anchor
+      if (window.history && window.history.replaceState && !window.history.state) {
+        window.history.replaceState({ arenaView: 'landing' }, '');
+      }
+
       // Quit Game - langsung kembali tanpa popup
       document.getElementById('btn-quit-game').addEventListener('click', () => {
         this.speech.stopListening();
-        this.switchView('landing', false);
-        if (window.history.state && window.history.state.arenaView) {
+        if (window.history.state && window.history.state.arenaView === 'game') {
           window.history.back();
+        } else {
+          this.switchView('landing', false);
         }
       });
 
@@ -2958,7 +2964,13 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       // Result Actions
       this.dom.result.playAgainBtn.addEventListener('click', () => this.startArena(this.currentMode));
-      this.dom.result.homeBtn.addEventListener('click', () => this.switchView('landing'));
+      this.dom.result.homeBtn.addEventListener('click', () => {
+        if (window.history.state && (window.history.state.arenaView === 'game' || window.history.state.arenaView === 'result')) {
+          window.history.back();
+        } else {
+          this.switchView('landing', false);
+        }
+      });
       this.dom.result.viewLeaderboardBtn.addEventListener('click', () => this.openLeaderboard());
       this.dom.result.submitBtn.addEventListener('click', () => this.submitScoreToLeaderboard());
 
