@@ -1,0 +1,145 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-09-14",
+  "source": "https://github.com/jefry195/Awesome-English-Leaderboard-API",
+  "questions": [
+    {
+      "id": "q1",
+      "category": "Everyday & Business Speaking",
+      "level": "Intermediate",
+      "en": "Could you please elaborate on that perspective?",
+      "phonetic": "/kʊd juː pliːz ɪˈlæb.ə.reɪt ɒn ðæt pəˈspek.tɪv/",
+      "id_translation": "Bisakah Anda menjelaskan lebih rinci mengenai sudut pandang tersebut?",
+      "id_prompt": "Ucapkan dalam Bahasa Inggris: 'Bisakah Anda menjelaskan lebih rinci mengenai sudut pandang tersebut?'",
+      "en_prompt": "Translate to Indonesian: 'Could you please elaborate on that perspective?'",
+      "options_id": [
+        "Bisakah Anda menjelaskan lebih rinci mengenai sudut pandang tersebut?",
+        "Apakah Anda setuju dengan jadwal pertemuan besok?",
+        "Tolong kirimkan dokumen laporan segera.",
+        "Bisakah kita mengubah waktu rapat?"
+      ],
+      "options_en": [
+        "Could you please elaborate on that perspective?",
+        "Would you please send the report tomorrow?",
+        "Can we reschedule the meeting later?",
+        "Do you agree with our proposal?"
+      ],
+      "notes": "Linking sound antara 'elaborate' dan 'on' (/ɪˈlæbəreɪt‿ɒn/)."
+    },
+    {
+      "id": "q2",
+      "category": "Tech & AI Discussion",
+      "level": "Advanced",
+      "en": "Artificial intelligence is fundamentally transforming how developers write code.",
+      "phonetic": "/ˌɑː.tɪˈfɪʃ.əl ɪnˈtel.ɪ.dʒəns ɪz ˌfʌn.dəˈmen.təl.i trænsˈfɔː.mɪŋ/",
+      "id_translation": "Kecerdasan buatan secara fundamental mengubah cara para pengembang menulis kode.",
+      "id_prompt": "Ucapkan dalam Bahasa Inggris: 'Kecerdasan buatan secara fundamental mengubah cara para pengembang menulis kode.'",
+      "en_prompt": "Translate to Indonesian: 'Artificial intelligence is fundamentally transforming how developers write code.'",
+      "options_id": [
+        "Kecerdasan buatan secara fundamental mengubah cara para pengembang menulis kode.",
+        "Komputer modern membutuhkan memori yang sangat besar untuk bekerja.",
+        "Programmer harus belajar bahasa pemrograman baru setiap tahun.",
+        "Teknologi internet mempercepat komunikasi antar kantor."
+      ],
+      "options_en": [
+        "Artificial intelligence is fundamentally transforming how developers write code.",
+        "Modern computers require vast memory to operate efficiently.",
+        "Programmers must study new programming languages yearly.",
+        "Internet technology speeds up office communications."
+      ],
+      "notes": "Penekanan pada suku kata fun-da-MEN-tal-ly dan trans-FORM-ing."
+    },
+    {
+      "id": "q3",
+      "category": "Mindset & Growth",
+      "level": "Intermediate",
+      "en": "Curiosity and perseverance are far more important than raw talent.",
+      "phonetic": "/ˌkjʊə.riˈɒs.ə.ti ænd ˌpɜː.sɪˈvɪə.rəns ɑː fɑː mɔːr ɪmˈpɔː.tənt/",
+      "id_translation": "Rasa ingin tahu dan kegigihan jauh lebih penting daripada bakat semata.",
+      "id_prompt": "Ucapkan dalam Bahasa Inggris: 'Rasa ingin tahu dan kegigihan jauh lebih penting daripada bakat semata.'",
+      "en_prompt": "Translate to Indonesian: 'Curiosity and perseverance are far more important than raw talent.'",
+      "options_id": [
+        "Rasa ingin tahu dan kegigihan jauh lebih penting daripada bakat semata.",
+        "Bakat alami selalu mengalahkan kerja keras dalam jangka panjang.",
+        "Pendidikan formal adalah kunci utama kesuksesan karir.",
+        "Kita harus selalu bersemangat setiap pagi."
+      ],
+      "options_en": [
+        "Curiosity and perseverance are far more important than raw talent.",
+        "Natural talent always defeats hard work in the long run.",
+        "Formal education is the primary key to career success.",
+        "We should always stay motivated every single morning."
+      ],
+      "notes": "Pengucapan 'perseverance' (/ˌpɜː.sɪˈvɪə.rəns/)."
+    },
+    {
+      "id": "q4",
+      "category": "Daily Idioms",
+      "level": "Beginner",
+      "en": "Let us touch base tomorrow afternoon to finalize the schedule.",
+      "phonetic": "/let ʌs tʌtʃ beɪs təˈmɒr.əʊ ˌɑːf.təˈnuːn tuː ˈfaɪ.nəl.aɪz/",
+      "id_translation": "Mari kita saling berkabar besok siang untuk menyelesaikan jadwalnya.",
+      "id_prompt": "Ucapkan dalam Bahasa Inggris: 'Mari kita saling berkabar besok siang untuk menyelesaikan jadwalnya.'",
+      "en_prompt": "Translate to Indonesian: 'Let us touch base tomorrow afternoon to finalize the schedule.'",
+      "options_id": [
+        "Mari kita saling berkabar besok siang untuk menyelesaikan jadwalnya.",
+        "Jangan lupa membawa dokumen penting besok pagi.",
+        "Pertemuan dibatalkan karena ada kendala teknis.",
+        "Kita harus segera memesan tiket penerbangan."
+      ],
+      "options_en": [
+        "Let us touch base tomorrow afternoon to finalize the schedule.",
+        "Do not forget to bring the important documents tomorrow morning.",
+        "The meeting was cancelled due to technical issues.",
+        "We must immediately book our flight tickets."
+      ],
+      "notes": "Idiom 'touch base' berarti saling kontak atau berdiskusi singkat."
+    },
+    {
+      "id": "q5",
+      "category": "BBC Learning English • Motivation",
+      "level": "Intermediate",
+      "en": "It is vital to step out of your comfort zone to achieve real progress.",
+      "phonetic": "/ɪt ɪz ˈvaɪ.təl tuː step aʊt ɒv jɔː ˈkʌm.fət zəʊn/",
+      "id_translation": "Sangat penting untuk keluar dari zona nyaman Anda demi mencapai kemajuan nyata.",
+      "id_prompt": "Ucapkan dalam Bahasa Inggris: 'Sangat penting untuk keluar dari zona nyaman Anda demi mencapai kemajuan nyata.'",
+      "en_prompt": "Translate to Indonesian: 'It is vital to step out of your comfort zone to achieve real progress.'",
+      "options_id": [
+        "Sangat penting untuk keluar dari zona nyaman Anda demi mencapai kemajuan nyata.",
+        "Zona nyaman adalah tempat terbaik untuk belajar keterampilan baru.",
+        "Kemajuan hanya bisa dicapai jika kita bekerja tanpa henti.",
+        "Tetaplah berada di posisi Anda yang sekarang agar aman."
+      ],
+      "options_en": [
+        "It is vital to step out of your comfort zone to achieve real progress.",
+        "A comfort zone is the best place to learn new skills.",
+        "Progress can only be achieved if we work non-stop.",
+        "Stay in your current safe position to avoid failure."
+      ],
+      "notes": "Bunyi 'vital' dilafalkan /ˈvaɪ.təl/."
+    },
+    {
+      "id": "q6",
+      "category": "Listening Dictation • Travel & Numbers",
+      "level": "Intermediate",
+      "en": "The flight arrives at gate twenty-four at seven fifteen PM.",
+      "phonetic": "/ðə flaɪt əˈraɪvz æt ɡeɪt ˈtwen.ti fɔːr æt ˈsev.ən fɪfˈtiːn/",
+      "id_translation": "Penerbangan tiba di gerbang dua puluh empat pada pukul tujuh lima belas malam.",
+      "id_prompt": "Ucapkan dalam Bahasa Inggris: 'Penerbangan tiba di gerbang dua puluh empat pada pukul tujuh lima belas malam.'",
+      "en_prompt": "Dengarkan audio dan terjemahkan: 'The flight arrives at gate twenty-four at seven fifteen PM.'",
+      "options_id": [
+        "Penerbangan tiba di gerbang dua puluh empat pada pukul tujuh lima belas malam.",
+        "Penerbangan ditunda hingga pukul delapan malam di gerbang empat belas.",
+        "Kereta api berangkat dari peron empat pada jam tujuh pagi.",
+        "Penerbangan telah dibatalkan oleh pihak maskapai."
+      ],
+      "options_en": [
+        "The flight arrives at gate twenty-four at seven fifteen PM.",
+        "The flight is delayed until eight PM at gate fourteen.",
+        "The train departs from platform four at seven AM.",
+        "The airline company has cancelled the flight."
+      ],
+      "notes": "Angka 'twenty-four' dan jam 'seven fifteen PM'."
+    }
+  ]
+}

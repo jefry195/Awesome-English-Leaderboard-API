@@ -1,177 +1,207 @@
 /**
  * ============================================================================
- * AWESOME ENGLISH LEADERBOARD API (Google Apps Script Backend)
+ * AWESOME ENGLISH LEADERBOARD & LEARNING MEMORY API (Google Apps Script)
  * ============================================================================
  * Repository: https://github.com/jefry195/Awesome-English-Leaderboard-API
  * Database: Google Sheets (Dapat diekspor ke Microsoft Excel .xlsx kapan saja)
  * 
  * Fitur:
- * 1. Auto-setup & Anti-Duplikasi Sheet:
- *    - Otomatis membuat/mengubah nama sheet menjadi "Leaderboard".
- *    - Tidak membuat sheet ganda jika sudah ada.
- * 2. Anti-Duplikasi Header:
- *    - Memeriksa baris 1 terlebih dahulu. Header hanya dibuat sekali.
- * 3. Menu Kustom di Toolbar Google Sheets:
- *    - "⚡ Awesome English > Inisialisasi / Periksa Database".
- * 4. API Endpoints:
- *    - GET: Mengambil daftar Top Leaderboard terurut (JSON).
- *    - POST: Menyimpan data skor & akurasi baru ke database (JSON).
- * 5. Full CORS Support:
- *    - Dapat dipanggil dari website, game, atau mobile app manapun.
+ * 1. Sheet "Leaderboard": Menyimpan skor global, ranking, level, dan akurasi.
+ * 2. Sheet "Memory": Menyimpan memori riwayat belajar personal (kalimat yang dilatih,
+ *    arah bahasa ID->EN / EN->ID, transkrip suara pengguna, dan catatan guru AI).
+ * 3. Anti-Duplikasi Cerdas: Sheet & header tidak akan pernah terduplikasi.
+ * 4. doGet Support:
+ *    - ?action=leaderboard  -> Mengambil Top Leaderboard (JSON).
+ *    - ?action=memory       -> Mengambil riwayat memori belajar untuk index.html & Gemini Canvas.
+ * 5. doPost Support:
+ *    - Menyimpan skor leaderboard dan riwayat latihan ke sheet Memory.
+ * 6. Full CORS Support: Bisa dipanggil langsung dari Web, Canvas, atau cURL.
  */
 
-const SHEET_NAME = "Leaderboard";
-const HEADERS = ["Timestamp", "Player Name", "Game Mode", "Score", "Accuracy (%)", "Level", "Notes"];
-const MAX_LEADERBOARD_ENTRIES = 50;
+const LEADERBOARD_SHEET_NAME = "Leaderboard";
+const MEMORY_SHEET_NAME = "Memory";
+
+const LEADERBOARD_HEADERS = ["Timestamp", "Player Name", "Game Mode", "Score", "Accuracy (%)", "Level", "Notes"];
+const MEMORY_HEADERS = ["Timestamp", "Player Name", "Direction", "Prompt / Target", "User Response", "Accuracy (%)", "AI Teacher Notes"];
+
+const MAX_ENTRIES = 50;
 
 /**
- * Mendapatkan sheet Leaderboard atau membuatnya secara otomatis tanpa duplikasi sheet/header
+ * Mendapatkan sheet Leaderboard dengan anti-duplikasi
  */
-function getOrCreateSheet() {
+function getLeaderboardSheet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(SHEET_NAME);
+  let sheet = ss.getSheetByName(LEADERBOARD_SHEET_NAME);
 
-  // 1. Logika Anti-Duplikasi Sheet:
   if (!sheet) {
     const allSheets = ss.getSheets();
-    // Jika hanya ada 1 sheet default (misal "Sheet1") dan masih kosong, ubah namanya langsung
     if (allSheets.length === 1 && allSheets[0].getLastRow() === 0) {
       sheet = allSheets[0];
-      sheet.setName(SHEET_NAME);
+      sheet.setName(LEADERBOARD_SHEET_NAME);
     } else {
-      sheet = ss.insertSheet(SHEET_NAME);
+      sheet = ss.insertSheet(LEADERBOARD_SHEET_NAME);
     }
   }
 
-  // 2. Logika Anti-Duplikasi Header:
+  ensureHeader(sheet, LEADERBOARD_HEADERS, "#1e293b", "#f8fafc");
+  return sheet;
+}
+
+/**
+ * Mendapatkan sheet Memory dengan anti-duplikasi
+ */
+function getMemorySheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(MEMORY_SHEET_NAME);
+
+  if (!sheet) {
+    sheet = ss.insertSheet(MEMORY_SHEET_NAME);
+  }
+
+  ensureHeader(sheet, MEMORY_HEADERS, "#312e81", "#e0e7ff");
+  return sheet;
+}
+
+/**
+ * Helper verifikasi header anti-duplikasi
+ */
+function ensureHeader(sheet, headers, bgColor, fontColor) {
   const lastRow = sheet.getLastRow();
   let hasHeader = false;
 
   if (lastRow > 0) {
     try {
-      const firstCellValue = sheet.getRange(1, 1).getValue();
-      if (firstCellValue && String(firstCellValue).trim().toLowerCase() === "timestamp") {
+      const firstCell = sheet.getRange(1, 1).getValue();
+      if (firstCell && String(firstCell).trim().toLowerCase() === "timestamp") {
         hasHeader = true;
       }
-    } catch (err) {
+    } catch (e) {
       hasHeader = false;
     }
   }
 
-  // Hanya buat header jika belum ada
   if (!hasHeader) {
     if (lastRow === 0) {
-      sheet.appendRow(HEADERS);
+      sheet.appendRow(headers);
     } else {
       sheet.insertRowBefore(1);
-      sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
     }
 
-    // Styling & Format Header
-    const headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
-    headerRange.setFontWeight("bold");
-    headerRange.setBackground("#1e293b"); // Slate dark
-    headerRange.setFontColor("#f8fafc"); // White slate
-    headerRange.setHorizontalAlignment("center");
+    const range = sheet.getRange(1, 1, 1, headers.length);
+    range.setFontWeight("bold");
+    range.setBackground(bgColor);
+    range.setFontColor(fontColor);
+    range.setHorizontalAlignment("center");
     sheet.setFrozenRows(1);
 
-    // Auto-fit lebar kolom
-    for (let i = 1; i <= HEADERS.length; i++) {
+    for (let i = 1; i <= headers.length; i++) {
       sheet.autoResizeColumn(i);
     }
   }
-
-  return sheet;
 }
 
 /**
- * Tambahkan menu interaktif otomatis di toolbar Google Sheets saat file dibuka
+ * Menu otomatis di Toolbar Google Sheets
  */
 function onOpen() {
   try {
     const ui = SpreadsheetApp.getUi();
     ui.createMenu("⚡ Awesome English")
-      .addItem("Inisialisasi / Periksa Database", "manualSetup")
+      .addItem("Inisialisasi Database & Memory", "manualSetup")
       .addToUi();
-  } catch (e) {
-    // Abaikan jika dijalankan di context non-UI
-  }
+  } catch (e) {}
 }
 
-/**
- * Fungsi manual untuk tombol menu Google Sheets
- */
 function manualSetup() {
-  const sheet = getOrCreateSheet();
+  getLeaderboardSheet();
+  getMemorySheet();
   SpreadsheetApp.getUi().alert(
-    "✅ Berhasil!\n\nSheet '" + sheet.getName() + "' dan baris Header telah terverifikasi aman tanpa duplikasi."
+    "✅ Database & Memory Berhasil Diinisialisasi!\n\nSheet 'Leaderboard' dan 'Memory' telah diverifikasi aman tanpa duplikasi."
   );
 }
 
 /**
- * Handle GET Request (Mengambil Top Leaderboard dalam format JSON)
+ * Handle GET Request (Leaderboard atau Learning Memory)
  */
 function doGet(e) {
   try {
-    const sheet = getOrCreateSheet();
-    const lastRow = sheet.getLastRow();
-    
-    // Jika hanya ada header atau belum ada data
-    if (lastRow <= 1) {
+    const action = (e && e.parameter && e.parameter.action) ? e.parameter.action.toLowerCase() : "leaderboard";
+
+    // 1. Ambil Memory Belajar (untuk Gemini Canvas & index.html)
+    if (action === "memory") {
+      const sheet = getMemorySheet();
+      const lastRow = sheet.getLastRow();
+      if (lastRow <= 1) {
+        return createJsonResponse({ status: "success", type: "memory", total: 0, data: [] });
+      }
+
+      const rows = sheet.getRange(2, 1, lastRow - 1, MEMORY_HEADERS.length).getValues();
+      const memories = rows
+        .filter(r => r[3] && String(r[3]).trim() !== "")
+        .reverse() // Tampilkan yang paling baru lebih dulu
+        .slice(0, MAX_ENTRIES)
+        .map((r, i) => ({
+          id: i + 1,
+          timestamp: r[0] instanceof Date ? r[0].toISOString() : String(r[0] || ""),
+          playerName: String(r[1] || "Jefri"),
+          direction: String(r[2] || "ID -> EN"),
+          target: String(r[3] || ""),
+          userResponse: String(r[4] || ""),
+          accuracy: Number(r[5]) || 0,
+          notes: String(r[6] || "")
+        }));
+
       return createJsonResponse({
         status: "success",
-        total: 0,
-        data: []
+        type: "memory",
+        total: memories.length,
+        data: memories
       });
     }
 
-    // Ambil data mulai dari baris 2 hingga baris terakhir
-    const dataRange = sheet.getRange(2, 1, lastRow - 1, HEADERS.length);
-    const rows = dataRange.getValues();
+    // 2. Ambil Leaderboard Ranking (Default)
+    const sheet = getLeaderboardSheet();
+    const lastRow = sheet.getLastRow();
+    if (lastRow <= 1) {
+      return createJsonResponse({ status: "success", type: "leaderboard", total: 0, data: [] });
+    }
 
-    // Petakan ke array of object
+    const rows = sheet.getRange(2, 1, lastRow - 1, LEADERBOARD_HEADERS.length).getValues();
     const records = rows
-      .filter(row => row[1] && String(row[1]).trim() !== "") // filter baris kosong
-      .map((row, index) => {
-        return {
-          id: index + 1,
-          timestamp: row[0] instanceof Date ? row[0].toISOString() : String(row[0] || ""),
-          playerName: String(row[1] || "Anonymous"),
-          gameMode: String(row[2] || "Speaking & Shadowing"),
-          score: Number(row[3]) || 0,
-          accuracy: Number(row[4]) || 0,
-          level: Number(row[5]) || 1,
-          notes: String(row[6] || "")
-        };
-      });
+      .filter(r => r[1] && String(r[1]).trim() !== "")
+      .map((r, i) => ({
+        id: i + 1,
+        timestamp: r[0] instanceof Date ? r[0].toISOString() : String(r[0] || ""),
+        playerName: String(r[1] || "Anonymous"),
+        gameMode: String(r[2] || "Speaking & Shadowing"),
+        score: Number(r[3]) || 0,
+        accuracy: Number(r[4]) || 0,
+        level: Number(r[5]) || 1,
+        notes: String(r[6] || "")
+      }));
 
-    // Urutkan berdasarkan score tertinggi (descending)
     records.sort((a, b) => b.score - a.score);
-
-    // Ambil Top N entries
-    const topRecords = records.slice(0, MAX_LEADERBOARD_ENTRIES);
+    const topRecords = records.slice(0, MAX_ENTRIES);
 
     return createJsonResponse({
       status: "success",
+      type: "leaderboard",
       total: records.length,
       data: topRecords
     });
+
   } catch (error) {
-    return createJsonResponse({
-      status: "error",
-      message: error.toString()
-    });
+    return createJsonResponse({ status: "error", message: error.toString() });
   }
 }
 
 /**
- * Handle POST Request (Menerima Skor Baru dari Game Landing Page)
+ * Handle POST Request (Menyimpan Skor ke Leaderboard & Riwayat ke Memory)
  */
 function doPost(e) {
   try {
-    const sheet = getOrCreateSheet();
     let payload = {};
-
     if (e && e.postData && e.postData.contents) {
       try {
         payload = JSON.parse(e.postData.contents);
@@ -183,19 +213,47 @@ function doPost(e) {
     }
 
     const timestamp = new Date();
-    const playerName = String(payload.playerName || payload.name || "Anonymous Learner").trim();
-    const gameMode = String(payload.gameMode || payload.mode || "Speaking & Shadowing").trim();
+    const playerName = String(payload.playerName || payload.name || "Jefri").trim();
+    const gameMode = String(payload.gameMode || payload.mode || "Speaking Arena").trim();
     const score = Number(payload.score) || 0;
     const accuracy = Number(payload.accuracy) || 0;
     const level = Number(payload.level) || 1;
     const notes = String(payload.notes || "").trim();
+    const direction = String(payload.direction || "ID -> EN").trim();
 
-    // Tambahkan baris data baru di bawah baris terakhir
-    sheet.appendRow([timestamp, playerName, gameMode, score, accuracy, level, notes]);
+    // 1. Simpan ke Sheet Leaderboard
+    const lbSheet = getLeaderboardSheet();
+    lbSheet.appendRow([timestamp, playerName, gameMode, score, accuracy, level, notes]);
+
+    // 2. Simpan ke Sheet Memory (Long-Term Learning History)
+    const memSheet = getMemorySheet();
+    if (payload.history && Array.isArray(payload.history)) {
+      payload.history.forEach(item => {
+        memSheet.appendRow([
+          timestamp,
+          playerName,
+          direction,
+          item.target || "",
+          item.heard || item.response || "",
+          Number(item.accuracy) || 0,
+          item.feedback || item.notes || ""
+        ]);
+      });
+    } else if (payload.target) {
+      memSheet.appendRow([
+        timestamp,
+        playerName,
+        direction,
+        payload.target,
+        payload.heard || payload.userResponse || "",
+        accuracy,
+        notes
+      ]);
+    }
 
     return createJsonResponse({
       status: "success",
-      message: "Score successfully recorded to Google Sheets / Excel database!",
+      message: "Score & Learning Memory successfully recorded to Google Sheets / Excel database!",
       entry: {
         timestamp: timestamp.toISOString(),
         playerName: playerName,
@@ -203,17 +261,12 @@ function doPost(e) {
         accuracy: accuracy
       }
     });
+
   } catch (error) {
-    return createJsonResponse({
-      status: "error",
-      message: error.toString()
-    });
+    return createJsonResponse({ status: "error", message: error.toString() });
   }
 }
 
-/**
- * Helper untuk response JSON dengan dukungan MIME JSON
- */
 function createJsonResponse(data) {
   const output = ContentService.createTextOutput(JSON.stringify(data));
   output.setMimeType(ContentService.MimeType.JSON);
