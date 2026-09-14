@@ -2955,13 +2955,19 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       } else if (this.currentMode === 'vocabulary' || this.currentMode === 'grammar' || this.currentMode === 'ielts' || this.currentMode === 'toefl') {
         const promptText = isIdToEn ? (q.prompt_id || q.translation) : (q.prompt_en || q.en || q.target);
-        this.dom.challenge.instruction.textContent = isIdToEn 
-          ? '🇮🇩 Lengkapi kalimat berikut dengan berbicara dalam Bahasa Inggris:'
-          : '🇬🇧 Complete the sentence or speak your answer:';
+        if (this.currentMode === 'ielts') {
+          this.dom.challenge.instruction.textContent = '🎯 IELTS Academic Test (Band 7.5 - 9.0): Selesaikan soal leksikal akademis atau ucapkan via Mic:';
+        } else if (this.currentMode === 'toefl') {
+          this.dom.challenge.instruction.textContent = '🏛️ TOEFL iBT Test Simulation (Scale 0-30): Lengkapi struktur passage ilmiah atau jawab via Mic:';
+        } else {
+          this.dom.challenge.instruction.textContent = isIdToEn 
+            ? '🇮🇩 Lengkapi kalimat berikut dengan berbicara dalam Bahasa Inggris:'
+            : '🇬🇧 Complete the sentence or speak your answer:';
+        }
 
         this.dom.challenge.targetPhrase.textContent = `"${promptText}"`;
         this.dom.challenge.targetPhonetic.textContent = q.phonetic || '';
-        this.dom.challenge.targetTranslation.textContent = isIdToEn ? `Jawaban English: ${q.en || q.target}` : `Arti: ${q.translation}`;
+        this.dom.challenge.targetTranslation.textContent = isIdToEn ? `Jawaban English: ${q.en || q.target}` : `Arti: ${q.translation || q.id_translation}`;
 
         if (q.options && q.options.length > 0) {
           this.dom.challenge.optionsContainer.innerHTML = '';
