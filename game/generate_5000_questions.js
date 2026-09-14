@@ -74,7 +74,7 @@ function generateShadowing(count) {
     'Leadership • TED-Ed Talks'
   ];
 
-  const levels = ['Beginner', 'Intermediate', 'Advanced'];
+  const levels = ['Beginner', 'Intermediate', 'Upper-Intermediate', 'Advanced'];
 
   let idx = 1;
   while (list.length < count) {
@@ -97,7 +97,7 @@ function generateShadowing(count) {
       id,
       mode: 'shadowing',
       category: pick(categories),
-      level: pick(levels),
+      level: levels[(idx - 1) % levels.length],
       en: enSentence,
       target: enSentence,
       phonetic: `/${enSentence.toLowerCase().slice(0, 35)}.../`,
@@ -117,7 +117,7 @@ function generateShadowing(count) {
    ============================================================================ */
 function generateListening(count) {
   const list = [];
-  const levels = ['Beginner', 'Intermediate', 'Advanced'];
+  const levels = ['Beginner', 'Intermediate', 'Upper-Intermediate', 'Advanced'];
   const times = ['7:15 AM', '8:30 AM', '9:45 AM', '10:20 AM', '11:50 AM', '1:15 PM', '2:40 PM', '3:30 PM', '4:15 PM', '5:45 PM', '6:30 PM', '8:15 PM', '9:00 PM'];
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -199,7 +199,7 @@ function generateListening(count) {
       id,
       mode: 'listening',
       category: item.cat,
-      level: pick(levels),
+      level: levels[(idx - 1) % levels.length],
       en: item.en,
       target: item.en,
       phonetic: `/${item.en.toLowerCase().slice(0, 35)}.../`,
@@ -219,7 +219,7 @@ function generateListening(count) {
    ============================================================================ */
 function generateVocabulary(count) {
   const list = [];
-  const levels = ['Beginner', 'Intermediate', 'Advanced'];
+  const levels = ['Beginner', 'Intermediate', 'Upper-Intermediate', 'Advanced'];
 
   const vocabBase = [
     { word: 'profound', distractors: ['shallow', 'trivial', 'negligible'], meaning: 'mendalam', prep: 'a profound influence on' },
@@ -291,7 +291,7 @@ function generateVocabulary(count) {
       id,
       mode: 'vocabulary',
       category: 'Vocabulary • Verbal Advantage & Collocations',
-      level: pick(levels),
+      level: levels[(idx - 1) % levels.length],
       en: enSentence,
       target: enSentence,
       missingWord: v.word,
@@ -316,7 +316,7 @@ function generateVocabulary(count) {
    ============================================================================ */
 function generateGrammar(count) {
   const list = [];
-  const levels = ['Beginner', 'Intermediate', 'Advanced'];
+  const levels = ['Beginner', 'Intermediate', 'Upper-Intermediate', 'Advanced'];
 
   const templates = [
     // Conditionals Unit 38
@@ -398,7 +398,7 @@ function generateGrammar(count) {
       id,
       mode: 'grammar',
       category: `Raymond Murphy • ${item.unit}`,
-      level: pick(levels),
+      level: levels[(idx - 1) % levels.length],
       en: item.en,
       target: item.en,
       missingWord: item.correct,
@@ -423,7 +423,7 @@ function generateGrammar(count) {
    ============================================================================ */
 function generateIELTS(count) {
   const list = [];
-  const levels = ['Intermediate', 'Advanced'];
+  const levels = ['IELTS Band 6.5 - 7.0', 'IELTS Band 7.5 - 8.0', 'IELTS Band 8.5 - 9.0'];
 
   const topics = [
     {
@@ -490,7 +490,7 @@ function generateIELTS(count) {
       id,
       mode: 'ielts',
       category: 'IELTS Academic Simulation • Band 7.5 - 9.0',
-      level: pick(levels),
+      level: levels[(idx - 1) % levels.length],
       cue_card: t.cue,
       en: enSentence,
       target: enSentence,
@@ -516,7 +516,7 @@ function generateIELTS(count) {
    ============================================================================ */
 function generateTOEFL(count) {
   const list = [];
-  const levels = ['Intermediate', 'Advanced'];
+  const levels = ['TOEFL iBT 80 - 90', 'TOEFL iBT 91 - 105', 'TOEFL iBT 106 - 120'];
 
   const lectures = [
     {
@@ -583,7 +583,7 @@ function generateTOEFL(count) {
       id,
       mode: 'toefl',
       category: `TOEFL iBT Academic Simulation • ${l.subject}`,
-      level: pick(levels),
+      level: levels[(idx - 1) % levels.length],
       en: enSentence,
       target: enSentence,
       missingWord: l.keyword,

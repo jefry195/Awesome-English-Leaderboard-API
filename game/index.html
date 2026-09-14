@@ -174,16 +174,6 @@
           </div>
         </div>
 
-        <!-- Active English to Indonesia Direction -->
-        <div class="lang-direction-wrapper">
-          <div class="lang-direction-title">Metode Latihan Default:</div>
-          <div class="lang-direction-group">
-            <div class="btn-lang-dir active" id="btn-dir-active">
-              <span class="flag-icon">🇬🇧</span> English ➔ <span class="flag-icon">🇮🇩</span> Indonesia (Listening, Speaking & Comprehension)
-            </div>
-          </div>
-        </div>
-
         <!-- Mode Selection Cards -->
         <h2 class="section-title">Select Challenge Arena</h2>
         <div class="modes-grid" id="modes-selection-container">
@@ -396,6 +386,15 @@
                 <span class="comp-label">You Said:</span>
                 <span class="comp-val" id="comp-heard">...</span>
               </div>
+            </div>
+
+            <!-- Cara Baca / Phonetic Pronunciation (Muncul setelah menjawab) -->
+            <div class="phonetic-reveal-box" id="phonetic-reveal-box">
+              <div class="phonetic-reveal-header">
+                <span class="phonetic-reveal-icon">🗣️</span>
+                <span class="phonetic-reveal-label">Cara Baca / Pronunciation:</span>
+              </div>
+              <div class="phonetic-reveal-val" id="eval-phonetic-text">...</div>
             </div>
 
             <!-- AI Teacher & Examiner Comments -->
@@ -631,14 +630,14 @@
       </div>
       <div class="modal-body">
         <form id="settings-form">
-          <!-- Apps Script URL -->
-          <div class="form-group">
+          <!-- Apps Script URL (Hidden from normal view) -->
+          <div class="form-group hidden" style="display: none;">
             <label for="cfg-appscript-url" class="form-label">
               Cloud Database API Webhook URL:
             </label>
             <input type="url" id="cfg-appscript-url" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
             <small class="form-hint">
-              Endpoint cloud database leaderboard & memory. Jika dikosongkan, local mock database akan digunakan.
+              Endpoint cloud database leaderboard & memory.
             </small>
           </div>
 
@@ -655,10 +654,41 @@
 
           <!-- Preferred English Accent -->
           <div class="form-group">
-            <label for="cfg-accent" class="form-label">Default English Pronunciation Accent:</label>
+            <label for="cfg-accent" class="form-label">Default English Accent:</label>
             <select id="cfg-accent" class="form-control">
               <option value="en-US">American English (en-US)</option>
               <option value="en-GB">British English (en-GB)</option>
+            </select>
+          </div>
+
+          <!-- Select Voice Persona -->
+          <div class="form-group">
+            <label for="cfg-voice" class="form-label">Pilihan Suara Native Speaker:</label>
+            <div class="voice-picker-row" style="display: flex; gap: 8px; align-items: center;">
+              <select id="cfg-voice" class="form-control" style="flex: 1;">
+                <option value="auto">🌐 Otomatis (Sistem Rekomendasi)</option>
+                <option value="female_us">👩 Sarah / US Female (American Natural)</option>
+                <option value="male_us">👨 Alex / US Male (American Clear)</option>
+                <option value="female_uk">👩 Emma / UK Female (British Accent)</option>
+                <option value="male_uk">👨 Daniel / UK Male (BBC Style)</option>
+                <option value="female_au">👩 Matilda / AU Female (Australian)</option>
+                <option value="male_in">👨 Rishi / IN Male (Indian English)</option>
+              </select>
+              <button type="button" id="btn-test-voice" class="btn btn-secondary btn-sm" style="white-space: nowrap; padding: 8px 12px;">
+                🔊 Tes Suara
+              </button>
+            </div>
+            <small class="form-hint">Pilih karakter suara native speaker yang paling sesuai dengan preferensi telinga Anda.</small>
+          </div>
+
+          <!-- Speech Rate -->
+          <div class="form-group">
+            <label for="cfg-voice-rate" class="form-label">Kecepatan Pengucapan (Speech Speed):</label>
+            <select id="cfg-voice-rate" class="form-control">
+              <option value="0.75">🐢 0.75x - Lambat (Sangat Ramah Pemula)</option>
+              <option value="0.88">🎯 0.88x - Sedang / Learner Friendly (Rekomendasi)</option>
+              <option value="1.0" selected>⚡ 1.0x - Normal Native Speed</option>
+              <option value="1.15">🚀 1.15x - Cepat (Advanced Challenge)</option>
             </select>
           </div>
 

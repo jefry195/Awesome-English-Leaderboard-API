@@ -1452,6 +1452,39 @@ body {
   word-break: break-word;
 }
 
+.phonetic-reveal-box {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px dashed rgba(99, 102, 241, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.phonetic-reveal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.phonetic-reveal-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a5b4fc;
+}
+
+.phonetic-reveal-val {
+  font-family: 'SF Mono', 'Courier New', monospace;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #38bdf8;
+  letter-spacing: 0.03em;
+}
+
 .ai-comment-card {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.08));
   border: 1px solid rgba(99, 102, 241, 0.3);
@@ -2838,16 +2871,6 @@ body {
           </div>
         </div>
 
-        <!-- Active English to Indonesia Direction -->
-        <div class="lang-direction-wrapper">
-          <div class="lang-direction-title">Metode Latihan Default:</div>
-          <div class="lang-direction-group">
-            <div class="btn-lang-dir active" id="btn-dir-active">
-              <span class="flag-icon">🇬🇧</span> English ➔ <span class="flag-icon">🇮🇩</span> Indonesia (Listening, Speaking & Comprehension)
-            </div>
-          </div>
-        </div>
-
         <!-- Mode Selection Cards -->
         <h2 class="section-title">Select Challenge Arena</h2>
         <div class="modes-grid" id="modes-selection-container">
@@ -3060,6 +3083,15 @@ body {
                 <span class="comp-label">You Said:</span>
                 <span class="comp-val" id="comp-heard">...</span>
               </div>
+            </div>
+
+            <!-- Cara Baca / Phonetic Pronunciation (Muncul setelah menjawab) -->
+            <div class="phonetic-reveal-box" id="phonetic-reveal-box">
+              <div class="phonetic-reveal-header">
+                <span class="phonetic-reveal-icon">🗣️</span>
+                <span class="phonetic-reveal-label">Cara Baca / Pronunciation:</span>
+              </div>
+              <div class="phonetic-reveal-val" id="eval-phonetic-text">...</div>
             </div>
 
             <!-- AI Teacher & Examiner Comments -->
@@ -3295,14 +3327,14 @@ body {
       </div>
       <div class="modal-body">
         <form id="settings-form">
-          <!-- Apps Script URL -->
-          <div class="form-group">
+          <!-- Apps Script URL (Hidden from normal view) -->
+          <div class="form-group hidden" style="display: none;">
             <label for="cfg-appscript-url" class="form-label">
               Cloud Database API Webhook URL:
             </label>
             <input type="url" id="cfg-appscript-url" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
             <small class="form-hint">
-              Endpoint cloud database leaderboard & memory. Jika dikosongkan, local mock database akan digunakan.
+              Endpoint cloud database leaderboard & memory.
             </small>
           </div>
 
@@ -3319,10 +3351,41 @@ body {
 
           <!-- Preferred English Accent -->
           <div class="form-group">
-            <label for="cfg-accent" class="form-label">Default English Pronunciation Accent:</label>
+            <label for="cfg-accent" class="form-label">Default English Accent:</label>
             <select id="cfg-accent" class="form-control">
               <option value="en-US">American English (en-US)</option>
               <option value="en-GB">British English (en-GB)</option>
+            </select>
+          </div>
+
+          <!-- Select Voice Persona -->
+          <div class="form-group">
+            <label for="cfg-voice" class="form-label">Pilihan Suara Native Speaker:</label>
+            <div class="voice-picker-row" style="display: flex; gap: 8px; align-items: center;">
+              <select id="cfg-voice" class="form-control" style="flex: 1;">
+                <option value="auto">🌐 Otomatis (Sistem Rekomendasi)</option>
+                <option value="female_us">👩 Sarah / US Female (American Natural)</option>
+                <option value="male_us">👨 Alex / US Male (American Clear)</option>
+                <option value="female_uk">👩 Emma / UK Female (British Accent)</option>
+                <option value="male_uk">👨 Daniel / UK Male (BBC Style)</option>
+                <option value="female_au">👩 Matilda / AU Female (Australian)</option>
+                <option value="male_in">👨 Rishi / IN Male (Indian English)</option>
+              </select>
+              <button type="button" id="btn-test-voice" class="btn btn-secondary btn-sm" style="white-space: nowrap; padding: 8px 12px;">
+                🔊 Tes Suara
+              </button>
+            </div>
+            <small class="form-hint">Pilih karakter suara native speaker yang paling sesuai dengan preferensi telinga Anda.</small>
+          </div>
+
+          <!-- Speech Rate -->
+          <div class="form-group">
+            <label for="cfg-voice-rate" class="form-label">Kecepatan Pengucapan (Speech Speed):</label>
+            <select id="cfg-voice-rate" class="form-control">
+              <option value="0.75">🐢 0.75x - Lambat (Sangat Ramah Pemula)</option>
+              <option value="0.88">🎯 0.88x - Sedang / Learner Friendly (Rekomendasi)</option>
+              <option value="1.0" selected>⚡ 1.0x - Normal Native Speed</option>
+              <option value="1.15">🚀 1.15x - Cepat (Advanced Challenge)</option>
             </select>
           </div>
 
@@ -3364,25 +3427,30 @@ body {
 
   const GITHUB_DATA_URL = 'https://raw.githubusercontent.com/jefry195/Awesome-English-Leaderboard-API/main/data/questions.json';
 
-  // Safe Storage wrapper for restricted iframe sandboxes (e.g. Gemini Canvas)
+  // Safe Storage wrapper for persistent browser storage and restricted iframe sandboxes
   const memoryStore = {};
   const safeStorage = {
     getItem: (key) => {
       try {
-        return window.localStorage ? window.safeStorage.getItem(key) : (memoryStore[key] || null);
-      } catch (e) {
-        return memoryStore[key] || null;
-      }
+        const ls = window['localStorage'];
+        if (ls) {
+          const val = ls.getItem(key);
+          if (val !== null) return val;
+        }
+      } catch (e) {}
+      return memoryStore[key] || null;
     },
     setItem: (key, val) => {
       try {
-        if (window.localStorage) window.safeStorage.setItem(key, val);
+        const ls = window['localStorage'];
+        if (ls) ls.setItem(key, String(val));
       } catch (e) {}
       memoryStore[key] = String(val);
     },
     removeItem: (key) => {
       try {
-        if (window.localStorage) window.safeStorage.removeItem(key);
+        const ls = window['localStorage'];
+        if (ls) ls.removeItem(key);
       } catch (e) {}
       delete memoryStore[key];
     }
@@ -5397,6 +5465,17 @@ body {
       this.recognition = null;
       this.isRecording = false;
 
+      this.selectedVoiceName = safeStorage.getItem('cfg_voice_name') || 'auto';
+      this.speechRate = parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.88');
+      this.cachedVoices = [];
+
+      if ('speechSynthesis' in window) {
+        this.cachedVoices = window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => {
+          this.cachedVoices = window.speechSynthesis.getVoices();
+        };
+      }
+
       if (this.hasRecognition) {
         try {
           this.recognition = new SpeechRecognition();
@@ -5484,13 +5563,46 @@ body {
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = lang;
-      utterance.rate = 0.92;
+      utterance.rate = this.speechRate || 0.88;
       utterance.pitch = 1.0;
 
-      const voices = window.speechSynthesis.getVoices();
-      const preferred = voices.find(v => v.lang.startsWith(lang.substring(0, 2)) && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('English')));
-      if (preferred) {
-        utterance.voice = preferred;
+      const voices = (this.cachedVoices && this.cachedVoices.length > 0) ? this.cachedVoices : window.speechSynthesis.getVoices();
+      let chosenVoice = null;
+
+      // 1. Check persona preference
+      const pref = this.selectedVoiceName || 'auto';
+      if (pref !== 'auto' && voices.length > 0) {
+        if (pref === 'female_us') {
+          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female') || v.name.includes('Natural') || v.name.includes('Google US')));
+        } else if (pref === 'male_us') {
+          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Male') || v.name.includes('Guy')));
+        } else if (pref === 'female_uk') {
+          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('Susan') || v.name.includes('Victoria') || v.name.includes('Female') || v.name.includes('Google UK English Female')));
+        } else if (pref === 'male_uk') {
+          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Male') || v.name.includes('Google UK English Male')));
+        } else if (pref === 'female_au') {
+          chosenVoice = voices.find(v => (v.lang.includes('AU') || v.lang.includes('en-AU')));
+        } else if (pref === 'male_in') {
+          chosenVoice = voices.find(v => (v.lang.includes('IN') || v.lang.includes('en-IN')));
+        } else {
+          chosenVoice = voices.find(v => v.name === pref || v.voiceURI === pref);
+        }
+      }
+
+      // 2. Fallback matching accent if no persona matched
+      if (!chosenVoice && voices.length > 0) {
+        const langCode = lang.toLowerCase();
+        chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
+        if (!chosenVoice) {
+          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.substring(0, 2)) && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Online')));
+        }
+        if (!chosenVoice) {
+          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+        }
+      }
+
+      if (chosenVoice) {
+        utterance.voice = chosenVoice;
       }
 
       window.speechSynthesis.speak(utterance);
@@ -5705,13 +5817,14 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
 
       // Offline / Local fallback demo accounts
-      if (email === 'jefri@admin.com' && password === 'admin123') {
+      const lowerEmail = (email || '').toLowerCase().trim();
+      if ((lowerEmail === 'jefry.m95@gmail.com' || lowerEmail === 'jefri@admin.com') && password === 'admin123') {
         return {
           status: 'success',
-          user: { email: 'jefri@admin.com', name: 'Jefri (Owner)', totalScore: 1500, level: 4, status: 'ACTIVE' }
+          user: { email: 'jefry.m95@gmail.com', name: 'Jefri (Admin)', totalScore: 3250, level: 5, status: 'ACTIVE' }
         };
       }
-      if (email === 'siswa1@english.com' && password === 'siswa123') {
+      if (lowerEmail === 'siswa1@english.com' && password === 'siswa123') {
         return {
           status: 'success',
           user: { email: 'siswa1@english.com', name: 'Budi Santoso', totalScore: 450, level: 1, status: 'ACTIVE' }
@@ -6075,7 +6188,8 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
     }
 
-    switchView(viewName) {
+    switchView(viewName, pushHistory = true) {
+      this.currentView = viewName;
       Object.entries(this.dom.views).forEach(([key, el]) => {
         if (key === viewName) {
           el.classList.add('active');
@@ -6084,6 +6198,12 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (pushHistory && window.history && window.history.pushState) {
+        if (viewName !== 'landing') {
+          window.history.pushState({ arenaView: viewName }, '');
+        }
+      }
     }
 
     setLanguageDirection(dir) {
@@ -6182,11 +6302,30 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         });
       });
 
-      // Quit Game
+      // Quit Game - langsung kembali tanpa popup
       document.getElementById('btn-quit-game').addEventListener('click', () => {
-        if (confirm('Yakin ingin kembali ke menu utama? Progres sesi saat ini akan disimpan di hasil.')) {
+        this.speech.stopListening();
+        this.switchView('landing', false);
+        if (window.history.state && window.history.state.arenaView) {
+          window.history.back();
+        }
+      });
+
+      // Handle mobile hardware back button
+      window.addEventListener('popstate', (e) => {
+        const activeModal = document.querySelector('.modal-overlay:not(.hidden)');
+        if (activeModal) {
+          activeModal.classList.add('hidden');
+          return;
+        }
+        const drawer = document.getElementById('mobile-drawer');
+        if (drawer && drawer.classList.contains('open')) {
+          this.closeDrawer();
+          return;
+        }
+        if (this.currentView === 'game' || this.currentView === 'result') {
           this.speech.stopListening();
-          this.switchView('landing');
+          this.switchView('landing', false);
         }
       });
 
@@ -6249,7 +6388,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       // Demo login shortcuts
       document.getElementById('btn-demo-admin')?.addEventListener('click', () => {
-        this.fillAuthForm('jefri@admin.com', 'admin123');
+        this.fillAuthForm('jefry.m95@gmail.com', 'admin123');
       });
       document.getElementById('btn-demo-student')?.addEventListener('click', () => {
         this.fillAuthForm('siswa1@english.com', 'siswa123');
@@ -6365,19 +6504,23 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.dom.mic.toggleBtn.classList.remove('recording');
       this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
 
+      // Sembunyikan cara baca saat menjawab (baru dimunculkan setelah menjawab)
+      this.dom.challenge.targetPhonetic.classList.add('hidden');
+      this.dom.challenge.targetPhonetic.textContent = '';
+      const phoneticBox = document.getElementById('phonetic-reveal-box');
+      if (phoneticBox) phoneticBox.classList.add('hidden');
+
       const isIdToEn = (this.languageDirection === 'id-to-en');
 
       if (this.currentMode === 'listening') {
         if (isIdToEn) {
           this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris, lalu ucapkan kembali dalam Bahasa Inggris:';
           this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
-          this.dom.challenge.targetPhonetic.textContent = 'Audio-First: Teks Bahasa Inggris disembunyikan';
           this.dom.challenge.targetTranslation.textContent = `Arti: "${q.translation || q.id_translation}"`;
         } else {
           this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris, lalu ucapkan artinya dalam Bahasa Indonesia:';
           this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
-          this.dom.challenge.targetPhonetic.textContent = 'Audio-First: Dengarkan audio, terjemahkan ke Bahasa Indonesia';
-          this.dom.challenge.targetTranslation.textContent = 'Klik tombol "Dengarkan Native Audio" di atas';
+          this.dom.challenge.targetTranslation.textContent = 'Klik tombol "Listen Native Audio" di atas';
         }
         this.dom.challenge.optionsContainer.classList.add('hidden');
         this.dom.mic.section.classList.remove('hidden');
@@ -6389,9 +6532,9 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       } else if (this.currentMode === 'vocabulary' || this.currentMode === 'grammar' || this.currentMode === 'ielts' || this.currentMode === 'toefl') {
         const promptText = isIdToEn ? (q.prompt_id || q.translation) : (q.prompt_en || q.en || q.target);
         if (this.currentMode === 'ielts') {
-          this.dom.challenge.instruction.textContent = '🎯 IELTS Academic Test (Band 7.5 - 9.0): Selesaikan soal leksikal akademis atau ucapkan via Mic:';
+          this.dom.challenge.instruction.textContent = `🎯 IELTS Academic Test (${q.level || 'Band 7.5 - 9.0'}): Selesaikan soal leksikal atau jawab via Mic:`;
         } else if (this.currentMode === 'toefl') {
-          this.dom.challenge.instruction.textContent = '🏛️ TOEFL iBT Test Simulation (Scale 0-30): Lengkapi struktur passage ilmiah atau jawab via Mic:';
+          this.dom.challenge.instruction.textContent = `🏛️ TOEFL iBT Test Simulation (${q.level || 'Scale 0-30'}): Lengkapi passage ilmiah atau jawab via Mic:`;
         } else {
           this.dom.challenge.instruction.textContent = isIdToEn 
             ? '🇮🇩 Lengkapi kalimat berikut dengan berbicara dalam Bahasa Inggris:'
@@ -6399,7 +6542,6 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         }
 
         this.dom.challenge.targetPhrase.textContent = `"${promptText}"`;
-        this.dom.challenge.targetPhonetic.textContent = q.phonetic || '';
         this.dom.challenge.targetTranslation.textContent = isIdToEn ? `Jawaban English: ${q.en || q.target}` : `Arti: ${q.translation || q.id_translation}`;
 
         if (q.options && q.options.length > 0) {
@@ -6434,16 +6576,12 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       } else {
         // Shadowing Arena
         if (isIdToEn) {
-          // Indonesia -> English: Lihat arti Indonesia, bicarakan dalam Bahasa Inggris!
           this.dom.challenge.instruction.textContent = '🇮🇩 Lihat kalimat Bahasa Indonesia di bawah, lalu klik Mic dan ucapkan dalam Bahasa Inggris:';
           this.dom.challenge.targetPhrase.textContent = `"${q.translation || q.id_translation}"`;
-          this.dom.challenge.targetPhonetic.textContent = `Target English: ${q.phonetic || ''}`;
-          this.dom.challenge.targetTranslation.textContent = 'Klik "Dengarkan Native Audio" jika ingin mendengar contoh pengucapan native speaker lebih dulu.';
+          this.dom.challenge.targetTranslation.textContent = 'Klik "Listen Native Audio" jika ingin mendengar contoh pengucapan native speaker lebih dulu.';
         } else {
-          // English -> Indonesia: Lihat kalimat English, ucapkan arti Indonesianya!
           this.dom.challenge.instruction.textContent = '🇬🇧 Dengarkan/baca kalimat Bahasa Inggris, lalu ucapkan artinya dalam Bahasa Indonesia ke Mic:';
           this.dom.challenge.targetPhrase.textContent = `"${q.en || q.target}"`;
-          this.dom.challenge.targetPhonetic.textContent = q.phonetic || '';
           this.dom.challenge.targetTranslation.textContent = `Target Indonesia: "${q.translation || q.id_translation}"`;
         }
         this.dom.challenge.optionsContainer.classList.add('hidden');
@@ -6565,6 +6703,19 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.dom.evaluation.compHeard.textContent = userAnswer || '(tidak terdengar suara)';
       this.dom.evaluation.aiFeedback.textContent = evalResult.feedback;
 
+      // Munculkan Cara Baca / Fonetik setelah menjawab
+      const phoneticText = q.phonetic || '';
+      if (phoneticText) {
+        this.dom.challenge.targetPhonetic.classList.remove('hidden');
+        this.dom.challenge.targetPhonetic.textContent = `Cara Baca: ${phoneticText}`;
+      }
+      const phoneticBox = document.getElementById('phonetic-reveal-box');
+      const evalPhonetic = document.getElementById('eval-phonetic-text');
+      if (phoneticBox && evalPhonetic) {
+        evalPhonetic.textContent = phoneticText || '(Audio native tersedia)';
+        phoneticBox.classList.remove('hidden');
+      }
+
       // Play correct audio for listening & speaking correction
       if (isIdToEn) {
         setTimeout(() => {
@@ -6574,7 +6725,6 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       if (this.currentMode === 'listening') {
         this.dom.challenge.targetPhrase.textContent = `"${q.en || q.target}"`;
-        this.dom.challenge.targetPhonetic.textContent = q.phonetic || '';
         this.dom.challenge.targetTranslation.textContent = `Arti: "${q.translation || q.id_translation}"`;
       }
     }
@@ -6751,6 +6901,41 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       document.getElementById('cfg-appscript-url').value = safeStorage.getItem('cfg_appscript_url') || 'https://script.google.com/macros/s/AKfycbxy8pG0P3G95SATXLLqC0V3ZzH7MmU7oEF40PPLJRgBUE6i8NnBmKZlupiYfObPKtZ5/exec';
       document.getElementById('cfg-gemini-key').value = safeStorage.getItem('cfg_gemini_key') || '';
       document.getElementById('cfg-accent').value = safeStorage.getItem('cfg_accent') || 'en-US';
+
+      const voiceSelect = document.getElementById('cfg-voice');
+      const savedVoice = safeStorage.getItem('cfg_voice_name') || 'auto';
+      const savedRate = safeStorage.getItem('cfg_voice_rate') || '0.88';
+
+      const rateSelect = document.getElementById('cfg-voice-rate');
+      if (rateSelect) rateSelect.value = savedRate;
+
+      if (voiceSelect) {
+        voiceSelect.innerHTML = `
+          <option value="auto">🌐 Otomatis (Sistem Rekomendasi)</option>
+          <option value="female_us">👩 Sarah / US Female (American Natural)</option>
+          <option value="male_us">👨 Alex / US Male (American Clear)</option>
+          <option value="female_uk">👩 Emma / UK Female (British Accent)</option>
+          <option value="male_uk">👨 Daniel / UK Male (BBC Style)</option>
+          <option value="female_au">👩 Matilda / AU Female (Australian)</option>
+          <option value="male_in">👨 Rishi / IN Male (Indian English)</option>
+        `;
+
+        if ('speechSynthesis' in window) {
+          const sysVoices = window.speechSynthesis.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+          if (sysVoices.length > 0) {
+            const optGroup = document.createElement('optgroup');
+            optGroup.label = '── Browser Native Voices ──';
+            sysVoices.forEach(v => {
+              const opt = document.createElement('option');
+              opt.value = v.name;
+              opt.textContent = `🎙️ ${v.name} (${v.lang})`;
+              optGroup.appendChild(opt);
+            });
+            voiceSelect.appendChild(optGroup);
+          }
+        }
+        voiceSelect.value = savedVoice;
+      }
     }
 
     saveSettings(e) {
@@ -6758,14 +6943,21 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       const url = document.getElementById('cfg-appscript-url').value.trim();
       const key = document.getElementById('cfg-gemini-key').value.trim();
       const accent = document.getElementById('cfg-accent').value;
+      const voice = document.getElementById('cfg-voice')?.value || 'auto';
+      const rate = document.getElementById('cfg-voice-rate')?.value || '0.88';
 
       safeStorage.setItem('cfg_appscript_url', url);
       safeStorage.setItem('cfg_gemini_key', key);
       safeStorage.setItem('cfg_accent', accent);
+      safeStorage.setItem('cfg_voice_name', voice);
+      safeStorage.setItem('cfg_voice_rate', rate);
 
-      this.dom.challenge.accentSelect.value = accent;
+      this.speech.selectedVoiceName = voice;
+      this.speech.speechRate = parseFloat(rate);
+      if (this.dom.challenge.accentSelect) this.dom.challenge.accentSelect.value = accent;
+
       this.closeModals();
-      this.showToast('Pengaturan berhasil disimpan!', 'success');
+      this.showToast('Pengaturan suara berhasil disimpan!', 'success');
     }
 
     resetSettings() {
@@ -6773,17 +6965,44 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         safeStorage.removeItem('cfg_appscript_url');
         safeStorage.removeItem('cfg_gemini_key');
         safeStorage.setItem('cfg_accent', 'en-US');
+        safeStorage.setItem('cfg_voice_name', 'auto');
+        safeStorage.setItem('cfg_voice_rate', '0.88');
+
         document.getElementById('cfg-appscript-url').value = '';
         document.getElementById('cfg-gemini-key').value = '';
         document.getElementById('cfg-accent').value = 'en-US';
+        if (document.getElementById('cfg-voice')) document.getElementById('cfg-voice').value = 'auto';
+        if (document.getElementById('cfg-voice-rate')) document.getElementById('cfg-voice-rate').value = '0.88';
+
+        this.speech.selectedVoiceName = 'auto';
+        this.speech.speechRate = 0.88;
         this.showToast('Pengaturan direset.', 'info');
       }
     }
 
     loadSettings() {
       const accent = safeStorage.getItem('cfg_accent') || 'en-US';
+      const voice = safeStorage.getItem('cfg_voice_name') || 'auto';
+      const rate = parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.88');
+
       if (this.dom.challenge.accentSelect) {
         this.dom.challenge.accentSelect.value = accent;
+      }
+      this.speech.selectedVoiceName = voice;
+      this.speech.speechRate = rate;
+
+      // Event listener for Test Voice button in settings
+      const btnTestVoice = document.getElementById('btn-test-voice');
+      if (btnTestVoice && !btnTestVoice.dataset.bound) {
+        btnTestVoice.dataset.bound = 'true';
+        btnTestVoice.addEventListener('click', () => {
+          const v = document.getElementById('cfg-voice')?.value || 'auto';
+          const r = parseFloat(document.getElementById('cfg-voice-rate')?.value || '0.88');
+          const acc = document.getElementById('cfg-accent')?.value || 'en-US';
+          this.speech.selectedVoiceName = v;
+          this.speech.speechRate = r;
+          this.speech.speak('Hello! Welcome to Awesome English Arena. Practice makes permanent!', acc);
+        });
       }
     }
 
