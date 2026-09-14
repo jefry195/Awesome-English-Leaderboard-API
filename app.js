@@ -2056,18 +2056,29 @@
       this.isRecording = false;
 
       if (this.hasRecognition) {
-        this.recognition = new SpeechRecognition();
-        this.recognition.continuous = false;
-        this.recognition.interimResults = true;
-        this.recognition.lang = 'en-US';
+        try {
+          this.recognition = new SpeechRecognition();
+          this.recognition.continuous = false;
+          this.recognition.interimResults = true;
+          this.recognition.lang = 'en-US';
+          this.recognition.maxAlternatives = 1;
+        } catch (e) {
+          console.warn('SpeechRecognition initialization error:', e);
+          this.hasRecognition = false;
+        }
       }
     }
 
     startListening(lang, onInterim, onFinal, onError) {
       if (!this.hasRecognition) {
-        onError('Microphone speech recognition tidak didukung di browser ini. Gunakan Chrome/Edge atau ketik manual.');
+        onError('Mikrofon suara tidak didukung di browser ini. Gunakan Google Chrome, Microsoft Edge, atau Safari (iOS/Mac), atau ketik manual.');
         return;
       }
+
+      // Stop any pending session cleanly before starting
+      try {
+        if (this.recognition) this.recognition.abort();
+      } catch (e) {}
 
       this.recognition.lang = lang || 'en-US';
 
@@ -2092,7 +2103,15 @@
 
       this.recognition.onerror = (event) => {
         this.isRecording = false;
-        onError(event.error);
+        let errMsg = event.error || 'Terjadi kendala mikrofon.';
+        if (event.error === 'not-allowed') {
+          errMsg = 'Izin mikrofon ditolak. Izinkan akses mic di pengaturan browser/HP Anda.';
+        } else if (event.error === 'no-speech') {
+          errMsg = 'Tidak ada suara terdengar. Silakan klik mic lagi dan ucapkan kalimat Anda.';
+        } else if (event.error === 'network') {
+          errMsg = 'Koneksi pengenal suara terputus. Pastikan HP/Laptop terhubung ke internet.';
+        }
+        onError(errMsg);
       };
 
       this.recognition.onend = () => {
@@ -2104,13 +2123,15 @@
         this.isRecording = true;
       } catch (err) {
         this.isRecording = false;
-        onError(err.message || 'Microphone access failed.');
+        onError(err.message || 'Gagal mengaktifkan mikrofon.');
       }
     }
 
     stopListening() {
       if (this.hasRecognition && this.isRecording) {
-        this.recognition.stop();
+        try {
+          this.recognition.stop();
+        } catch (e) {}
         this.isRecording = false;
       }
     }
