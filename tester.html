@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Awesome English Leaderboard API • Tester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #121828;
+      --border: rgba(255, 255, 255, 0.08);
+      --primary: #6366f1;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-green: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 2rem; }
+    h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; }
+    p { color: var(--text-muted); font-size: 0.95rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
+    input, select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      color: var(--text);
+      outline: none;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    input:focus { border-color: var(--primary); }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.9; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      margin-left: 0.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    th { color: var(--text-muted); font-weight: 600; }
+    .status { margin-top: 0.8rem; font-size: 0.9rem; font-weight: 500; }
+    .success { color: var(--accent-green); }
+    .error { color: #f43f5e; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚡ Awesome English Leaderboard API</h1>
+      <p>Interactive test dashboard for Google Apps Script & Excel backend.</p>
+    </header>
+
+    <div class="card">
+      <label for="script-url">Apps Script Web App URL:</label>
+      <input type="url" id="script-url" placeholder="https://script.google.com/macros/s/.../exec">
+      <button class="btn" id="btn-fetch">Fetch Leaderboard (GET)</button>
+      <span class="status" id="fetch-status"></span>
+    </div>
+
+    <div class="card">
+      <h3>Submit Test Score (POST)</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+        <div>
+          <label for="player-name">Player Name:</label>
+          <input type="text" id="player-name" value="Test Learner">
+        </div>
+        <div>
+          <label for="game-mode">Mode:</label>
+          <select id="game-mode">
+            <option>Speaking & Shadowing</option>
+            <option>Listening Dictation</option>
+            <option>Vocabulary Collocations</option>
+            <option>Murphy Grammar Quest</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <label for="player-score">Score:</label>
+          <input type="number" id="player-score" value="450">
+        </div>
+        <div>
+          <label for="player-acc">Accuracy (%):</label>
+          <input type="number" id="player-acc" value="94">
+        </div>
+      </div>
+      <button class="btn" id="btn-post">Submit Score</button>
+      <span class="status" id="post-status"></span>
+    </div>
+
+    <div class="card">
+      <h3>Leaderboard Results</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Mode</th>
+            <th>Score</th>
+            <th>Accuracy</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+          <tr><td colspan="5" style="color: var(--text-muted); text-align: center;">Click "Fetch Leaderboard" to load rankings.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const urlInput = document.getElementById('script-url');
+    urlInput.value = localStorage.getItem('test_appscript_url') || '';
+
+    document.getElementById('btn-fetch').addEventListener('click', async () => {
+      const url = urlInput.value.trim();
+      if (!url) return alert('Please enter Apps Script URL.');
+      localStorage.setItem('test_appscript_url', url);
+
+      const status = document.getElementById('fetch-status');
+      status.textContent = 'Fetching...';
+      status.className = 'status';
+
+      try {
+        const res = await fetch(url + '?action=leaderboard');
+        const json = await res.json();
+        const tbody = document.getElementById('leaderboard-body');
+        tbody.innerHTML = '';
+
+        if (!json.data || json.data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No data found in spreadsheet.</td></tr>';
+        } else {
+          json.data.forEach((r, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${idx + 1}</td>
+              <td><strong>${r.playerName}</strong></td>
+              <td>${r.gameMode}</td>
+              <td style="color:#818cf8; font-weight:700;">${r.score}</td>
+              <td>${r.accuracy}%</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+        status.textContent = '✓ Data loaded!';
+        status.className = 'status success';
+      } catch (err) {
+        status.textContent = '✗ Error: ' + err.message;
+        status.className = 'status error';
+      }
+    });
+
+    document.getElementById('btn-post').addEventListener('click', async () => {
+      const url = urlInput.value.trim();
+      if (!url) return alert('Please enter Apps Script URL.');
+      localStorage.setItem('test_appscript_url', url);
+
+      const status = document.getElementById('post-status');
+      status.textContent = 'Submitting...';
+      status.className = 'status';
+
+      const payload = {
+        playerName: document.getElementById('player-name').value,
+        gameMode: document.getElementById('game-mode').value,
+        score: Number(document.getElementById('player-score').value),
+        accuracy: Number(document.getElementById('player-acc').value),
+        level: 1,
+        notes: 'Submitted from API Tester'
+      };
+
+      try {
+        await fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        status.textContent = '✓ Submitted to Google Sheets / Excel!';
+        status.className = 'status success';
+        setTimeout(() => document.getElementById('btn-fetch').click(), 1000);
+      } catch (err) {
+        status.textContent = '✗ Error: ' + err.message;
+        status.className = 'status error';
+      }
+    });
+  </script>
+</body>
+</html>

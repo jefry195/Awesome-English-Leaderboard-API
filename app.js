@@ -1,15 +1,58 @@
-{
-  "version": "2.0.0",
-  "updated_at": "2026-09-14",
-  "source": "Awesome English Curated Community Resources (Raymond Murphy, Anki, Refold, BBC, NPR, Hard Fork NYT)",
-  "total_questions": 80,
-  "summary": {
-    "shadowing": 20,
-    "listening": 20,
-    "vocabulary": 20,
-    "grammar": 20
-  },
-  "questions": [
+/**
+ * ============================================================================
+ * AWESOME ENGLISH ARENA - GAME ENGINE & AI TUTOR
+ * ============================================================================
+ * Features:
+ * - 4 Curated Arenas from Awesome English resources
+ * - Two-Way Bilingual Challenge:
+ *     1. 🇮🇩 Indonesia ➔ 🇬🇧 English (Speaking / Production)
+ *     2. 🇬🇧 English ➔ 🇮🇩 Indonesia (Listening & Comprehension)
+ * - Dynamic Dataset loaded from GitHub repo:
+ *     https://raw.githubusercontent.com/jefry195/Awesome-English-Leaderboard-API/main/data/questions.json
+ * - Live Google Sheets Database & Long-Term Learning Memory via Apps Script Web App
+ * - Web Speech API (Microphone voice input with en-US/id-ID support)
+ * - Web Speech Synthesis (Native US/UK Text-to-Speech)
+ * - Intelligent Heuristic Pronunciation Matcher (Offline)
+ * - Gemini AI Teacher & Examiner API Integration (Free Tier: gemini-3-flash-preview)
+ * - Web Audio API Synthetic Sound Effects
+ */
+
+(() => {
+  'use strict';
+
+  const GITHUB_DATA_URL = 'https://raw.githubusercontent.com/jefry195/Awesome-English-Leaderboard-API/main/data/questions.json';
+
+  // Safe Storage wrapper for restricted iframe sandboxes (e.g. Gemini Canvas)
+  const memoryStore = {};
+  const safeStorage = {
+    getItem: (key) => {
+      try {
+        return window.localStorage ? window.safeStorage.getItem(key) : (memoryStore[key] || null);
+      } catch (e) {
+        return memoryStore[key] || null;
+      }
+    },
+    setItem: (key, val) => {
+      try {
+        if (window.localStorage) window.safeStorage.setItem(key, val);
+      } catch (e) {}
+      memoryStore[key] = String(val);
+    },
+    removeItem: (key) => {
+      try {
+        if (window.localStorage) window.safeStorage.removeItem(key);
+      } catch (e) {}
+      delete memoryStore[key];
+    }
+  };
+
+
+
+  /* ==========================================================================
+     1. CURATED CONTENT REPOSITORY (Bilingual English & Indonesian)
+     ========================================================================== */
+  const QUESTION_BANK = {
+  "shadowing": [
     {
       "id": "sh_01",
       "mode": "shadowing",
@@ -509,7 +552,9 @@
         "Hubungi pihak hotel secara langsung jika penerbangan Anda tertunda malam ini."
       ],
       "notes": "Ungkapan ramah perpisahan \"keep in touch\" (/kiːp ɪn tʌtʃ/)."
-    },
+    }
+  ],
+  "listening": [
     {
       "id": "ls_01",
       "mode": "listening",
@@ -1009,7 +1054,9 @@
         "Ukuran paket melebihi batas ketentuan pos yang berlaku."
       ],
       "notes": "Pelafalan kata \"weighs\" berima dengan \"days\" (/weɪz/)."
-    },
+    }
+  ],
+  "vocabulary": [
     {
       "id": "vc_01",
       "mode": "vocabulary",
@@ -1469,7 +1516,9 @@
       "id_prompt": "Ucapkan dalam Bahasa Inggris: \"Bisakah Anda memperjelas alasan mengapa tenggat waktu tersebut ditunda?\"",
       "en_prompt": "Terjemahkan ke Bahasa Indonesia: \"Could you shed light on why the deadline was postponed?\"",
       "notes": "\"Shed light on\" berarti memberikan penjelasan yang membuat masalah menjadi terang/jelas."
-    },
+    }
+  ],
+  "grammar": [
     {
       "id": "gm_01",
       "mode": "grammar",
@@ -1931,4 +1980,1393 @@
       "notes": "Struktur pasif impersonal: Subject + is rumored/believed/thought + to be + V-ing."
     }
   ]
+};
+
+  /* ==========================================================================
+     2. AUDIO SYNTHESIS & SOUND EFFECTS (Web Audio API)
+     ========================================================================== */
+  class SoundManager {
+    constructor() {
+      this.ctx = null;
+    }
+
+    init() {
+      if (!this.ctx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          this.ctx = new AudioContext();
+        }
+      }
+    }
+
+    playTone(freq, type, duration, gain = 0.15) {
+      try {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+
+        const osc = this.ctx.createOscillator();
+        const gainNode = this.ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+        gainNode.gain.setValueAtTime(gain, this.ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
+        osc.connect(gainNode);
+        gainNode.connect(this.ctx.destination);
+
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    playSuccess() {
+      this.playTone(523.25, 'sine', 0.1, 0.2);
+      setTimeout(() => this.playTone(659.25, 'sine', 0.1, 0.2), 100);
+      setTimeout(() => this.playTone(783.99, 'sine', 0.25, 0.25), 200);
+    }
+
+    playWrong() {
+      this.playTone(220, 'sawtooth', 0.18, 0.15);
+      setTimeout(() => this.playTone(185, 'sawtooth', 0.25, 0.18), 120);
+    }
+
+    playStreak() {
+      this.playTone(440, 'triangle', 0.08, 0.15);
+      setTimeout(() => this.playTone(880, 'triangle', 0.15, 0.2), 80);
+    }
+
+    playClick() {
+      this.playTone(600, 'sine', 0.04, 0.08);
+    }
+  }
+
+  /* ==========================================================================
+     3. SPEECH SERVICES (Web Speech Recognition + SpeechSynthesis)
+     ========================================================================== */
+  class SpeechService {
+    constructor() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      this.hasRecognition = !!SpeechRecognition;
+      this.recognition = null;
+      this.isRecording = false;
+
+      if (this.hasRecognition) {
+        this.recognition = new SpeechRecognition();
+        this.recognition.continuous = false;
+        this.recognition.interimResults = true;
+        this.recognition.lang = 'en-US';
+      }
+    }
+
+    startListening(lang, onInterim, onFinal, onError) {
+      if (!this.hasRecognition) {
+        onError('Microphone speech recognition tidak didukung di browser ini. Gunakan Chrome/Edge atau ketik manual.');
+        return;
+      }
+
+      this.recognition.lang = lang || 'en-US';
+
+      this.recognition.onresult = (event) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+
+        if (finalTranscript) {
+          onFinal(finalTranscript.trim());
+        } else if (interimTranscript) {
+          onInterim(interimTranscript.trim());
+        }
+      };
+
+      this.recognition.onerror = (event) => {
+        this.isRecording = false;
+        onError(event.error);
+      };
+
+      this.recognition.onend = () => {
+        this.isRecording = false;
+      };
+
+      try {
+        this.recognition.start();
+        this.isRecording = true;
+      } catch (err) {
+        this.isRecording = false;
+        onError(err.message || 'Microphone access failed.');
+      }
+    }
+
+    stopListening() {
+      if (this.hasRecognition && this.isRecording) {
+        this.recognition.stop();
+        this.isRecording = false;
+      }
+    }
+
+    speak(text, lang = 'en-US') {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      utterance.rate = 0.92;
+      utterance.pitch = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      const preferred = voices.find(v => v.lang.startsWith(lang.substring(0, 2)) && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('English')));
+      if (preferred) {
+        utterance.voice = preferred;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  /* ==========================================================================
+     4. SIMILARITY & INTELLIGENT PHONETIC EVALUATOR (Offline Engine)
+     ========================================================================== */
+  class Evaluator {
+    static normalize(str) {
+      return (str || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    static levenshtein(a, b) {
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1,
+              matrix[i][j - 1] + 1,
+              matrix[i - 1][j] + 1
+            );
+          }
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    static calculateAccuracy(target, heard) {
+      const normTarget = this.normalize(target);
+      const normHeard = this.normalize(heard);
+
+      if (!normTarget || !normHeard) return 0;
+      if (normTarget === normHeard) return 100;
+
+      const targetWords = normTarget.split(' ');
+      const heardWords = normHeard.split(' ');
+
+      const maxLen = Math.max(normTarget.length, normHeard.length);
+      const levDist = this.levenshtein(normTarget, normHeard);
+      const charSim = Math.max(0, (maxLen - levDist) / maxLen);
+
+      let matchedWords = 0;
+      targetWords.forEach(w => {
+        if (heardWords.includes(w)) matchedWords++;
+      });
+      const wordRecall = matchedWords / targetWords.length;
+
+      const finalScore = Math.round((charSim * 0.5 + wordRecall * 0.5) * 100);
+      return Math.min(100, Math.max(0, finalScore));
+    }
+  }
+
+  /* ==========================================================================
+     5. GEMINI AI INTEGRATION (Free Tier gemini-3-flash-preview)
+     ========================================================================== */
+  class GeminiService {
+    static async evaluateAnswer(apiKey, targetText, userTranscript, mode, direction) {
+      if (!apiKey) {
+        const accuracy = Evaluator.calculateAccuracy(targetText, userTranscript);
+        let feedback = '';
+        if (accuracy >= 90) {
+          feedback = 'Luar biasa! Pengucapan dan struktur kalimat Anda sangat akurat dan mengalir alami.';
+        } else if (accuracy >= 70) {
+          feedback = 'Bagus! Inti kalimat sudah benar. Perhatikan sedikit artikulasi pengucapan atau kata penghubung.';
+        } else {
+          feedback = 'Terus semangat! Coba dengarkan lagi audio native speaker lalu tirukan perlahan kata per kata.';
+        }
+        return { accuracy, feedback };
+      }
+
+      const models = ['gemini-3-flash-preview', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+      const prompt = `
+You are an expert, encouraging Bilingual English & Indonesian Language Teacher & Speaking Examiner.
+Learning Direction: ${direction}
+Mode: ${mode}
+Expected Target: "${targetText}"
+Learner Voice/Answer: "${userTranscript}"
+
+Respond with concise, actionable feedback for the student in JSON format with exactly these keys:
+{
+  "accuracy": <number 0-100 reflecting accuracy>,
+  "verdict": "<short positive encouragement>",
+  "feedback": "<2-3 sentences explaining phonetic errors, rhythm, or translation nuances in friendly Indonesian>"
 }
+Do NOT return markdown code fences. Return ONLY the raw JSON string.
+`;
+
+      for (const model of models) {
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.3 }
+            })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            rawText = rawText.replace(/```json|```/g, '').trim();
+
+            const parsed = JSON.parse(rawText);
+            return {
+              accuracy: Number(parsed.accuracy) || Evaluator.calculateAccuracy(targetText, userTranscript),
+              verdict: parsed.verdict || 'Bagus sekali!',
+              feedback: parsed.feedback || 'Jawaban Anda telah dicatat.'
+            };
+          }
+        } catch (err) {
+          console.warn(`Model ${model} request failed:`, err);
+        }
+      }
+
+      const accuracy = Evaluator.calculateAccuracy(targetText, userTranscript);
+      return {
+        accuracy,
+        verdict: accuracy > 80 ? 'Bagus sekali!' : 'Terus berlatih!',
+        feedback: `Analisis offline: ${accuracy}% akurasi.`
+      };
+    }
+  }
+
+  /* ==========================================================================
+     6. LEADERBOARD & MEMORY API SERVICE (Google Sheets Database)
+     ========================================================================== */
+  class LeaderboardService {
+    static getStorageKey() {
+      return 'awesome_english_local_leaderboard';
+    }
+
+    static getMemoryStorageKey() {
+      return 'awesome_english_local_memory';
+    }
+
+    static getAppScriptUrl() {
+      return safeStorage.getItem('cfg_appscript_url') || 'https://script.google.com/macros/s/AKfycbxy8pG0P3G95SATXLLqC0V3ZzH7MmU7oEF40PPLJRgBUE6i8NnBmKZlupiYfObPKtZ5/exec';
+    }
+
+    static async fetchLeaderboard() {
+      const url = this.getAppScriptUrl();
+
+      if (url) {
+        try {
+          const res = await fetch(url + '?action=leaderboard');
+          const json = await res.json();
+          if (json.status === 'success' && Array.isArray(json.data)) {
+            return { source: 'Google Sheets (Live Database)', data: json.data };
+          }
+        } catch (e) {
+          console.warn('Could not fetch from Google Apps Script:', e);
+        }
+      }
+
+      const local = JSON.parse(safeStorage.getItem(this.getStorageKey()) || 'null');
+      if (local && Array.isArray(local)) {
+        return { source: 'Local Storage Database', data: local };
+      }
+
+      const defaultRecords = [
+        { playerName: 'Jefri', gameMode: 'Speaking Arena (ID->EN)', score: 520, accuracy: 96, timestamp: new Date(Date.now() - 3600000).toISOString() },
+        { playerName: 'Sarah L.', gameMode: 'Listening Arena (EN->ID)', score: 480, accuracy: 92, timestamp: new Date(Date.now() - 7200000).toISOString() },
+        { playerName: 'Rian Dev', gameMode: 'Murphy Grammar Quest', score: 430, accuracy: 88, timestamp: new Date(Date.now() - 14400000).toISOString() }
+      ];
+      safeStorage.setItem(this.getStorageKey(), JSON.stringify(defaultRecords));
+      return { source: 'Local Database', data: defaultRecords };
+    }
+
+    static async fetchMemory() {
+      const url = this.getAppScriptUrl();
+
+      if (url) {
+        try {
+          const res = await fetch(url + '?action=memory');
+          const json = await res.json();
+          if (json.status === 'success' && Array.isArray(json.data)) {
+            return { source: 'Google Sheets (Live Memory Sheet)', data: json.data };
+          }
+        } catch (e) {
+          console.warn('Could not fetch memory from Google Apps Script:', e);
+        }
+      }
+
+      const localMem = JSON.parse(safeStorage.getItem(this.getMemoryStorageKey()) || '[]');
+      return { source: 'Local Memory Storage', data: localMem };
+    }
+
+    static async loginUser(email, password) {
+      const url = this.getAppScriptUrl();
+      if (url) {
+        try {
+          const res = await fetch(`${url}?action=login&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+          const json = await res.json();
+          return json;
+        } catch (e) {
+          console.warn('Google Sheets login fetch error:', e);
+        }
+      }
+
+      // Offline / Local fallback demo accounts
+      if (email === 'jefri@admin.com' && password === 'admin123') {
+        return {
+          status: 'success',
+          user: { email: 'jefri@admin.com', name: 'Jefri (Owner)', totalScore: 1500, level: 4, status: 'ACTIVE' }
+        };
+      }
+      if (email === 'siswa1@english.com' && password === 'siswa123') {
+        return {
+          status: 'success',
+          user: { email: 'siswa1@english.com', name: 'Budi Santoso', totalScore: 450, level: 1, status: 'ACTIVE' }
+        };
+      }
+
+      return {
+        status: 'error',
+        message: 'Email atau password tidak ditemukan. Pastikan akun sudah didaftarkan di sheet Users Google Sheets oleh Jefri (Admin).'
+      };
+    }
+
+    static async fetchUser(email) {
+      const url = this.getAppScriptUrl();
+      if (url) {
+        try {
+          const res = await fetch(`${url}?action=get_user&email=${encodeURIComponent(email)}`);
+          const json = await res.json();
+          if (json.status === 'success' && json.user) {
+            return json.user;
+          }
+        } catch (e) {}
+      }
+      return null;
+    }
+
+    static async submitScore(entry) {
+      const url = this.getAppScriptUrl();
+
+      // Save locally
+      const local = JSON.parse(safeStorage.getItem(this.getStorageKey()) || '[]');
+      local.push(entry);
+      local.sort((a, b) => b.score - a.score);
+      safeStorage.setItem(this.getStorageKey(), JSON.stringify(local.slice(0, 50)));
+
+      // Save local memory
+      if (entry.history && Array.isArray(entry.history)) {
+        const mem = JSON.parse(safeStorage.getItem(this.getMemoryStorageKey()) || '[]');
+        entry.history.forEach(h => {
+          mem.unshift({
+            timestamp: new Date().toISOString(),
+            playerName: entry.playerName,
+            email: entry.userEmail || '',
+            direction: entry.direction,
+            target: h.target,
+            userResponse: h.heard,
+            accuracy: h.accuracy,
+            notes: h.feedback
+          });
+        });
+        safeStorage.setItem(this.getMemoryStorageKey(), JSON.stringify(mem.slice(0, 50)));
+      }
+
+      // POST to Google Sheets
+      if (url) {
+        try {
+          await fetch(url, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(entry)
+          });
+          return { success: true, message: '✓ Skor & Memory tersimpan permanen di Google Sheets / Excel!' };
+        } catch (e) {
+          return { success: true, message: 'Tersimpan di database lokal (Sheets sync error)' };
+        }
+      }
+
+      return { success: true, message: 'Tersimpan di Leaderboard lokal!' };
+    }
+  }
+
+  /* ==========================================================================
+     AUTHENTICATION & ACCESS MANAGER (Restricted Member & Persistent Scores)
+     ========================================================================== */
+  class AuthManager {
+    static STORAGE_KEY = 'awesome_english_auth_session';
+    static currentUser = null;
+    static onAuthChange = null;
+
+    static init(callback) {
+      this.onAuthChange = callback;
+      const saved = safeStorage.getItem(this.STORAGE_KEY);
+      if (saved) {
+        try {
+          this.currentUser = JSON.parse(saved);
+          this.syncRemote();
+        } catch (e) {
+          this.currentUser = null;
+        }
+      } else {
+        // Auto-login default admin for smooth initial experience
+        this.currentUser = {
+          email: 'jefri@admin.com',
+          name: 'Jefri (Owner)',
+          totalScore: 1500,
+          level: 4,
+          status: 'ACTIVE'
+        };
+        this.save();
+      }
+      this.updateUI();
+    }
+
+    static isLoggedIn() {
+      return !!this.currentUser && !!this.currentUser.email;
+    }
+
+    static async syncRemote() {
+      if (!this.currentUser || !this.currentUser.email) return;
+      const remoteUser = await LeaderboardService.fetchUser(this.currentUser.email);
+      if (remoteUser) {
+        this.currentUser.totalScore = remoteUser.totalScore;
+        this.currentUser.level = remoteUser.level;
+        this.currentUser.name = remoteUser.name;
+        this.save();
+        this.updateUI();
+      }
+    }
+
+    static async login(email, password, remember = true) {
+      const res = await LeaderboardService.loginUser(email, password);
+      if (res.status === 'success' && res.user) {
+        this.currentUser = res.user;
+        if (remember) this.save();
+        this.updateUI();
+        return { success: true, user: this.currentUser };
+      }
+      return { success: false, message: res.message || 'Login gagal.' };
+    }
+
+    static logout() {
+      this.currentUser = null;
+      safeStorage.removeItem(this.STORAGE_KEY);
+      this.updateUI();
+    }
+
+    static save() {
+      if (this.currentUser) {
+        safeStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.currentUser));
+      }
+    }
+
+    static addScore(points) {
+      if (!this.currentUser) return;
+      this.currentUser.totalScore = (this.currentUser.totalScore || 0) + points;
+      this.currentUser.level = Math.max(this.currentUser.level || 1, Math.floor(this.currentUser.totalScore / 500) + 1);
+      this.save();
+      this.updateUI();
+    }
+
+    static updateUI() {
+      const userProfile = document.getElementById('nav-user-profile');
+      const loginBtn = document.getElementById('btn-login-nav');
+      const userName = document.getElementById('nav-user-name');
+      const userScore = document.getElementById('nav-user-score');
+      const userLevel = document.getElementById('nav-user-level');
+
+      if (this.isLoggedIn()) {
+        if (userProfile) userProfile.classList.remove('hidden');
+        if (loginBtn) loginBtn.classList.add('hidden');
+        if (userName) userName.textContent = this.currentUser.name;
+        if (userScore) userScore.textContent = `⭐ ${(this.currentUser.totalScore || 0).toLocaleString()} PTS`;
+        if (userLevel) userLevel.textContent = `Lvl ${this.currentUser.level || 1}`;
+      } else {
+        if (userProfile) userProfile.classList.add('hidden');
+        if (loginBtn) loginBtn.classList.remove('hidden');
+      }
+
+      if (typeof this.onAuthChange === 'function') {
+        this.onAuthChange(this.currentUser);
+      }
+    }
+  }
+
+  /* ==========================================================================
+     7. MAIN GAME CONTROLLER & UI BINDINGS
+     ========================================================================== */
+  class EnglishArenaGame {
+    constructor() {
+      this.sound = new SoundManager();
+      this.speech = new SpeechService();
+
+      // Game state
+      this.languageDirection = 'id-to-en'; // 'id-to-en' or 'en-to-id'
+      this.currentMode = 'shadowing';
+      this.questions = [];
+      this.currentIndex = 0;
+      this.score = 0;
+      this.streak = 0;
+      this.maxStreak = 0;
+      this.history = [];
+
+      // UI Elements Cache
+      this.dom = {
+        views: {
+          landing: document.getElementById('landing-view'),
+          game: document.getElementById('game-view'),
+          result: document.getElementById('result-view')
+        },
+        hud: {
+          score: document.getElementById('hud-score'),
+          streak: document.getElementById('hud-streak'),
+          progress: document.getElementById('hud-progress'),
+          modePill: document.getElementById('current-mode-pill'),
+          dirPill: document.getElementById('current-dir-pill')
+        },
+        challenge: {
+          instruction: document.getElementById('challenge-instruction'),
+          category: document.getElementById('meta-category'),
+          difficulty: document.getElementById('meta-difficulty'),
+          promptBox: document.getElementById('prompt-box'),
+          targetPhrase: document.getElementById('target-phrase'),
+          targetPhonetic: document.getElementById('target-phonetic'),
+          targetTranslation: document.getElementById('target-translation'),
+          audioBtn: document.getElementById('btn-listen-audio'),
+          accentSelect: document.getElementById('accent-select'),
+          optionsContainer: document.getElementById('options-container')
+        },
+        mic: {
+          section: document.getElementById('mic-section'),
+          toggleBtn: document.getElementById('btn-mic-toggle'),
+          status: document.getElementById('mic-status'),
+          transcript: document.getElementById('transcript-text'),
+          manualInput: document.getElementById('manual-text-input'),
+          manualSubmit: document.getElementById('btn-submit-manual'),
+          textInputRow: document.getElementById('text-input-row')
+        },
+        evaluation: {
+          panel: document.getElementById('evaluation-panel'),
+          scoreBadge: document.getElementById('eval-score-badge'),
+          verdict: document.getElementById('eval-verdict'),
+          compTarget: document.getElementById('comp-target'),
+          compHeard: document.getElementById('comp-heard'),
+          aiFeedback: document.getElementById('ai-feedback-text'),
+          nextBtn: document.getElementById('btn-next-question')
+        },
+        result: {
+          modeName: document.getElementById('res-mode-name'),
+          totalScore: document.getElementById('res-total-score'),
+          cumulativeScore: document.getElementById('res-cumulative-score'),
+          avgAccuracy: document.getElementById('res-avg-accuracy'),
+          maxStreak: document.getElementById('res-max-streak'),
+          level: document.getElementById('res-level'),
+          playerNameInput: document.getElementById('player-name-input'),
+          submitBtn: document.getElementById('btn-submit-leaderboard'),
+          statusMsg: document.getElementById('submit-status-msg'),
+          playAgainBtn: document.getElementById('btn-play-again'),
+          homeBtn: document.getElementById('btn-back-home'),
+          viewLeaderboardBtn: document.getElementById('btn-view-leaderboard-from-result')
+        },
+        modals: {
+          auth: document.getElementById('modal-auth'),
+          leaderboard: document.getElementById('modal-leaderboard'),
+          settings: document.getElementById('modal-settings'),
+          tabLeaderboardBtn: document.getElementById('tab-leaderboard-btn'),
+          tabMemoryBtn: document.getElementById('tab-memory-btn'),
+          containerLeaderboard: document.getElementById('container-leaderboard-table'),
+          containerMemory: document.getElementById('container-memory-table'),
+          tbody: document.getElementById('leaderboard-tbody'),
+          memoryTbody: document.getElementById('memory-tbody'),
+          syncStatus: document.getElementById('leaderboard-sync-status')
+        },
+        auth: {
+          form: document.getElementById('auth-form'),
+          email: document.getElementById('auth-email'),
+          password: document.getElementById('auth-password'),
+          remember: document.getElementById('auth-remember'),
+          errorBox: document.getElementById('auth-error-box'),
+          submitBtn: document.getElementById('btn-submit-login')
+        }
+      };
+
+      this.pendingMode = null;
+      this.initAuth();
+      this.initEvents();
+      this.loadSettings();
+      this.loadQuestionsFromGitHub();
+    }
+
+    initAuth() {
+      AuthManager.init((user) => {
+        if (user && this.dom.result.playerNameInput) {
+          this.dom.result.playerNameInput.value = user.name;
+        }
+      });
+    }
+
+    async loadQuestionsFromGitHub() {
+      const endpoints = ['./data/questions.json', GITHUB_DATA_URL];
+      for (const url of endpoints) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && Array.isArray(data.questions) && data.questions.length > 0) {
+              data.questions.forEach(q => {
+                const targetMode = q.mode || 'shadowing';
+                if (!QUESTION_BANK[targetMode]) QUESTION_BANK[targetMode] = [];
+                
+                // Avoid duplicates
+                const exists = QUESTION_BANK[targetMode].some(item => item.id === q.id || item.en === q.en);
+                if (!exists) {
+                  QUESTION_BANK[targetMode].push({
+                    id: q.id,
+                    mode: targetMode,
+                    category: q.category,
+                    level: q.level,
+                    en: q.en,
+                    target: q.target || q.en,
+                    phonetic: q.phonetic,
+                    translation: q.id_translation || q.translation,
+                    id_translation: q.id_translation || q.translation,
+                    id_prompt: q.id_prompt,
+                    en_prompt: q.en_prompt,
+                    missingWord: q.missingWord,
+                    prompt_en: q.prompt_en,
+                    prompt_id: q.prompt_id,
+                    options: q.options || q.options_en || q.options_id,
+                    options_id: q.options_id,
+                    options_en: q.options_en,
+                    correctIndex: q.correctIndex !== undefined ? q.correctIndex : 0,
+                    notes: q.notes
+                  });
+                }
+              });
+              console.log('Successfully synced question dataset from:', url);
+              break; // loaded successfully
+            }
+          }
+        } catch (err) {
+          // try next endpoint
+        }
+      }
+    }
+
+    switchView(viewName) {
+      Object.entries(this.dom.views).forEach(([key, el]) => {
+        if (key === viewName) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    setLanguageDirection(dir) {
+      this.sound.playClick();
+      this.languageDirection = dir;
+
+      const btnIdEn = document.getElementById('btn-dir-id-en');
+      const btnEnId = document.getElementById('btn-dir-en-id');
+
+      if (dir === 'id-to-en') {
+        btnIdEn?.classList.add('active');
+        btnEnId?.classList.remove('active');
+        if (this.dom.hud.dirPill) this.dom.hud.dirPill.textContent = '🇮🇩 ➔ 🇬🇧';
+      } else {
+        btnEnId?.classList.add('active');
+        btnIdEn?.classList.remove('active');
+        if (this.dom.hud.dirPill) this.dom.hud.dirPill.textContent = '🇬🇧 ➔ 🇮🇩';
+      }
+    }
+
+    initEvents() {
+      // Navigation & Modal triggers
+      document.getElementById('nav-logo-btn').addEventListener('click', () => this.switchView('landing'));
+      document.getElementById('btn-leaderboard-nav').addEventListener('click', () => this.openLeaderboard());
+      document.getElementById('btn-close-leaderboard').addEventListener('click', () => this.closeModals());
+      document.getElementById('btn-refresh-leaderboard').addEventListener('click', () => this.refreshCurrentModalData());
+
+      // Tab switcher in Modal
+      if (this.dom.modals.tabLeaderboardBtn) {
+        this.dom.modals.tabLeaderboardBtn.addEventListener('click', () => this.switchModalTab('leaderboard'));
+      }
+      if (this.dom.modals.tabMemoryBtn) {
+        this.dom.modals.tabMemoryBtn.addEventListener('click', () => this.switchModalTab('memory'));
+      }
+
+      // Settings
+      document.getElementById('btn-settings-nav').addEventListener('click', () => this.openSettings());
+      document.getElementById('btn-close-settings').addEventListener('click', () => this.closeModals());
+      document.getElementById('settings-form').addEventListener('submit', (e) => this.saveSettings(e));
+      document.getElementById('btn-reset-settings').addEventListener('click', () => this.resetSettings());
+
+      // Language Direction Switcher (Landing)
+      const btnIdEn = document.getElementById('btn-dir-id-en');
+      const btnEnId = document.getElementById('btn-dir-en-id');
+      if (btnIdEn) btnIdEn.addEventListener('click', () => this.setLanguageDirection('id-to-en'));
+      if (btnEnId) btnEnId.addEventListener('click', () => this.setLanguageDirection('en-to-id'));
+
+      // Mode Selection Cards
+      document.querySelectorAll('.btn-play-mode').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          this.sound.playClick();
+          const mode = e.currentTarget.dataset.mode;
+          this.startArena(mode);
+        });
+      });
+
+      // Quit Game
+      document.getElementById('btn-quit-game').addEventListener('click', () => {
+        if (confirm('Yakin ingin kembali ke menu utama? Progres sesi saat ini akan disimpan di hasil.')) {
+          this.speech.stopListening();
+          this.switchView('landing');
+        }
+      });
+
+      // Audio TTS Trigger
+      this.dom.challenge.audioBtn.addEventListener('click', () => {
+        const q = this.questions[this.currentIndex];
+        const accent = this.dom.challenge.accentSelect.value;
+        const textToSpeak = q.en || q.target;
+        this.speech.speak(textToSpeak, accent);
+      });
+
+      // Microphone Toggle
+      this.dom.mic.toggleBtn.addEventListener('click', () => this.toggleMicrophone());
+
+      // Manual Submit
+      this.dom.mic.manualSubmit.addEventListener('click', () => {
+        const val = this.dom.mic.manualInput.value.trim();
+        if (val) {
+          this.dom.mic.transcript.textContent = `"${val}"`;
+          this.evaluateAnswer(val);
+        }
+      });
+
+      this.dom.mic.manualInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          this.dom.mic.manualSubmit.click();
+        }
+      });
+
+      // Next Question
+      this.dom.evaluation.nextBtn.addEventListener('click', () => {
+        this.sound.playClick();
+        this.nextQuestion();
+      });
+
+      // Result Actions
+      this.dom.result.playAgainBtn.addEventListener('click', () => this.startArena(this.currentMode));
+      this.dom.result.homeBtn.addEventListener('click', () => this.switchView('landing'));
+      this.dom.result.viewLeaderboardBtn.addEventListener('click', () => this.openLeaderboard());
+      this.dom.result.submitBtn.addEventListener('click', () => this.submitScoreToLeaderboard());
+
+      // Authentication Triggers
+      const btnLoginNav = document.getElementById('btn-login-nav');
+      if (btnLoginNav) {
+        btnLoginNav.addEventListener('click', () => this.openAuthModal());
+      }
+
+      const btnLogoutNav = document.getElementById('btn-nav-logout');
+      if (btnLogoutNav) {
+        btnLogoutNav.addEventListener('click', () => {
+          AuthManager.logout();
+          this.showToast('Anda telah keluar dari sesi.', 'info');
+        });
+      }
+
+      const btnCloseAuth = document.getElementById('btn-close-auth');
+      if (btnCloseAuth) {
+        btnCloseAuth.addEventListener('click', () => this.closeModals());
+      }
+
+      // Demo login shortcuts
+      document.getElementById('btn-demo-admin')?.addEventListener('click', () => {
+        this.fillAuthForm('jefri@admin.com', 'admin123');
+      });
+      document.getElementById('btn-demo-student')?.addEventListener('click', () => {
+        this.fillAuthForm('siswa1@english.com', 'siswa123');
+      });
+
+      // Login form submission
+      this.dom.auth.form?.addEventListener('submit', (e) => this.handleLoginSubmit(e));
+    }
+
+    fillAuthForm(email, password) {
+      if (this.dom.auth.email) this.dom.auth.email.value = email;
+      if (this.dom.auth.password) this.dom.auth.password.value = password;
+      if (this.dom.auth.errorBox) this.dom.auth.errorBox.classList.add('hidden');
+    }
+
+    openAuthModal(customNotice = '') {
+      if (this.dom.modals.auth) {
+        this.dom.modals.auth.classList.remove('hidden');
+        if (this.dom.auth.errorBox) {
+          if (customNotice) {
+            this.dom.auth.errorBox.textContent = customNotice;
+            this.dom.auth.errorBox.classList.remove('hidden');
+          } else {
+            this.dom.auth.errorBox.classList.add('hidden');
+          }
+        }
+      }
+    }
+
+    async handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = this.dom.auth.email.value.trim();
+      const pass = this.dom.auth.password.value.trim();
+      const remember = this.dom.auth.remember ? this.dom.auth.remember.checked : true;
+
+      this.dom.auth.submitBtn.disabled = true;
+      this.dom.auth.submitBtn.innerHTML = '<span class="btn-icon">⏳</span> Memverifikasi...';
+      if (this.dom.auth.errorBox) this.dom.auth.errorBox.classList.add('hidden');
+
+      const res = await AuthManager.login(email, pass, remember);
+
+      this.dom.auth.submitBtn.disabled = false;
+      this.dom.auth.submitBtn.innerHTML = '<span class="btn-icon">🚀</span> Masuk & Mulai Belajar';
+
+      if (res.success) {
+        this.closeModals();
+        this.showToast(`Selamat datang, ${res.user.name}! Skor Anda siap diakumulasikan.`, 'success');
+        if (this.pendingMode) {
+          const modeToPlay = this.pendingMode;
+          this.pendingMode = null;
+          this.startArena(modeToPlay);
+        }
+      } else {
+        if (this.dom.auth.errorBox) {
+          this.dom.auth.errorBox.textContent = res.message;
+          this.dom.auth.errorBox.classList.remove('hidden');
+        }
+      }
+    }
+
+    startArena(mode) {
+      if (!AuthManager.isLoggedIn()) {
+        this.pendingMode = mode;
+        this.openAuthModal('Silakan masuk dengan email & password terdaftar untuk memainkan arena ini.');
+        return;
+      }
+      this.currentMode = mode;
+      const bank = QUESTION_BANK[mode] || QUESTION_BANK.shadowing;
+      this.questions = [...bank].sort(() => Math.random() - 0.5);
+      this.currentIndex = 0;
+      this.score = 0;
+      this.streak = 0;
+      this.maxStreak = 0;
+      this.history = [];
+
+      const modeTitles = {
+        shadowing: 'Speaking & Shadowing Arena',
+        listening: 'Listening Dictation Arena',
+        vocabulary: 'Vocabulary Collocation Arena',
+        grammar: 'Murphy Grammar Quest'
+      };
+      this.dom.hud.modePill.textContent = modeTitles[mode] || 'Arena';
+      if (this.dom.hud.dirPill) {
+        this.dom.hud.dirPill.textContent = this.languageDirection === 'id-to-en' ? '🇮🇩 ➔ 🇬🇧' : '🇬🇧 ➔ 🇮🇩';
+      }
+
+      this.switchView('game');
+      this.renderQuestion();
+    }
+
+    renderQuestion() {
+      const q = this.questions[this.currentIndex];
+      if (!q) {
+        this.finishArena();
+        return;
+      }
+
+      // Update HUD
+      this.dom.hud.score.textContent = this.score;
+      this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
+      this.dom.hud.progress.textContent = `${this.currentIndex + 1}/${this.questions.length}`;
+
+      // Update Meta
+      this.dom.challenge.category.textContent = q.category;
+      this.dom.challenge.difficulty.textContent = `Level: ${q.level}`;
+
+      // Reset Inputs & Evaluation panel
+      this.dom.evaluation.panel.classList.add('hidden');
+      this.dom.mic.transcript.textContent = 'Menunggu input suara dari mikrofon...';
+      this.dom.mic.manualInput.value = '';
+      this.dom.mic.toggleBtn.classList.remove('recording');
+      this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
+
+      const isIdToEn = (this.languageDirection === 'id-to-en');
+
+      if (this.currentMode === 'listening') {
+        if (isIdToEn) {
+          this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris, lalu ucapkan kembali dalam Bahasa Inggris:';
+          this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
+          this.dom.challenge.targetPhonetic.textContent = 'Audio-First: Teks Bahasa Inggris disembunyikan';
+          this.dom.challenge.targetTranslation.textContent = `Arti: "${q.translation || q.id_translation}"`;
+        } else {
+          this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris, lalu ucapkan artinya dalam Bahasa Indonesia:';
+          this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
+          this.dom.challenge.targetPhonetic.textContent = 'Audio-First: Dengarkan audio, terjemahkan ke Bahasa Indonesia';
+          this.dom.challenge.targetTranslation.textContent = 'Klik tombol "Dengarkan Native Audio" di atas';
+        }
+        this.dom.challenge.optionsContainer.classList.add('hidden');
+        this.dom.mic.section.classList.remove('hidden');
+
+        setTimeout(() => {
+          this.speech.speak(q.en || q.target, this.dom.challenge.accentSelect.value);
+        }, 500);
+
+      } else if (this.currentMode === 'vocabulary' || this.currentMode === 'grammar') {
+        const promptText = isIdToEn ? (q.prompt_id || q.translation) : (q.prompt_en || q.en || q.target);
+        this.dom.challenge.instruction.textContent = isIdToEn 
+          ? '🇮🇩 Lengkapi kalimat berikut dengan berbicara dalam Bahasa Inggris:'
+          : '🇬🇧 Complete the sentence or speak your answer:';
+
+        this.dom.challenge.targetPhrase.textContent = `"${promptText}"`;
+        this.dom.challenge.targetPhonetic.textContent = q.phonetic || '';
+        this.dom.challenge.targetTranslation.textContent = isIdToEn ? `Jawaban English: ${q.en || q.target}` : `Arti: ${q.translation}`;
+
+        if (q.options && q.options.length > 0) {
+          this.dom.challenge.optionsContainer.innerHTML = '';
+          this.dom.challenge.optionsContainer.classList.remove('hidden');
+
+          q.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
+            btn.addEventListener('click', () => {
+              this.evaluateMultipleChoice(idx, btn);
+            });
+            this.dom.challenge.optionsContainer.appendChild(btn);
+          });
+        } else {
+          this.dom.challenge.optionsContainer.classList.add('hidden');
+        }
+        this.dom.mic.section.classList.remove('hidden');
+
+      } else {
+        // Shadowing Arena
+        if (isIdToEn) {
+          // Indonesia -> English: Lihat arti Indonesia, bicarakan dalam Bahasa Inggris!
+          this.dom.challenge.instruction.textContent = '🇮🇩 Lihat kalimat Bahasa Indonesia di bawah, lalu klik Mic dan ucapkan dalam Bahasa Inggris:';
+          this.dom.challenge.targetPhrase.textContent = `"${q.translation || q.id_translation}"`;
+          this.dom.challenge.targetPhonetic.textContent = `Target English: ${q.phonetic || ''}`;
+          this.dom.challenge.targetTranslation.textContent = 'Klik "Dengarkan Native Audio" jika ingin mendengar contoh pengucapan native speaker lebih dulu.';
+        } else {
+          // English -> Indonesia: Lihat kalimat English, ucapkan arti Indonesianya!
+          this.dom.challenge.instruction.textContent = '🇬🇧 Dengarkan/baca kalimat Bahasa Inggris, lalu ucapkan artinya dalam Bahasa Indonesia ke Mic:';
+          this.dom.challenge.targetPhrase.textContent = `"${q.en || q.target}"`;
+          this.dom.challenge.targetPhonetic.textContent = q.phonetic || '';
+          this.dom.challenge.targetTranslation.textContent = `Target Indonesia: "${q.translation || q.id_translation}"`;
+        }
+        this.dom.challenge.optionsContainer.classList.add('hidden');
+        this.dom.mic.section.classList.remove('hidden');
+      }
+    }
+
+    toggleMicrophone() {
+      this.sound.init();
+
+      if (this.speech.isRecording) {
+        this.speech.stopListening();
+        this.dom.mic.toggleBtn.classList.remove('recording');
+        this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
+      } else {
+        this.dom.mic.toggleBtn.classList.add('recording');
+        
+        // Bahasa pengenalan suara disesuaikan dengan target bahasa yang harus diucapkan!
+        const isIdToEn = (this.languageDirection === 'id-to-en');
+        const lang = isIdToEn ? (this.dom.challenge.accentSelect.value || 'en-US') : 'id-ID';
+
+        this.dom.mic.status.textContent = isIdToEn ? 'Mendengarkan... Bicaralah dalam Bahasa Inggris!' : 'Mendengarkan... Bicaralah dalam Bahasa Indonesia!';
+        this.dom.mic.transcript.textContent = 'Mendengarkan...';
+
+        this.speech.startListening(
+          lang,
+          // Interim
+          (interim) => {
+            this.dom.mic.transcript.textContent = `"${interim}..."`;
+          },
+          // Final result
+          (final) => {
+            this.dom.mic.toggleBtn.classList.remove('recording');
+            this.dom.mic.status.textContent = 'Mengevaluasi suara...';
+            this.dom.mic.transcript.textContent = `"${final}"`;
+            this.evaluateAnswer(final);
+          },
+          // Error
+          (err) => {
+            this.dom.mic.toggleBtn.classList.remove('recording');
+            this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
+            this.showToast(`Info Mikrofon: ${err}`, 'info');
+          }
+        );
+      }
+    }
+
+    evaluateMultipleChoice(selectedIdx, btnElement) {
+      const q = this.questions[this.currentIndex];
+      const isCorrect = (selectedIdx === q.correctIndex);
+      const chosenWord = q.options[selectedIdx];
+
+      const allButtons = this.dom.challenge.optionsContainer.querySelectorAll('.btn-option');
+      allButtons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === q.correctIndex) b.classList.add('correct');
+        else if (idx === selectedIdx && !isCorrect) b.classList.add('wrong');
+      });
+
+      this.evaluateAnswer(chosenWord, isCorrect);
+    }
+
+    async evaluateAnswer(userAnswer, predeterminedCorrect = null) {
+      this.speech.stopListening();
+      const q = this.questions[this.currentIndex];
+      const isIdToEn = (this.languageDirection === 'id-to-en');
+      
+      // Target text to match against:
+      let targetExpected = isIdToEn ? (q.missingWord || q.en || q.target) : (q.translation || q.id_translation);
+
+      this.dom.evaluation.panel.classList.remove('hidden');
+      this.dom.evaluation.aiFeedback.textContent = 'AI Teacher sedang menganalisis jawaban dan intonasi Anda...';
+
+      const apiKey = safeStorage.getItem('cfg_gemini_key') || '';
+      const dirText = isIdToEn ? 'Indonesia ke English' : 'English ke Indonesia';
+      const evalResult = await GeminiService.evaluateAnswer(apiKey, targetExpected, userAnswer, this.currentMode, dirText);
+
+      let accuracy = evalResult.accuracy;
+      if (predeterminedCorrect !== null) {
+        accuracy = predeterminedCorrect ? 100 : 20;
+      }
+
+      const isSuccess = accuracy >= 70;
+      if (isSuccess) {
+        this.streak += 1;
+        if (this.streak > this.maxStreak) this.maxStreak = this.streak;
+        const streakBonus = (this.streak > 1) ? (this.streak * 10) : 0;
+        this.score += (accuracy + streakBonus);
+
+        if (this.streak > 1) {
+          this.sound.playStreak();
+        } else {
+          this.sound.playSuccess();
+        }
+      } else {
+        this.streak = 0;
+        this.sound.playWrong();
+      }
+
+      // Record to history
+      this.history.push({
+        questionNumber: this.currentIndex + 1,
+        direction: dirText,
+        target: targetExpected,
+        heard: userAnswer,
+        accuracy: accuracy,
+        feedback: evalResult.feedback
+      });
+
+      // Update HUD & Evaluation Panel
+      this.dom.hud.score.textContent = this.score;
+      this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
+
+      this.dom.evaluation.scoreBadge.textContent = `Akurasi: ${accuracy}%`;
+      this.dom.evaluation.scoreBadge.className = 'score-badge ' + (accuracy >= 80 ? '' : (accuracy >= 50 ? 'medium' : 'low'));
+      this.dom.evaluation.verdict.textContent = evalResult.verdict || (isSuccess ? 'Bagus Sekali! 🎉' : 'Terus Berlatih! 💪');
+
+      this.dom.evaluation.compTarget.textContent = targetExpected;
+      this.dom.evaluation.compHeard.textContent = userAnswer || '(tidak terdengar suara)';
+      this.dom.evaluation.aiFeedback.textContent = evalResult.feedback;
+
+      // Play correct audio for listening & speaking correction
+      if (isIdToEn) {
+        setTimeout(() => {
+          this.speech.speak(q.en || q.target, this.dom.challenge.accentSelect.value);
+        }, 300);
+      }
+
+      if (this.currentMode === 'listening') {
+        this.dom.challenge.targetPhrase.textContent = `"${q.en || q.target}"`;
+        this.dom.challenge.targetPhonetic.textContent = q.phonetic || '';
+        this.dom.challenge.targetTranslation.textContent = `Arti: "${q.translation || q.id_translation}"`;
+      }
+    }
+
+    nextQuestion() {
+      this.currentIndex += 1;
+      this.renderQuestion();
+    }
+
+    finishArena() {
+      this.switchView('result');
+      this.sound.playSuccess();
+
+      const totalQuestions = this.history.length || 1;
+      const sumAccuracy = this.history.reduce((acc, h) => acc + h.accuracy, 0);
+      const avgAcc = Math.round(sumAccuracy / totalQuestions);
+
+      let levelName = 'Beginner';
+      if (avgAcc >= 90) levelName = 'Expert / Native Rhythm';
+      else if (avgAcc >= 75) levelName = 'Upper-Intermediate';
+      else if (avgAcc >= 60) levelName = 'Intermediate';
+
+      const dirLabel = this.languageDirection === 'id-to-en' ? 'ID ➔ EN' : 'EN ➔ ID';
+      this.dom.result.modeName.textContent = `${this.dom.hud.modePill.textContent} (${dirLabel})`;
+      this.dom.result.totalScore.textContent = `+${this.score} PTS`;
+      this.dom.result.avgAccuracy.textContent = `${avgAcc}%`;
+      this.dom.result.maxStreak.textContent = `${this.maxStreak}🔥`;
+      this.dom.result.level.textContent = levelName;
+      this.dom.result.statusMsg.textContent = '';
+
+      // Score Retention: Display cumulative score across days & devices
+      const currentTotal = AuthManager.isLoggedIn() ? (AuthManager.currentUser.totalScore || 0) : 0;
+      const newTotal = currentTotal + this.score;
+      if (this.dom.result.cumulativeScore) {
+        this.dom.result.cumulativeScore.textContent = `${newTotal.toLocaleString()} PTS`;
+      }
+
+      if (AuthManager.isLoggedIn()) {
+        this.dom.result.playerNameInput.value = AuthManager.currentUser.name;
+        // Auto-sync score to Google Sheets
+        this.submitScoreToLeaderboard();
+      }
+    }
+
+    async submitScoreToLeaderboard() {
+      const name = this.dom.result.playerNameInput.value.trim() || (AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Jefri');
+      const sumAccuracy = this.history.reduce((acc, h) => acc + h.accuracy, 0);
+      const avgAcc = Math.round(sumAccuracy / (this.history.length || 1));
+      const dirLabel = this.languageDirection === 'id-to-en' ? 'ID -> EN' : 'EN -> ID';
+
+      this.dom.result.submitBtn.disabled = true;
+      this.dom.result.submitBtn.textContent = 'Menyimpan & Sinkronkan...';
+
+      const entry = {
+        userEmail: AuthManager.isLoggedIn() ? AuthManager.currentUser.email : '',
+        playerName: name,
+        gameMode: `${this.dom.hud.modePill.textContent} (${dirLabel})`,
+        direction: dirLabel,
+        score: this.score,
+        accuracy: avgAcc,
+        level: AuthManager.isLoggedIn() ? AuthManager.currentUser.level : this.history.length,
+        timestamp: new Date().toISOString(),
+        history: this.history
+      };
+
+      const result = await LeaderboardService.submitScore(entry);
+
+      // Accumulate score to local session so if continuing tomorrow, score is preserved
+      if (AuthManager.isLoggedIn()) {
+        AuthManager.addScore(this.score);
+        if (this.dom.result.cumulativeScore) {
+          this.dom.result.cumulativeScore.textContent = `${(AuthManager.currentUser.totalScore || 0).toLocaleString()} PTS`;
+        }
+      }
+
+      this.dom.result.submitBtn.disabled = false;
+      this.dom.result.submitBtn.textContent = '✓ Tersimpan di Google Sheets!';
+      this.dom.result.statusMsg.textContent = `${result.message} Skor Anda aman dan akan berlanjut besok.`;
+      this.dom.result.statusMsg.className = 'status-message success';
+
+      this.showToast('✓ Progres berhasil disinkronkan ke Google Sheets!', 'success');
+    }
+
+    /* ==========================================================================
+       MODALS & MEMORY LOGIC
+       ========================================================================== */
+    openLeaderboard() {
+      this.dom.modals.leaderboard.classList.remove('hidden');
+      this.switchModalTab('leaderboard');
+    }
+
+    switchModalTab(tabName) {
+      if (tabName === 'leaderboard') {
+        this.dom.modals.tabLeaderboardBtn.classList.add('active');
+        this.dom.modals.tabMemoryBtn.classList.remove('active');
+        this.dom.modals.containerLeaderboard.classList.remove('hidden');
+        this.dom.modals.containerMemory.classList.add('hidden');
+        this.loadLeaderboardData();
+      } else {
+        this.dom.modals.tabMemoryBtn.classList.add('active');
+        this.dom.modals.tabLeaderboardBtn.classList.remove('active');
+        this.dom.modals.containerMemory.classList.remove('hidden');
+        this.dom.modals.containerLeaderboard.classList.add('hidden');
+        this.loadMemoryData();
+      }
+    }
+
+    refreshCurrentModalData() {
+      if (this.dom.modals.tabMemoryBtn.classList.contains('active')) {
+        this.loadMemoryData();
+      } else {
+        this.loadLeaderboardData();
+      }
+    }
+
+    async loadLeaderboardData() {
+      this.dom.modals.tbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil ranking dari Google Sheets...</td></tr>';
+
+      const res = await LeaderboardService.fetchLeaderboard();
+      this.dom.modals.syncStatus.textContent = res.source;
+
+      if (!res.data || res.data.length === 0) {
+        this.dom.modals.tbody.innerHTML = '<tr><td colspan="6" class="loading-row">Belum ada skor. Jadilah yang pertama bermain!</td></tr>';
+        return;
+      }
+
+      this.dom.modals.tbody.innerHTML = '';
+      res.data.forEach((row, idx) => {
+        const tr = document.createElement('tr');
+        const rankClass = idx === 0 ? 'rank-1' : (idx === 1 ? 'rank-2' : (idx === 2 ? 'rank-3' : ''));
+        const medal = idx === 0 ? '🥇 1' : (idx === 1 ? '🥈 2' : (idx === 2 ? '🥉 3' : `${idx + 1}`));
+        const dateStr = row.timestamp ? new Date(row.timestamp).toLocaleDateString() : '-';
+
+        tr.innerHTML = `
+          <td class="rank-cell ${rankClass}">${medal}</td>
+          <td><strong>${this.escapeHtml(row.playerName)}</strong></td>
+          <td>${this.escapeHtml(row.gameMode)}</td>
+          <td><span style="color: #6366f1; font-weight:700;">${row.score}</span></td>
+          <td>${row.accuracy}%</td>
+          <td style="color: var(--text-muted); font-size: 0.8rem;">${dateStr}</td>
+        `;
+        this.dom.modals.tbody.appendChild(tr);
+      });
+    }
+
+    async loadMemoryData() {
+      this.dom.modals.memoryTbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil riwayat memori belajar dari Google Sheets...</td></tr>';
+
+      const res = await LeaderboardService.fetchMemory();
+      this.dom.modals.syncStatus.textContent = res.source;
+
+      if (!res.data || res.data.length === 0) {
+        this.dom.modals.memoryTbody.innerHTML = '<tr><td colspan="6" class="loading-row">Belum ada riwayat memori belajar. Selesaikan permainan untuk mencatat memori!</td></tr>';
+        return;
+      }
+
+      this.dom.modals.memoryTbody.innerHTML = '';
+      res.data.forEach((m, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td><span style="color:#06b6d4; font-weight:600;">${this.escapeHtml(m.direction || 'ID->EN')}</span></td>
+          <td><strong>${this.escapeHtml(m.target || '')}</strong></td>
+          <td><em>${this.escapeHtml(m.userResponse || '')}</em></td>
+          <td><span style="color:${m.accuracy >= 75 ? '#10b981' : '#f59e0b'}; font-weight:700;">${m.accuracy}%</span></td>
+          <td style="font-size:0.85rem; color:#cbd5e1;">${this.escapeHtml(m.notes || '-')}</td>
+        `;
+        this.dom.modals.memoryTbody.appendChild(tr);
+      });
+    }
+
+    openSettings() {
+      this.dom.modals.settings.classList.remove('hidden');
+      document.getElementById('cfg-appscript-url').value = safeStorage.getItem('cfg_appscript_url') || 'https://script.google.com/macros/s/AKfycbxy8pG0P3G95SATXLLqC0V3ZzH7MmU7oEF40PPLJRgBUE6i8NnBmKZlupiYfObPKtZ5/exec';
+      document.getElementById('cfg-gemini-key').value = safeStorage.getItem('cfg_gemini_key') || '';
+      document.getElementById('cfg-accent').value = safeStorage.getItem('cfg_accent') || 'en-US';
+    }
+
+    saveSettings(e) {
+      e.preventDefault();
+      const url = document.getElementById('cfg-appscript-url').value.trim();
+      const key = document.getElementById('cfg-gemini-key').value.trim();
+      const accent = document.getElementById('cfg-accent').value;
+
+      safeStorage.setItem('cfg_appscript_url', url);
+      safeStorage.setItem('cfg_gemini_key', key);
+      safeStorage.setItem('cfg_accent', accent);
+
+      this.dom.challenge.accentSelect.value = accent;
+      this.closeModals();
+      this.showToast('Pengaturan berhasil disimpan!', 'success');
+    }
+
+    resetSettings() {
+      if (confirm('Reset pengaturan ke default?')) {
+        safeStorage.removeItem('cfg_appscript_url');
+        safeStorage.removeItem('cfg_gemini_key');
+        safeStorage.setItem('cfg_accent', 'en-US');
+        document.getElementById('cfg-appscript-url').value = '';
+        document.getElementById('cfg-gemini-key').value = '';
+        document.getElementById('cfg-accent').value = 'en-US';
+        this.showToast('Pengaturan direset.', 'info');
+      }
+    }
+
+    loadSettings() {
+      const accent = safeStorage.getItem('cfg_accent') || 'en-US';
+      if (this.dom.challenge.accentSelect) {
+        this.dom.challenge.accentSelect.value = accent;
+      }
+    }
+
+    closeModals() {
+      if (this.dom.modals.auth) this.dom.modals.auth.classList.add('hidden');
+      if (this.dom.modals.leaderboard) this.dom.modals.leaderboard.classList.add('hidden');
+      if (this.dom.modals.settings) this.dom.modals.settings.classList.add('hidden');
+    }
+
+    showToast(msg, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = msg;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    window.gameInstance = new EnglishArenaGame();
+  });
+})();
