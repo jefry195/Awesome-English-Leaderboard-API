@@ -232,6 +232,348 @@ body {
   gap: 0.75rem;
 }
 
+.mobile-nav-controls {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE SLIDE-OUT DRAWER & HAMBURGER
+   -------------------------------------------------------------------------- */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  transition: opacity var(--trans-normal);
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 86vw;
+  background: rgba(12, 16, 28, 0.98);
+  border-left: 1px solid var(--border-glass);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.drawer-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.btn-close-drawer {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+  line-height: 1;
+}
+
+.btn-close-drawer:hover, .btn-close-drawer:active {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fff;
+  border-color: var(--accent-rose);
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.2rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Profile Box in Drawer */
+.drawer-profile-box {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.drawer-profile-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.drawer-profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px solid var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.drawer-profile-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.drawer-profile-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drawer-profile-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.drawer-score-pill {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.drawer-lvl-pill {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.btn-drawer-action {
+  font-size: 0.88rem;
+  padding: 0.65rem;
+}
+
+.btn-danger-outline {
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #fecdd3;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--trans-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-danger-outline:hover {
+  background: rgba(244, 63, 94, 0.3);
+  color: #fff;
+  border-color: #f43f5e;
+}
+
+/* Nav items inside Drawer */
+.drawer-nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.drawer-menu-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 1rem;
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--trans-fast);
+  touch-action: manipulation;
+}
+
+.drawer-menu-btn:hover, .drawer-menu-btn:active {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--primary);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.drawer-menu-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.drawer-menu-text {
+  flex: 1;
+  text-align: left;
+}
+
+.drawer-menu-arrow {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.drawer-credit-btn {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.2));
+  border-color: rgba(139, 92, 246, 0.35);
+}
+
+/* Drawer WhatsApp Card */
+.drawer-wa-card {
+  background: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.25);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+.drawer-wa-heading {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #34d399;
+  margin-bottom: 0.3rem;
+}
+
+.drawer-wa-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.btn-wa-drawer {
+  width: 100%;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  transition: all var(--trans-fast);
+  touch-action: manipulation;
+}
+
+.btn-wa-drawer:hover {
+  background: linear-gradient(135deg, #2bf075, #15a594);
+  transform: translateY(-1px);
+}
+
+.drawer-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-glass);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Hamburger Button */
+.btn-hamburger {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+  padding: 0;
+  touch-action: manipulation;
+}
+
+.btn-hamburger:hover, .btn-hamburger:active {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+
+.hamburger-line {
+  width: 20px;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all var(--trans-fast);
+}
+
+.mobile-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-full);
+  max-width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* --------------------------------------------------------------------------
    BUTTONS
    -------------------------------------------------------------------------- */
@@ -1617,14 +1959,14 @@ body {
     padding: 0.18rem 0.45rem;
   }
 
-  .nav-actions {
-    gap: 0.35rem;
+  .desktop-nav-actions {
+    display: none !important;
   }
 
-  .nav-actions .btn {
-    padding: 0.42rem 0.7rem;
-    font-size: 0.8rem;
-    min-height: 36px;
+  .mobile-nav-controls {
+    display: flex !important;
+    align-items: center;
+    gap: 0.45rem;
   }
 
   .main-layout {
@@ -1903,31 +2245,7 @@ body {
   }
 }
 
-/* NAVBAR RESPONSIVE COLLAPSE (<= 640px) */
-@media (max-width: 640px) {
-  .credit-full { display: none; }
-  .credit-short { display: inline; }
-}
-
-@media (max-width: 520px) {
-  .nav-btn-text {
-    display: none;
-  }
-
-  .btn-credit-jefri {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.76rem;
-  }
-
-  .nav-actions .btn {
-    padding: 0.38rem 0.6rem;
-    font-size: 0.85rem;
-  }
-
-  .logo-title {
-    font-size: 0.95rem;
-  }
-}
+/* SMALL PHONE TWEAKS */
 
 /* EXTRA SMALL PHONE (<= 380px, e.g. iPhone SE, Fold outer) */
 @media (max-width: 380px) {
@@ -2375,7 +2693,9 @@ body {
         <span class="logo-badge">⚡ AWESOME</span>
         <span class="logo-title">English Arena</span>
       </div>
-      <div class="nav-actions">
+
+      <!-- Desktop Nav Actions (Desktop & Tablet Wide) -->
+      <div class="nav-actions desktop-nav-actions">
         <!-- Logged-in User Profile Badge -->
         <div id="nav-user-profile" class="user-pill hidden">
           <span class="user-avatar" id="nav-user-avatar">👤</span>
@@ -2386,8 +2706,7 @@ body {
         </div>
         <!-- Member Login Button (shown when not logged in) -->
         <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-credit-jefri" title="Kunjungi Portofolio Developer Jefri">
-          <span class="credit-full">👨‍💻 Credit by Jefri ↗</span>
-          <span class="credit-short">👨‍💻 Jefri</span>
+          👨‍💻 Credit by Jefri ↗
         </a>
         <button id="btn-login-nav" class="btn btn-primary btn-sm" title="Masuk dengan Email & Password">
           <span class="btn-icon">🔐</span> <span class="nav-btn-text">Masuk</span>
@@ -2399,8 +2718,89 @@ body {
           ⚙️
         </button>
       </div>
+
+      <!-- Mobile Right Controls (Hamburger & Quick Score Badge) -->
+      <div class="mobile-nav-controls">
+        <div id="mobile-quick-score" class="mobile-user-chip hidden">
+          <span class="mobile-user-avatar">👤</span>
+          <span id="mobile-user-pts">0 PTS</span>
+        </div>
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Buka Menu Navigasi" title="Menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
     </div>
   </header>
+
+  <!-- MOBILE SLIDE-OUT DRAWER & OVERLAY -->
+  <div class="drawer-overlay hidden" id="drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation Drawer">
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <span class="logo-badge">⚡ AWESOME</span>
+        <span class="drawer-title">English Arena</span>
+      </div>
+      <button class="btn-close-drawer" id="btn-close-drawer" aria-label="Tutup Menu">&times;</button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- User Profile Card in Drawer -->
+      <div class="drawer-profile-box">
+        <div class="drawer-profile-top">
+          <div class="drawer-profile-avatar">👤</div>
+          <div class="drawer-profile-meta">
+            <div class="drawer-profile-name" id="drawer-user-name">Tamu (Belum Masuk)</div>
+            <div class="drawer-profile-badges" id="drawer-badges-row">
+              <span class="drawer-score-pill" id="drawer-user-score">⭐ 0 PTS</span>
+              <span class="drawer-lvl-pill" id="drawer-user-level">Lvl 1</span>
+            </div>
+          </div>
+        </div>
+        <button id="btn-drawer-login" class="btn btn-primary btn-block btn-drawer-action">
+          <span class="btn-icon">🔐</span> Masuk Akun Member
+        </button>
+        <button id="btn-drawer-logout" class="btn btn-danger-outline btn-block btn-drawer-action hidden">
+          🚪 Keluar dari Akun
+        </button>
+      </div>
+
+      <!-- Navigation Menu List -->
+      <nav class="drawer-nav-menu">
+        <button class="drawer-menu-btn" id="btn-drawer-leaderboard">
+          <span class="drawer-menu-icon">🏆</span>
+          <span class="drawer-menu-text">Leaderboard & Memory</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-settings">
+          <span class="drawer-menu-icon">⚙️</span>
+          <span class="drawer-menu-text">Pengaturan & Audio</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="drawer-menu-btn drawer-credit-btn">
+          <span class="drawer-menu-icon">👨‍💻</span>
+          <span class="drawer-menu-text">Portofolio Jefri (Developer)</span>
+          <span class="drawer-menu-arrow">↗</span>
+        </a>
+      </nav>
+
+      <!-- WhatsApp Registration Banner -->
+      <div class="drawer-wa-card">
+        <div class="drawer-wa-heading">💬 Hubungi Admin / Pendaftaran</div>
+        <p class="drawer-wa-sub">Mau daftar akun member baru atau tanya materi bahasa Inggris?</p>
+        <a href="https://wa.me/6282354506569?text=Halo%20Jefri,%20saya%20ingin%20mendaftar%20akun%20member%20Awesome%20English%20Arena" target="_blank" rel="noopener noreferrer" class="btn btn-wa-drawer">
+          <span class="btn-icon">💬</span> WhatsApp Jefri (082354506569)
+        </a>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <span>Awesome English Arena • Mobile Responsive</span>
+    </div>
+  </aside>
 
   <!-- Main Content Wrapper -->
   <main class="main-layout">
@@ -5462,15 +5862,43 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       const userScore = document.getElementById('nav-user-score');
       const userLevel = document.getElementById('nav-user-level');
 
+      // Mobile header chip
+      const mobileScore = document.getElementById('mobile-quick-score');
+      const mobilePts = document.getElementById('mobile-user-pts');
+
+      // Drawer elements
+      const drawerName = document.getElementById('drawer-user-name');
+      const drawerScore = document.getElementById('drawer-user-score');
+      const drawerLevel = document.getElementById('drawer-user-level');
+      const drawerLoginBtn = document.getElementById('btn-drawer-login');
+      const drawerLogoutBtn = document.getElementById('btn-drawer-logout');
+
       if (this.isLoggedIn()) {
         if (userProfile) userProfile.classList.remove('hidden');
         if (loginBtn) loginBtn.classList.add('hidden');
         if (userName) userName.textContent = this.currentUser.name;
         if (userScore) userScore.textContent = `⭐ ${(this.currentUser.totalScore || 0).toLocaleString()} PTS`;
         if (userLevel) userLevel.textContent = `Lvl ${this.currentUser.level || 1}`;
+
+        if (mobileScore) mobileScore.classList.remove('hidden');
+        if (mobilePts) mobilePts.textContent = `${(this.currentUser.totalScore || 0).toLocaleString()} PTS`;
+
+        if (drawerName) drawerName.textContent = this.currentUser.name;
+        if (drawerScore) drawerScore.textContent = `⭐ ${(this.currentUser.totalScore || 0).toLocaleString()} PTS`;
+        if (drawerLevel) drawerLevel.textContent = `Lvl ${this.currentUser.level || 1}`;
+        if (drawerLoginBtn) drawerLoginBtn.classList.add('hidden');
+        if (drawerLogoutBtn) drawerLogoutBtn.classList.remove('hidden');
       } else {
         if (userProfile) userProfile.classList.add('hidden');
         if (loginBtn) loginBtn.classList.remove('hidden');
+
+        if (mobileScore) mobileScore.classList.add('hidden');
+
+        if (drawerName) drawerName.textContent = 'Tamu (Belum Masuk)';
+        if (drawerScore) drawerScore.textContent = '⭐ 0 PTS';
+        if (drawerLevel) drawerLevel.textContent = 'Lvl 1';
+        if (drawerLoginBtn) drawerLoginBtn.classList.remove('hidden');
+        if (drawerLogoutBtn) drawerLogoutBtn.classList.add('hidden');
       }
 
       if (typeof this.onAuthChange === 'function') {
@@ -5682,6 +6110,48 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       document.getElementById('btn-leaderboard-nav').addEventListener('click', () => this.openLeaderboard());
       document.getElementById('btn-close-leaderboard').addEventListener('click', () => this.closeModals());
       document.getElementById('btn-refresh-leaderboard').addEventListener('click', () => this.refreshCurrentModalData());
+
+      // Mobile Drawer triggers
+      const hamburgerBtn = document.getElementById('btn-hamburger');
+      const closeDrawerBtn = document.getElementById('btn-close-drawer');
+      const drawerOverlay = document.getElementById('drawer-overlay');
+
+      if (hamburgerBtn) hamburgerBtn.addEventListener('click', () => this.openDrawer());
+      if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => this.closeDrawer());
+      if (drawerOverlay) drawerOverlay.addEventListener('click', () => this.closeDrawer());
+
+      const drawerLeaderboard = document.getElementById('btn-drawer-leaderboard');
+      if (drawerLeaderboard) {
+        drawerLeaderboard.addEventListener('click', () => {
+          this.closeDrawer();
+          this.openLeaderboard();
+        });
+      }
+
+      const drawerSettings = document.getElementById('btn-drawer-settings');
+      if (drawerSettings) {
+        drawerSettings.addEventListener('click', () => {
+          this.closeDrawer();
+          this.openSettings();
+        });
+      }
+
+      const drawerLogin = document.getElementById('btn-drawer-login');
+      if (drawerLogin) {
+        drawerLogin.addEventListener('click', () => {
+          this.closeDrawer();
+          this.openAuthModal();
+        });
+      }
+
+      const drawerLogout = document.getElementById('btn-drawer-logout');
+      if (drawerLogout) {
+        drawerLogout.addEventListener('click', () => {
+          this.closeDrawer();
+          AuthManager.logout();
+          this.showToast('Anda telah keluar dari akun.', 'info');
+        });
+      }
 
       // Tab switcher in Modal
       if (this.dom.modals.tabLeaderboardBtn) {
@@ -6317,7 +6787,22 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
     }
 
+    openDrawer() {
+      const drawer = document.getElementById('mobile-drawer');
+      const overlay = document.getElementById('drawer-overlay');
+      if (drawer) drawer.classList.add('open');
+      if (overlay) overlay.classList.remove('hidden');
+    }
+
+    closeDrawer() {
+      const drawer = document.getElementById('mobile-drawer');
+      const overlay = document.getElementById('drawer-overlay');
+      if (drawer) drawer.classList.remove('open');
+      if (overlay) overlay.classList.add('hidden');
+    }
+
     closeModals() {
+      this.closeDrawer();
       if (this.dom.modals.auth) this.dom.modals.auth.classList.add('hidden');
       if (this.dom.modals.leaderboard) this.dom.modals.leaderboard.classList.add('hidden');
       if (this.dom.modals.settings) this.dom.modals.settings.classList.add('hidden');

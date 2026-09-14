@@ -29,7 +29,9 @@
         <span class="logo-badge">⚡ AWESOME</span>
         <span class="logo-title">English Arena</span>
       </div>
-      <div class="nav-actions">
+
+      <!-- Desktop Nav Actions (Desktop & Tablet Wide) -->
+      <div class="nav-actions desktop-nav-actions">
         <!-- Logged-in User Profile Badge -->
         <div id="nav-user-profile" class="user-pill hidden">
           <span class="user-avatar" id="nav-user-avatar">👤</span>
@@ -40,8 +42,7 @@
         </div>
         <!-- Member Login Button (shown when not logged in) -->
         <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-credit-jefri" title="Kunjungi Portofolio Developer Jefri">
-          <span class="credit-full">👨‍💻 Credit by Jefri ↗</span>
-          <span class="credit-short">👨‍💻 Jefri</span>
+          👨‍💻 Credit by Jefri ↗
         </a>
         <button id="btn-login-nav" class="btn btn-primary btn-sm" title="Masuk dengan Email & Password">
           <span class="btn-icon">🔐</span> <span class="nav-btn-text">Masuk</span>
@@ -53,8 +54,89 @@
           ⚙️
         </button>
       </div>
+
+      <!-- Mobile Right Controls (Hamburger & Quick Score Badge) -->
+      <div class="mobile-nav-controls">
+        <div id="mobile-quick-score" class="mobile-user-chip hidden">
+          <span class="mobile-user-avatar">👤</span>
+          <span id="mobile-user-pts">0 PTS</span>
+        </div>
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Buka Menu Navigasi" title="Menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
     </div>
   </header>
+
+  <!-- MOBILE SLIDE-OUT DRAWER & OVERLAY -->
+  <div class="drawer-overlay hidden" id="drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation Drawer">
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <span class="logo-badge">⚡ AWESOME</span>
+        <span class="drawer-title">English Arena</span>
+      </div>
+      <button class="btn-close-drawer" id="btn-close-drawer" aria-label="Tutup Menu">&times;</button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- User Profile Card in Drawer -->
+      <div class="drawer-profile-box">
+        <div class="drawer-profile-top">
+          <div class="drawer-profile-avatar">👤</div>
+          <div class="drawer-profile-meta">
+            <div class="drawer-profile-name" id="drawer-user-name">Tamu (Belum Masuk)</div>
+            <div class="drawer-profile-badges" id="drawer-badges-row">
+              <span class="drawer-score-pill" id="drawer-user-score">⭐ 0 PTS</span>
+              <span class="drawer-lvl-pill" id="drawer-user-level">Lvl 1</span>
+            </div>
+          </div>
+        </div>
+        <button id="btn-drawer-login" class="btn btn-primary btn-block btn-drawer-action">
+          <span class="btn-icon">🔐</span> Masuk Akun Member
+        </button>
+        <button id="btn-drawer-logout" class="btn btn-danger-outline btn-block btn-drawer-action hidden">
+          🚪 Keluar dari Akun
+        </button>
+      </div>
+
+      <!-- Navigation Menu List -->
+      <nav class="drawer-nav-menu">
+        <button class="drawer-menu-btn" id="btn-drawer-leaderboard">
+          <span class="drawer-menu-icon">🏆</span>
+          <span class="drawer-menu-text">Leaderboard & Memory</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-settings">
+          <span class="drawer-menu-icon">⚙️</span>
+          <span class="drawer-menu-text">Pengaturan & Audio</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="drawer-menu-btn drawer-credit-btn">
+          <span class="drawer-menu-icon">👨‍💻</span>
+          <span class="drawer-menu-text">Portofolio Jefri (Developer)</span>
+          <span class="drawer-menu-arrow">↗</span>
+        </a>
+      </nav>
+
+      <!-- WhatsApp Registration Banner -->
+      <div class="drawer-wa-card">
+        <div class="drawer-wa-heading">💬 Hubungi Admin / Pendaftaran</div>
+        <p class="drawer-wa-sub">Mau daftar akun member baru atau tanya materi bahasa Inggris?</p>
+        <a href="https://wa.me/6282354506569?text=Halo%20Jefri,%20saya%20ingin%20mendaftar%20akun%20member%20Awesome%20English%20Arena" target="_blank" rel="noopener noreferrer" class="btn btn-wa-drawer">
+          <span class="btn-icon">💬</span> WhatsApp Jefri (082354506569)
+        </a>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <span>Awesome English Arena • Mobile Responsive</span>
+    </div>
+  </aside>
 
   <!-- Main Content Wrapper -->
   <main class="main-layout">

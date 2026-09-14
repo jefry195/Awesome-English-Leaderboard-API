@@ -2520,15 +2520,43 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       const userScore = document.getElementById('nav-user-score');
       const userLevel = document.getElementById('nav-user-level');
 
+      // Mobile header chip
+      const mobileScore = document.getElementById('mobile-quick-score');
+      const mobilePts = document.getElementById('mobile-user-pts');
+
+      // Drawer elements
+      const drawerName = document.getElementById('drawer-user-name');
+      const drawerScore = document.getElementById('drawer-user-score');
+      const drawerLevel = document.getElementById('drawer-user-level');
+      const drawerLoginBtn = document.getElementById('btn-drawer-login');
+      const drawerLogoutBtn = document.getElementById('btn-drawer-logout');
+
       if (this.isLoggedIn()) {
         if (userProfile) userProfile.classList.remove('hidden');
         if (loginBtn) loginBtn.classList.add('hidden');
         if (userName) userName.textContent = this.currentUser.name;
         if (userScore) userScore.textContent = `⭐ ${(this.currentUser.totalScore || 0).toLocaleString()} PTS`;
         if (userLevel) userLevel.textContent = `Lvl ${this.currentUser.level || 1}`;
+
+        if (mobileScore) mobileScore.classList.remove('hidden');
+        if (mobilePts) mobilePts.textContent = `${(this.currentUser.totalScore || 0).toLocaleString()} PTS`;
+
+        if (drawerName) drawerName.textContent = this.currentUser.name;
+        if (drawerScore) drawerScore.textContent = `⭐ ${(this.currentUser.totalScore || 0).toLocaleString()} PTS`;
+        if (drawerLevel) drawerLevel.textContent = `Lvl ${this.currentUser.level || 1}`;
+        if (drawerLoginBtn) drawerLoginBtn.classList.add('hidden');
+        if (drawerLogoutBtn) drawerLogoutBtn.classList.remove('hidden');
       } else {
         if (userProfile) userProfile.classList.add('hidden');
         if (loginBtn) loginBtn.classList.remove('hidden');
+
+        if (mobileScore) mobileScore.classList.add('hidden');
+
+        if (drawerName) drawerName.textContent = 'Tamu (Belum Masuk)';
+        if (drawerScore) drawerScore.textContent = '⭐ 0 PTS';
+        if (drawerLevel) drawerLevel.textContent = 'Lvl 1';
+        if (drawerLoginBtn) drawerLoginBtn.classList.remove('hidden');
+        if (drawerLogoutBtn) drawerLogoutBtn.classList.add('hidden');
       }
 
       if (typeof this.onAuthChange === 'function') {
@@ -2740,6 +2768,48 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       document.getElementById('btn-leaderboard-nav').addEventListener('click', () => this.openLeaderboard());
       document.getElementById('btn-close-leaderboard').addEventListener('click', () => this.closeModals());
       document.getElementById('btn-refresh-leaderboard').addEventListener('click', () => this.refreshCurrentModalData());
+
+      // Mobile Drawer triggers
+      const hamburgerBtn = document.getElementById('btn-hamburger');
+      const closeDrawerBtn = document.getElementById('btn-close-drawer');
+      const drawerOverlay = document.getElementById('drawer-overlay');
+
+      if (hamburgerBtn) hamburgerBtn.addEventListener('click', () => this.openDrawer());
+      if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => this.closeDrawer());
+      if (drawerOverlay) drawerOverlay.addEventListener('click', () => this.closeDrawer());
+
+      const drawerLeaderboard = document.getElementById('btn-drawer-leaderboard');
+      if (drawerLeaderboard) {
+        drawerLeaderboard.addEventListener('click', () => {
+          this.closeDrawer();
+          this.openLeaderboard();
+        });
+      }
+
+      const drawerSettings = document.getElementById('btn-drawer-settings');
+      if (drawerSettings) {
+        drawerSettings.addEventListener('click', () => {
+          this.closeDrawer();
+          this.openSettings();
+        });
+      }
+
+      const drawerLogin = document.getElementById('btn-drawer-login');
+      if (drawerLogin) {
+        drawerLogin.addEventListener('click', () => {
+          this.closeDrawer();
+          this.openAuthModal();
+        });
+      }
+
+      const drawerLogout = document.getElementById('btn-drawer-logout');
+      if (drawerLogout) {
+        drawerLogout.addEventListener('click', () => {
+          this.closeDrawer();
+          AuthManager.logout();
+          this.showToast('Anda telah keluar dari akun.', 'info');
+        });
+      }
 
       // Tab switcher in Modal
       if (this.dom.modals.tabLeaderboardBtn) {
@@ -3375,7 +3445,22 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
     }
 
+    openDrawer() {
+      const drawer = document.getElementById('mobile-drawer');
+      const overlay = document.getElementById('drawer-overlay');
+      if (drawer) drawer.classList.add('open');
+      if (overlay) overlay.classList.remove('hidden');
+    }
+
+    closeDrawer() {
+      const drawer = document.getElementById('mobile-drawer');
+      const overlay = document.getElementById('drawer-overlay');
+      if (drawer) drawer.classList.remove('open');
+      if (overlay) overlay.classList.add('hidden');
+    }
+
     closeModals() {
+      this.closeDrawer();
       if (this.dom.modals.auth) this.dom.modals.auth.classList.add('hidden');
       if (this.dom.modals.leaderboard) this.dom.modals.leaderboard.classList.add('hidden');
       if (this.dom.modals.settings) this.dom.modals.settings.classList.add('hidden');
