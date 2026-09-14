@@ -2440,15 +2440,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           this.currentUser = null;
         }
       } else {
-        // Auto-login default admin for smooth initial experience
-        this.currentUser = {
-          email: 'jefri@admin.com',
-          name: 'Jefri (Owner)',
-          totalScore: 1500,
-          level: 4,
-          status: 'ACTIVE'
-        };
-        this.save();
+        this.currentUser = null;
       }
       this.updateUI();
     }
@@ -2533,7 +2525,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.speech = new SpeechService();
 
       // Game state
-      this.languageDirection = 'id-to-en'; // 'id-to-en' or 'en-to-id'
+      this.languageDirection = 'en-to-id'; // 'id-to-en' or 'en-to-id'
       this.currentMode = 'shadowing';
       this.questions = [];
       this.currentIndex = 0;
@@ -2627,6 +2619,13 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.initEvents();
       this.loadSettings();
       this.loadQuestionsFromGitHub();
+
+      // Show login modal at start if not logged in
+      if (!AuthManager.isLoggedIn()) {
+        setTimeout(() => {
+          this.openAuthModal('Selamat datang! Silakan masuk dengan akun Anda untuk mulai bermain.');
+        }, 300);
+      }
     }
 
     initAuth() {
@@ -2897,7 +2896,9 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         shadowing: 'Speaking & Shadowing Arena',
         listening: 'Listening Dictation Arena',
         vocabulary: 'Vocabulary Collocation Arena',
-        grammar: 'Murphy Grammar Quest'
+        grammar: 'Murphy Grammar Quest',
+        ielts: 'IELTS Academic Simulation (Band 0-9)',
+        toefl: 'TOEFL iBT Simulation (Scale 0-30)'
       };
       this.dom.hud.modePill.textContent = modeTitles[mode] || 'Arena';
       if (this.dom.hud.dirPill) {
@@ -2952,7 +2953,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           this.speech.speak(q.en || q.target, this.dom.challenge.accentSelect.value);
         }, 500);
 
-      } else if (this.currentMode === 'vocabulary' || this.currentMode === 'grammar') {
+      } else if (this.currentMode === 'vocabulary' || this.currentMode === 'grammar' || this.currentMode === 'ielts' || this.currentMode === 'toefl') {
         const promptText = isIdToEn ? (q.prompt_id || q.translation) : (q.prompt_en || q.en || q.target);
         this.dom.challenge.instruction.textContent = isIdToEn 
           ? '🇮🇩 Lengkapi kalimat berikut dengan berbicara dalam Bahasa Inggris:'
@@ -2966,12 +2967,23 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           this.dom.challenge.optionsContainer.innerHTML = '';
           this.dom.challenge.optionsContainer.classList.remove('hidden');
 
-          q.options.forEach((opt, idx) => {
+          // Dynamically shuffle options for display so answers are never always A
+          const displayList = q.options.map((opt, origIdx) => ({
+            text: opt,
+            isCorrect: (origIdx === q.correctIndex)
+          }));
+          
+          for (let i = displayList.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [displayList[i], displayList[j]] = [displayList[j], displayList[i]];
+          }
+
+          displayList.forEach((item, displayIdx) => {
             const btn = document.createElement('button');
             btn.className = 'btn-option';
-            btn.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
+            btn.textContent = `${String.fromCharCode(65 + displayIdx)}. ${item.text}`;
             btn.addEventListener('click', () => {
-              this.evaluateMultipleChoice(idx, btn);
+              this.evaluateMultipleChoiceRandomized(displayIdx, btn, displayList);
             });
             this.dom.challenge.optionsContainer.appendChild(btn);
           });

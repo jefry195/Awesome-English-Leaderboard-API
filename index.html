@@ -39,6 +39,9 @@
           <button id="btn-logout-nav" class="btn-nav-logout" title="Keluar dari akun">Keluar</button>
         </div>
         <!-- Member Login Button (shown when not logged in) -->
+        <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-credit-jefri" title="Kunjungi Portofolio Developer Jefri">
+          👨‍💻 Credit by Jefri ↗
+        </a>
         <button id="btn-login-nav" class="btn btn-primary btn-sm" title="Masuk dengan Email & Password">
           <span class="btn-icon">🔐</span> Masuk
         </button>
@@ -88,16 +91,13 @@
           </div>
         </div>
 
-        <!-- Language Direction Switcher (Dua Arah: ID -> EN & EN -> ID) -->
+        <!-- Active English to Indonesia Direction -->
         <div class="lang-direction-wrapper">
-          <div class="lang-direction-title">Pilih Arah Bahasa Latihan:</div>
-          <div class="lang-direction-group" id="lang-direction-group">
-            <button class="btn-lang-dir active" data-dir="id-to-en" id="btn-dir-id-en" title="Lihat/Dengar Bahasa Indonesia, Ucapkan dalam Bahasa Inggris">
-              <span class="flag-icon">🇮🇩</span> Indonesia ➔ <span class="flag-icon">🇬🇧</span> English (Speaking & Pronunciation)
-            </button>
-            <button class="btn-lang-dir" data-dir="en-to-id" id="btn-dir-en-id" title="Dengar Bahasa Inggris, Terjemahkan/Jawab dalam Bahasa Indonesia">
-              <span class="flag-icon">🇬🇧</span> English ➔ <span class="flag-icon">🇮🇩</span> Indonesia (Listening & Comprehension)
-            </button>
+          <div class="lang-direction-title">Metode Latihan Default:</div>
+          <div class="lang-direction-group">
+            <div class="btn-lang-dir active" id="btn-dir-active">
+              <span class="flag-icon">🇬🇧</span> English ➔ <span class="flag-icon">🇮🇩</span> Indonesia (Listening, Speaking & Comprehension)
+            </div>
           </div>
         </div>
 
@@ -418,19 +418,7 @@
           </div>
         </form>
 
-        <div class="auth-hints">
-          <div class="auth-hint-title">ℹ️ Demo Akun Pengujian:</div>
-          <div class="auth-hint-badges">
-            <button type="button" class="btn-demo-badge" id="btn-demo-admin" title="Gunakan Akun Admin Jefri">
-              👑 Jefri: jefri@admin.com (admin123)
-            </button>
-            <button type="button" class="btn-demo-badge" id="btn-demo-student" title="Gunakan Akun Siswa">
-              🎓 Siswa: siswa1@english.com (siswa123)
-            </button>
-          </div>
-          <p class="auth-hint-sub">Jefri dapat menambah atau mengubah password siswa kapan saja cukup dengan mengetik di tab <strong>Users</strong> pada Google Sheets.</p>
         </div>
-      </div>
     </div>
   </div>
 
