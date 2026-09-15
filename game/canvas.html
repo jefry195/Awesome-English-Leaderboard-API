@@ -545,6 +545,64 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+   LEVEL DIFFICULTY FILTER BAR
+   -------------------------------------------------------------------------- */
+.level-filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0 1.2rem 0;
+  padding: 0.8rem 1.2rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(16px);
+}
+
+.level-filter-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.level-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-level-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  padding: 0.45rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+  touch-action: manipulation;
+}
+
+.btn-level-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+.btn-level-pill.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #a5b4fc;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+}
+
+/* --------------------------------------------------------------------------
    BUTTONS
    -------------------------------------------------------------------------- */
 .btn {
@@ -1124,52 +1182,86 @@ body {
   font-style: italic;
 }
 
-/* Audio Controls */
+/* Audio Controls & Symmetrical Grid */
 .audio-controls {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.8rem;
+  width: 100%;
 }
 
 .btn-audio {
-  background: rgba(99, 102, 241, 0.15);
-  color: #c7d2fe;
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  padding: 0.6rem 1.2rem;
+  width: 100%;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.25));
+  color: #e0e7ff;
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  padding: 0.75rem 1.2rem;
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  gap: 0.6rem;
   transition: all var(--trans-fast);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .btn-audio:hover {
-  background: rgba(99, 102, 241, 0.3);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(139, 92, 246, 0.4));
+  transform: translateY(-1px);
   color: #fff;
+  border-color: rgba(99, 102, 241, 0.7);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
 }
 
-.accent-selector {
+.audio-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.audio-control-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.75rem;
+  transition: border-color var(--trans-fast);
+}
+
+.audio-control-card:focus-within {
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.audio-control-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  gap: 0.3rem;
 }
 
-.form-select-sm {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--border-glass);
-  color: var(--text-primary);
-  padding: 0.35rem 0.7rem;
+.audio-control-card .form-select-sm {
+  width: 100%;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  padding: 0.4rem 0.5rem;
   border-radius: var(--radius-sm);
   outline: none;
   font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 38px;
 }
 
 /* --------------------------------------------------------------------------
@@ -1787,15 +1879,31 @@ body {
 
 .form-control {
   width: 100%;
-  background: rgba(255, 255, 255, 0.06);
+  background-color: #1e293b !important;
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-md);
   padding: 0.7rem 1rem;
-  color: var(--text-primary);
+  color: #f8fafc !important;
   font-family: var(--font-body);
   font-size: 0.95rem;
   outline: none;
   transition: all var(--trans-fast);
+}
+
+/* Universal Dark Dropdown fix for Chrome/Windows/Android */
+select,
+select.form-control,
+select.form-select-sm {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  color-scheme: dark;
+}
+
+select option,
+select optgroup {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  padding: 10px 14px;
 }
 
 .form-control:focus {
@@ -2072,24 +2180,18 @@ body {
   .audio-controls {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
 
   .btn-audio {
     width: 100%;
     justify-content: center;
-    min-height: 42px;
+    min-height: 44px;
   }
 
-  .accent-selector {
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .accent-selector select {
-    flex-grow: 1;
-    max-width: 180px;
-    min-height: 38px;
+  .audio-settings-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
 
   /* Mic Button Touch Friendly for HP */
@@ -2681,6 +2783,1015 @@ body {
   display: inline;
 }
 
+/* ==========================================================================
+   INTERACTIVE DASHBOARD & GAMIFICATION SYSTEM STYLES
+   ========================================================================== */
+
+/* Desktop Navigation Tabs */
+.desktop-nav-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-glass);
+}
+
+.nav-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+}
+
+.nav-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-tab-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+}
+
+/* Gamification Top Bar Chips */
+.nav-gamify-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.nav-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.nav-hearts-chip {
+  color: #fb7185;
+  border-color: rgba(244, 63, 94, 0.25);
+  background: rgba(244, 63, 94, 0.08);
+}
+
+.nav-streak-chip {
+  color: #fb923c;
+  border-color: rgba(249, 115, 22, 0.25);
+  background: rgba(249, 115, 22, 0.08);
+}
+
+.nav-xp-chip {
+  color: #facc15;
+  border-color: rgba(234, 179, 8, 0.25);
+  background: rgba(234, 179, 8, 0.08);
+}
+
+.mobile-hearts-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fda4af;
+}
+
+/* Mobile Bottom Navigation Bar */
+.bottom-nav-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(10, 14, 26, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-glass);
+  z-index: 900;
+  padding: 0.3rem 0.5rem;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.bottom-nav-btn {
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-md);
+  transition: all var(--trans-fast);
+  flex: 1;
+}
+
+.bottom-nav-btn .bnav-icon {
+  font-size: 1.25rem;
+}
+
+.bottom-nav-btn.active {
+  color: #818cf8;
+}
+
+.bottom-nav-btn.active .bnav-icon {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.6));
+}
+
+/* ==========================================================================
+   INTERACTIVE PLAYER DASHBOARD CARD
+   ========================================================================== */
+.player-dashboard-card {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto 2rem auto;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 0 30px rgba(99, 102, 241, 0.15);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.player-dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.dashboard-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.3rem;
+  gap: 1rem;
+}
+
+.dash-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dash-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #6366f1, #06b6d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+}
+
+.dash-user-name {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.dash-user-tier-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.2rem;
+}
+
+.tier-pill {
+  padding: 0.2rem 0.6rem;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-full);
+  color: #6ee7b7;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.level-pill {
+  padding: 0.2rem 0.6rem;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: var(--radius-full);
+  color: #a5b4fc;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.dash-streak-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-md);
+}
+
+.dash-streak-icon {
+  font-size: 1.6rem;
+  animation: flameBounce 1.8s infinite ease-in-out;
+}
+
+@keyframes flameBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15) rotate(4deg); }
+}
+
+.dash-streak-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-streak-num {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fdba74;
+  line-height: 1;
+}
+
+.dash-streak-label {
+  font-size: 0.72rem;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+/* XP Progress Bar */
+.dash-xp-section {
+  margin-bottom: 1.3rem;
+}
+
+.dash-xp-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+}
+
+.dash-xp-fraction {
+  color: #facc15;
+  font-weight: 700;
+}
+
+.dash-xp-progress-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.dash-xp-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #eab308, #10b981);
+  border-radius: var(--radius-full);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 12px rgba(234, 179, 8, 0.5);
+}
+
+/* Indicators Row */
+.dash-indicators-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.4rem;
+}
+
+.dash-indicator-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.dash-ind-icon {
+  font-size: 1.25rem;
+}
+
+.dash-ind-label {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.dash-ind-val {
+  color: var(--text-primary);
+  margin-left: auto;
+  font-weight: 700;
+}
+
+/* CTA Row */
+.dash-cta-row {
+  display: flex;
+  gap: 0.85rem;
+}
+
+.btn-glow-pulse {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4); transform: scale(1); }
+  50% { box-shadow: 0 6px 28px rgba(139, 92, 246, 0.7); transform: scale(1.02); }
+}
+
+.hero-subline-intro {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 1.6rem auto;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Tag Styles */
+.tag-new {
+  background: linear-gradient(135deg, #10b981, #06b6d4) !important;
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   GAME SENTENCE BUILDER STYLES
+   ========================================================================== */
+.sentence-builder-container {
+  width: 100%;
+  margin: 1.2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.builder-instruction {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.builder-answer-zone {
+  min-height: 72px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 2px dashed rgba(99, 102, 241, 0.4);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--trans-fast);
+}
+
+.builder-answer-zone:hover {
+  border-color: var(--primary);
+  background: rgba(20, 30, 55, 0.85);
+}
+
+.builder-placeholder {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-style: italic;
+  pointer-events: none;
+}
+
+.builder-word-bank {
+  min-height: 60px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.word-chip {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  color: #f1f5f9;
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--trans-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  display: inline-flex;
+  align-items: center;
+}
+
+.word-chip:hover {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.45);
+}
+
+.word-chip.in-answer {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-color: #a78bfa;
+  color: #ffffff;
+  animation: chipPop 0.18s ease;
+}
+
+@keyframes chipPop {
+  0% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
+
+.word-chip.used {
+  opacity: 0.25;
+  pointer-events: none;
+  cursor: not-allowed;
+  border-color: transparent;
+}
+
+.builder-action-row {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+
+/* Vocab Visual Emoji Box */
+.vocab-visual-badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.vocab-visual-badge span {
+  font-size: 3.5rem;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
+  animation: emojiFloat 3s infinite ease-in-out;
+}
+
+@keyframes emojiFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Replay Audio Button */
+.btn-replay-audio {
+  background: rgba(6, 182, 212, 0.15) !important;
+  border-color: rgba(6, 182, 212, 0.4) !important;
+  color: #67e8f9 !important;
+}
+
+.btn-replay-audio:hover {
+  background: rgba(6, 182, 212, 0.3) !important;
+}
+
+/* Evaluation Detail Cards */
+.eval-info-card {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  margin-top: 0.65rem;
+  text-align: left;
+}
+
+.eval-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 0.35rem;
+}
+
+.eval-card-text {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   PROGRESS PAGE & STATISTIK BELAJAR STYLES
+   ========================================================================== */
+.progress-page-container,
+.profile-page-container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.page-title-banner {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-headline {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.5rem 0;
+}
+
+.page-subline {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.progress-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.progress-metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--trans-fast);
+}
+
+.progress-metric-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-active);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.progress-metric-card.highlight-card {
+  border-color: rgba(99, 102, 241, 0.35);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+}
+
+.progress-metric-card.highlight-gold {
+  border-color: rgba(234, 179, 8, 0.35);
+}
+
+.progress-metric-card.highlight-emerald {
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.prog-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.prog-card-icon {
+  font-size: 1.8rem;
+}
+
+.prog-card-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prog-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prog-card-val {
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.prog-card-label {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.prog-card-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.prog-card-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: var(--radius-full);
+  transition: width 0.6s ease;
+}
+
+.prog-card-fill.fill-emerald {
+  background: linear-gradient(90deg, #10b981, #06b6d4);
+}
+
+.prog-card-sub {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.progress-cta-box {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* ==========================================================================
+   PROFILE & ACHIEVEMENTS (BADGES) STYLES
+   ========================================================================== */
+.profile-summary-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95));
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.3rem;
+}
+
+.profile-avatar-box {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.3rem;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+}
+
+.profile-display-name {
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.4rem;
+}
+
+.profile-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.profile-tier-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.profile-lvl-badge {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  color: #a5b4fc;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.profile-xp-badge {
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid rgba(234, 179, 8, 0.35);
+  color: #fde047;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.profile-streak-badge {
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  color: #fdba74;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.profile-hearts-panel {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  border-radius: var(--radius-md);
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.8rem;
+  gap: 1rem;
+}
+
+.hearts-panel-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #f43f5e;
+}
+
+.hearts-visual-icons {
+  font-size: 1.5rem;
+  letter-spacing: 0.2rem;
+  margin: 0.3rem 0;
+}
+
+.hearts-panel-hint {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.achievements-section {
+  margin-bottom: 2rem;
+}
+
+.achievements-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.achievements-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.achievements-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #facc15;
+  background: rgba(234, 179, 8, 0.12);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.badge-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all var(--trans-fast);
+}
+
+.badge-card.unlocked {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+  border-color: rgba(234, 179, 8, 0.4);
+  box-shadow: 0 4px 16px rgba(234, 179, 8, 0.15);
+}
+
+.badge-card.locked {
+  opacity: 0.45;
+  filter: grayscale(0.8);
+}
+
+.badge-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.badge-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.3rem;
+}
+
+.badge-desc {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+
+.badge-status-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.badge-status-pill.unlocked {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.badge-status-pill.locked {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+}
+
+.profile-action-links {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   FLOATING XP & MICRO-ANIMATIONS
+   ========================================================================== */
+.floating-xp-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.floating-xp-bubble {
+  position: absolute;
+  background: linear-gradient(135deg, #f59e0b, #eab308);
+  color: #0f172a;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 900;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 18px rgba(234, 179, 8, 0.7);
+  animation: floatUpFade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes floatUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-15px) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) scale(1);
+  }
+}
+
+/* Modal Hearts Empty */
+.modal-hearts-card {
+  max-width: 440px;
+}
+
+.hearts-refill-icon-large {
+  font-size: 3.5rem;
+  margin: 0.5rem 0 1rem 0;
+  animation: heartThrob 1.4s infinite ease-in-out;
+}
+
+@keyframes heartThrob {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.hearts-refill-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.hearts-refill-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin-bottom: 1rem;
+}
+
+.hearts-timer-pill {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  color: var(--secondary);
+  margin-bottom: 1.3rem;
+}
+
+.hearts-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* Shake Animation for Wrong Answer */
+.shake-error {
+  animation: shakeAnim 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shakeAnim {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+  40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+/* Bounce Animation for Correct Answer */
+.bounce-success {
+  animation: bounceAnim 0.45s ease;
+}
+
+@keyframes bounceAnim {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .desktop-nav-tabs {
+    display: none;
+  }
+  .bottom-nav-bar {
+    display: flex;
+  }
+  .main-layout {
+    padding-bottom: 80px;
+  }
+  .nav-gamify-bar {
+    display: none;
+  }
+  .dash-indicators-row {
+    grid-template-columns: 1fr;
+  }
+  .dash-cta-row {
+    flex-direction: column;
+  }
+}
+
+
 </style>
 </head>
 <body>
@@ -2697,15 +3808,46 @@ body {
         <span class="logo-title">English Arena</span>
       </div>
 
-      <!-- Desktop Nav Actions (Desktop & Tablet Wide) -->
+      <!-- Desktop Navigation Tabs (Home, Play, Progress, Profile) -->
+      <nav class="desktop-nav-tabs" id="desktop-nav-tabs" aria-label="Main Navigation">
+        <button type="button" class="nav-tab-btn active" data-nav="landing" id="tab-nav-home">
+          <span class="tab-icon">🏠</span> <span>Home</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-nav="play" id="tab-nav-play">
+          <span class="tab-icon">🎮</span> <span>Play</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-nav="progress" id="tab-nav-progress">
+          <span class="tab-icon">📊</span> <span>Progress</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-nav="profile" id="tab-nav-profile">
+          <span class="tab-icon">👤</span> <span>Profile</span>
+        </button>
+      </nav>
+
+      <!-- Desktop Nav Actions (Gamification Pills & Tools) -->
       <div class="nav-actions desktop-nav-actions">
+        <!-- Live Gamification Stats: Hearts, Streak, XP -->
+        <div class="nav-gamify-bar" id="nav-gamify-bar">
+          <div class="nav-stat-chip nav-hearts-chip" id="nav-hearts-chip" title="Kesempatan / Lives (5 Hearts)">
+            <span class="chip-icon">❤️</span>
+            <span class="chip-val" id="nav-hearts-text">5/5</span>
+          </div>
+          <div class="nav-stat-chip nav-streak-chip" id="nav-streak-chip" title="Streak Hari Belajar">
+            <span class="chip-icon">🔥</span>
+            <span class="chip-val" id="nav-streak-text">1 Hari</span>
+          </div>
+          <div class="nav-stat-chip nav-xp-chip" id="nav-xp-chip" title="Total XP Terkumpul">
+            <span class="chip-icon">⭐</span>
+            <span class="chip-val" id="nav-xp-text">0 XP</span>
+          </div>
+        </div>
+
         <!-- Logged-in User Profile Badge -->
-        <div id="nav-user-profile" class="user-pill hidden">
+        <div id="nav-user-profile" class="user-pill">
           <span class="user-avatar" id="nav-user-avatar">👤</span>
           <span class="user-name" id="nav-user-name">Player</span>
-          <span class="user-score-badge" id="nav-user-score">⭐ 0 PTS</span>
           <span class="user-lvl-badge" id="nav-user-level">Lvl 1</span>
-          <button id="btn-logout-nav" class="btn-nav-logout" title="Keluar dari akun">Keluar</button>
+          <button id="btn-logout-nav" class="btn-nav-logout hidden" title="Keluar dari akun">Keluar</button>
         </div>
         <!-- Member Login Button (shown when not logged in) -->
         <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-credit-jefri" title="Kunjungi Portofolio Developer Jefri">
@@ -2722,11 +3864,15 @@ body {
         </button>
       </div>
 
-      <!-- Mobile Right Controls (Hamburger & Quick Score Badge) -->
+      <!-- Mobile Right Controls (Hearts, Hamburger & Quick Score Badge) -->
       <div class="mobile-nav-controls">
-        <div id="mobile-quick-score" class="mobile-user-chip hidden">
-          <span class="mobile-user-avatar">👤</span>
-          <span id="mobile-user-pts">0 PTS</span>
+        <div class="mobile-hearts-chip" id="mobile-hearts-chip" title="Lives / Hearts">
+          <span class="mobile-heart-icon">❤️</span>
+          <span id="mobile-hearts-text">5</span>
+        </div>
+        <div id="mobile-quick-score" class="mobile-user-chip">
+          <span class="mobile-user-avatar">⭐</span>
+          <span id="mobile-user-pts">0 XP</span>
         </div>
         <button class="btn-hamburger" id="btn-hamburger" aria-label="Buka Menu Navigasi" title="Menu">
           <span class="hamburger-line"></span>
@@ -2771,6 +3917,30 @@ body {
 
       <!-- Navigation Menu List -->
       <nav class="drawer-nav-menu">
+        <button class="drawer-menu-btn" id="btn-drawer-home" data-nav="landing">
+          <span class="drawer-menu-icon">🏠</span>
+          <span class="drawer-menu-text">Beranda (Home)</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-play" data-nav="play">
+          <span class="drawer-menu-icon">🎮</span>
+          <span class="drawer-menu-text">Mulai Bermain (Play)</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-progress" data-nav="progress">
+          <span class="drawer-menu-icon">📊</span>
+          <span class="drawer-menu-text">Progress Belajar</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-profile" data-nav="profile">
+          <span class="drawer-menu-icon">👤</span>
+          <span class="drawer-menu-text">Profil & Pencapaian</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
         <button class="drawer-menu-btn" id="btn-drawer-leaderboard">
           <span class="drawer-menu-icon">🏆</span>
           <span class="drawer-menu-text">Leaderboard & Memory</span>
@@ -2811,121 +3981,186 @@ body {
     <!-- VIEW 1: HERO / LANDING SCREEN -->
     <section id="landing-view" class="view-section active">
       <div class="hero-content">
-        <div class="pill-badge">
-          <span class="pill-dot"></span> Powered by Awesome English Curated Resources & Smart AI
-        </div>
-        <h1 class="hero-headline">
-          Master Spoken English with <span class="gradient-text">Voice Mic & AI Teacher</span>
-        </h1>
-        <p class="hero-subline">
-          Train your accent through real-time <strong>Speech Shadowing</strong>, conquer <strong>Listening Dictation</strong>, and test your vocabulary with live feedback from <strong>Smart AI Examiner</strong>. Compete on the global <strong>Live Cloud Leaderboard</strong>!
-        </p>
+        <!-- Interactive Player Dashboard Card -->
+        <div class="player-dashboard-card" id="player-dashboard-card">
+          <div class="dashboard-top-row">
+            <div class="dash-user-profile">
+              <div class="dash-avatar" id="dash-player-avatar">👤</div>
+              <div class="dash-user-meta">
+                <div class="dash-user-name" id="dash-player-name">Player 1</div>
+                <div class="dash-user-tier-badges">
+                  <span class="tier-pill" id="dash-tier-badge">🟢 Beginner</span>
+                  <span class="level-pill" id="dash-level-badge">Level 1</span>
+                </div>
+              </div>
+            </div>
+            <div class="dash-streak-box" title="Streak Hari Belajar Berturut-turut">
+              <span class="dash-streak-icon">🔥</span>
+              <div class="dash-streak-meta">
+                <span class="dash-streak-num" id="dash-streak-count">1</span>
+                <span class="dash-streak-label">Hari Streak</span>
+              </div>
+            </div>
+          </div>
 
-        <!-- Quick Stats Banner -->
-        <div class="stats-row">
-          <div class="stat-card">
-            <span class="stat-number">4+</span>
-            <span class="stat-label">Learning Modes</span>
+          <!-- XP Progress Bar -->
+          <div class="dash-xp-section">
+            <div class="dash-xp-header">
+              <span class="dash-xp-label">Progress Menuju Level Berikutnya:</span>
+              <span class="dash-xp-fraction" id="dash-xp-fraction">0 / 300 XP</span>
+            </div>
+            <div class="dash-xp-progress-track">
+              <div class="dash-xp-progress-fill" id="dash-xp-progress-fill" style="width: 5%"></div>
+            </div>
           </div>
-          <div class="stat-card">
-            <span class="stat-number">🎙️ Mic</span>
-            <span class="stat-label">Speech Recognition</span>
+
+          <!-- Dashboard Quick Indicators: Lives, Total XP, Accuracy -->
+          <div class="dash-indicators-row">
+            <div class="dash-indicator-chip" id="dash-chip-hearts" title="Kesempatan bermain">
+              <span class="dash-ind-icon">❤️</span>
+              <span class="dash-ind-label">Lives:</span>
+              <strong class="dash-ind-val" id="dash-hearts-count">5/5</strong>
+            </div>
+            <div class="dash-indicator-chip" id="dash-chip-xp" title="Total XP yang terkumpul">
+              <span class="dash-ind-icon">⭐</span>
+              <span class="dash-ind-label">Total XP:</span>
+              <strong class="dash-ind-val" id="dash-total-xp">0 XP</strong>
+            </div>
+            <div class="dash-indicator-chip" id="dash-chip-acc" title="Tingkat akurasi jawaban">
+              <span class="dash-ind-icon">🎯</span>
+              <span class="dash-ind-label">Akurasi:</span>
+              <strong class="dash-ind-val" id="dash-accuracy-val">100%</strong>
+            </div>
           </div>
-          <div class="stat-card">
-            <span class="stat-number">✨ AI</span>
-            <span class="stat-label">Teacher & Examiner</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">🏆 Rank</span>
-            <span class="stat-label">Live Cloud Leaderboard</span>
+
+          <!-- Big Primary CTA: Mulai Bermain -->
+          <div class="dash-cta-row">
+            <button type="button" id="btn-dashboard-start" class="btn btn-primary btn-lg btn-glow-pulse">
+              <span class="btn-icon">🚀</span> <strong>Mulai Bermain Sekarang</strong>
+            </button>
+            <button type="button" id="btn-dashboard-progress" class="btn btn-secondary btn-lg">
+              <span class="btn-icon">📊</span> Lihat Progress
+            </button>
           </div>
         </div>
 
-        <!-- Mode Selection Cards -->
-        <h2 class="section-title">Select Challenge Arena</h2>
+        <div class="hero-subline-intro">
+          Belajar Bahasa Inggris melalui game interaktif yang seru: Audio native, speech mic recognition, kuis kosakata gambar, tantangan grammar, dan susun kalimat!
+        </div>
+
+        <!-- Level / Difficulty Filter Bar (Beginner, Elementary, Intermediate, Advanced) -->
+        <div class="level-filter-container">
+          <div class="level-filter-title">
+            <span>🎯 Pilih Tingkat Kesulitan:</span>
+          </div>
+          <div class="level-filter-pills" id="level-pills-container">
+            <button type="button" class="btn-level-pill active" data-level="all">🌐 Semua Level</button>
+            <button type="button" class="btn-level-pill" data-level="Beginner">🟢 Beginner</button>
+            <button type="button" class="btn-level-pill" data-level="Elementary">🟡 Elementary</button>
+            <button type="button" class="btn-level-pill" data-level="Intermediate">🟠 Intermediate</button>
+            <button type="button" class="btn-level-pill" data-level="Advanced">🔴 Advanced</button>
+          </div>
+        </div>
+
+        <!-- Mode Selection Cards: 5 Core Games + 2 Advanced Arenas -->
+        <h2 class="section-title" id="arenas-heading">Pilih Mode Permainan</h2>
         <div class="modes-grid" id="modes-selection-container">
           
-          <!-- Mode 1: Shadowing & Speaking -->
-          <div class="mode-card" data-mode="shadowing" id="mode-shadowing-card">
-            <div class="mode-header">
-              <span class="mode-icon">🎙️</span>
-              <span class="mode-tag tag-popular">Recommended</span>
-            </div>
-            <h3 class="mode-title">Speaking & Shadowing</h3>
-            <p class="mode-desc">Listen to native pronunciations, speak into your mic, and receive instant phonetic match scoring + AI accent feedback.</p>
-            <div class="mode-footer">
-              <span class="mode-source">From: Shadowing & Refold Method</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="shadowing">Play Arena →</button>
-            </div>
-          </div>
-
-          <!-- Mode 2: Listening & Dictation -->
-          <div class="mode-card" data-mode="listening" id="mode-listening-card">
-            <div class="mode-header">
-              <span class="mode-icon">🎧</span>
-              <span class="mode-tag">Audio Only</span>
-            </div>
-            <h3 class="mode-title">Listening Dictation</h3>
-            <p class="mode-desc">Audio-first training inspired by Numblr & BBC 6-Minute English. Hear numbers, dates, and dialogues, then speak your answer!</p>
-            <div class="mode-footer">
-              <span class="mode-source">From: Numblr & BBC English</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="listening">Play Arena →</button>
-            </div>
-          </div>
-
-          <!-- Mode 3: Vocabulary Sentence Mining -->
+          <!-- Mode 1: Game Vocabulary -->
           <div class="mode-card" data-mode="vocabulary" id="mode-vocabulary-card">
             <div class="mode-header">
               <span class="mode-icon">🧠</span>
-              <span class="mode-tag">High-Yield</span>
+              <span class="mode-tag tag-popular">Game 1 • Kosakata</span>
             </div>
-            <h3 class="mode-title">Vocabulary & Collocations</h3>
-            <p class="mode-desc">Anki-style sentence mining and high-frequency idioms. Guess missing words or say them out loud through your mic.</p>
+            <h3 class="mode-title">Tebak Vocabulary</h3>
+            <p class="mode-desc">Tebak arti kosakata & idiom dari kata atau gambar Bahasa Inggris. Dapatkan XP, penjelasan arti, dan contoh kalimat!</p>
             <div class="mode-footer">
-              <span class="mode-source">From: Anki & Sentence Mining</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="vocabulary">Play Arena →</button>
+              <span class="mode-source">4 Pilihan • Arti & Contoh Kalimat</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="vocabulary">Mainkan →</button>
             </div>
           </div>
 
-          <!-- Mode 4: Murphy Grammar Challenge -->
+          <!-- Mode 2: Game Grammar -->
           <div class="mode-card" data-mode="grammar" id="mode-grammar-card">
             <div class="mode-header">
               <span class="mode-icon">✍️</span>
-              <span class="mode-tag">Essentials</span>
+              <span class="mode-tag">Game 2 • Tata Bahasa</span>
             </div>
-            <h3 class="mode-title">Murphy Grammar Quest</h3>
-            <p class="mode-desc">Master everyday conditionals, tenses, and prepositions based on Raymond Murphy's English Grammar in Use.</p>
+            <h3 class="mode-title">Grammar Quest</h3>
+            <p class="mode-desc">Pilih kalimat dan kata kerja yang benar. Menampilkan penjelasan ringkas aturan tata bahasa setelah menjawab!</p>
             <div class="mode-footer">
-              <span class="mode-source">From: English Grammar in Use</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="grammar">Play Arena →</button>
+              <span class="mode-source">Murphy Grammar • Tenses & Rules</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="grammar">Mainkan →</button>
             </div>
           </div>
 
-          <!-- Mode 5: IELTS Academic Simulation -->
+          <!-- Mode 3: Game Listening -->
+          <div class="mode-card" data-mode="listening" id="mode-listening-card">
+            <div class="mode-header">
+              <span class="mode-icon">🎧</span>
+              <span class="mode-tag">Game 3 • Audio Only</span>
+            </div>
+            <h3 class="mode-title">Listening Challenge</h3>
+            <p class="mode-desc">Dengarkan audio penutur asli untuk percakapan pendek & kalimat sehari-hari. Sedia tombol putar ulang audio!</p>
+            <div class="mode-footer">
+              <span class="mode-source">Native Speech • Tombol Replay</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="listening">Mainkan →</button>
+            </div>
+          </div>
+
+          <!-- Mode 4: Game Sentence Builder -->
+          <div class="mode-card" data-mode="sentence_builder" id="mode-sentence-builder-card">
+            <div class="mode-header">
+              <span class="mode-icon">🧩</span>
+              <span class="mode-tag tag-new">Game 4 • Susun Kalimat</span>
+            </div>
+            <h3 class="mode-title">Sentence Builder</h3>
+            <p class="mode-desc">Susun kata-kata yang diacak menjadi kalimat Bahasa Inggris yang benar secara interaktif. Latih struktur kalimat alami!</p>
+            <div class="mode-footer">
+              <span class="mode-source">Word Bank Chips • Interaktif</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="sentence_builder">Mainkan →</button>
+            </div>
+          </div>
+
+          <!-- Mode 5: Speaking Practice -->
+          <div class="mode-card" data-mode="shadowing" id="mode-shadowing-card">
+            <div class="mode-header">
+              <span class="mode-icon">🎙️</span>
+              <span class="mode-tag tag-popular">Game 5 • Latihan Suara</span>
+            </div>
+            <h3 class="mode-title">Speaking Practice</h3>
+            <p class="mode-desc">Ucapkan kalimat langsung ke mikrofon. Dapatkan skor akurasi kemiripan pengucapan dan koreksi AI secara instan!</p>
+            <div class="mode-footer">
+              <span class="mode-source">Speech Recognition • Voice Match</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="shadowing">Mainkan →</button>
+            </div>
+          </div>
+
+          <!-- Mode 6: IELTS Academic Simulation -->
           <div class="mode-card" data-mode="ielts" id="mode-ielts-card">
             <div class="mode-header">
               <span class="mode-icon">🎯</span>
-              <span class="mode-tag tag-popular">Band 7.5 - 9.0</span>
+              <span class="mode-tag">Simulasi IELTS</span>
             </div>
             <h3 class="mode-title">IELTS Academic Simulation</h3>
-            <p class="mode-desc">Speaking Part 1 & Part 2 Cue Cards with official Band 0-9 lexical evaluation. Train academic vocabulary and high-band fluency!</p>
+            <p class="mode-desc">Latihan kosakata akademik dan Speaking Part 1 & 2 dengan standar evaluasi leksikal resmi Cambridge Band 7.5 - 9.0.</p>
             <div class="mode-footer">
-              <span class="mode-source">From: Cambridge IELTS Official</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="ielts">Play Arena →</button>
+              <span class="mode-source">Cambridge IELTS Official</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="ielts">Mainkan →</button>
             </div>
           </div>
 
-          <!-- Mode 6: TOEFL iBT Simulation -->
+          <!-- Mode 7: TOEFL iBT Simulation -->
           <div class="mode-card" data-mode="toefl" id="mode-toefl-card">
             <div class="mode-header">
               <span class="mode-icon">🏛️</span>
-              <span class="mode-tag">Score 26 - 30</span>
+              <span class="mode-tag">Simulasi TOEFL</span>
             </div>
             <h3 class="mode-title">TOEFL iBT Test Quest</h3>
-            <p class="mode-desc">Integrated Academic Speaking & Listening passages inspired by university lectures across Science, Arts, and Economics.</p>
+            <p class="mode-desc">Passage saintifik dan kuliah universitas internasional lintas sains, seni, dan ekonomi dengan evaluasi skor 26-30.</p>
             <div class="mode-footer">
-              <span class="mode-source">From: ETS TOEFL Official Guide</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="toefl">Play Arena →</button>
+              <span class="mode-source">ETS TOEFL Official Guide</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="toefl">Mainkan →</button>
             </div>
           </div>
 
@@ -2945,14 +4180,27 @@ body {
             <div class="dir-pill" id="current-dir-pill" title="Arah Bahasa Aktif">🇬🇧 ➔ 🇮🇩</div>
           </div>
           <div class="hud-stats">
+            <!-- 5 Hearts Life Indicator -->
+            <div class="hud-item hud-hearts-item" id="hud-hearts-item" title="Kesempatan / Lives">
+              <span class="hud-icon">❤️</span>
+              <span class="hud-val" id="hud-hearts">5/5</span>
+            </div>
+            <!-- Combo Multiplier -->
+            <div class="hud-item hud-combo-item" id="hud-combo-item" title="Combo Beruntun">
+              <span class="hud-icon">⚡</span>
+              <span class="hud-val" id="hud-combo">1x</span>
+            </div>
+            <!-- Score -->
             <div class="hud-item" title="Current Score">
               <span class="hud-icon">⭐</span>
               <span class="hud-val" id="hud-score">0</span>
             </div>
+            <!-- Streak -->
             <div class="hud-item" title="Streak Multiplier">
               <span class="hud-icon">🔥</span>
               <span class="hud-val" id="hud-streak">0</span>
             </div>
+            <!-- Progress -->
             <div class="hud-item" title="Question Progress">
               <span class="hud-icon">🎯</span>
               <span class="hud-val" id="hud-progress">1/5</span>
@@ -2971,40 +4219,58 @@ body {
 
           <!-- Prompt Question / Instruction -->
           <h3 class="challenge-instruction" id="challenge-instruction">
-            Listen to the native audio, then click the Mic button and repeat clearly:
+            Dengarkan audio native, lalu ucapkan kembali kalimat berikut dengan jelas:
           </h3>
 
           <!-- Main Challenge Display Text -->
           <div class="prompt-box" id="prompt-box">
+            <!-- Vocab Emoji / Image Visual Icon -->
+            <div class="vocab-visual-badge hidden" id="vocab-visual-badge">
+              <span id="vocab-emoji-icon">🍎</span>
+            </div>
             <div class="prompt-text" id="target-phrase">
               "Could you please elaborate on that perspective?"
             </div>
-            <div class="prompt-phonetic" id="target-phonetic">
-              /kʊd juː pliːz ɪˈlæb.ə.reɪt ɒn ðæt pəˈspek.tɪv/
-            </div>
-            <div class="prompt-translation" id="target-translation">
-              "Bisakah Anda menjelaskan lebih rinci mengenai sudut pandang tersebut?"
-            </div>
+            <!-- Hidden by default before answering -->
+            <div class="prompt-phonetic hidden" id="target-phonetic"></div>
+            <!-- Translation strictly HIDDEN until after user answers -->
+            <div class="prompt-translation hidden" id="target-translation"></div>
           </div>
 
           <!-- Audio Listening Controls -->
           <div class="audio-controls">
-            <button id="btn-listen-audio" class="btn btn-audio" title="Listen to Native English">
+            <button id="btn-listen-audio" class="btn btn-audio" title="Dengarkan Audio Penutur Asli">
               <span class="speaker-icon">🔊</span> Listen Native Audio
             </button>
-            <div class="accent-selector">
-              <label for="accent-select">Voice:</label>
-              <select id="accent-select" class="form-select-sm">
-                <option value="en-US">🇺🇸 US English</option>
-                <option value="en-GB">🇬🇧 UK English</option>
-              </select>
+            <button id="btn-replay-audio" class="btn btn-audio btn-replay-audio" title="Putar Ulang Audio">
+              <span class="speaker-icon">🔁</span> Putar Ulang
+            </button>
+            <div class="audio-settings-grid">
+              <div class="audio-control-card">
+                <label for="accent-select" class="audio-control-label">🎙️ Accent</label>
+                <select id="accent-select" class="form-select-sm">
+                  <option value="en-US">US (American)</option>
+                  <option value="en-GB">UK (British)</option>
+                </select>
+              </div>
+              <div class="audio-control-card">
+                <label for="arena-speed-select" class="audio-control-label">⚡ Speed</label>
+                <select id="arena-speed-select" class="form-select-sm">
+                  <option value="0.5">🐢 0.50x (Ekstra Lambat)</option>
+                  <option value="0.6">🐢 0.60x (Sangat Lambat)</option>
+                  <option value="0.7">🐢 0.70x (Lambat)</option>
+                  <option value="0.8" selected>🎯 0.80x (Normal)</option>
+                  <option value="0.9">⚡ 0.90x (Lancar)</option>
+                  <option value="1.0">⚡ 1.00x (Cepat / Native)</option>
+                </select>
+              </div>
             </div>
           </div>
 
           <!-- MICROPHONE & SPEECH INPUT AREA -->
           <div class="mic-input-section" id="mic-section">
             <div class="mic-wrapper">
-              <button id="btn-mic-toggle" class="btn-mic" aria-label="Toggle Microphone" title="Click to Speak">
+              <button id="btn-mic-toggle" class="btn-mic" aria-label="Toggle Microphone" title="Klik untuk berbicara">
                 <div class="mic-ripple mic-ripple-1"></div>
                 <div class="mic-ripple mic-ripple-2"></div>
                 <div class="mic-icon-svg">
@@ -3015,44 +4281,87 @@ body {
                   </svg>
                 </div>
               </button>
-              <div class="mic-status-label" id="mic-status">Tap microphone to speak</div>
+              <div class="mic-status-label" id="mic-status">Ketuk mikrofon untuk mulai berbicara</div>
             </div>
 
             <!-- Live Speech Transcript Box -->
             <div class="transcript-box" id="transcript-box">
-              <span class="transcript-prefix">Your Voice:</span>
-              <span class="transcript-content" id="transcript-text">Waiting for microphone input...</span>
+              <span class="transcript-prefix">Suara Anda:</span>
+              <span class="transcript-content" id="transcript-text">Menunggu input suara dari mikrofon...</span>
             </div>
 
-            <!-- Alternative Text Input (Fallback / Typing) -->
+            <!-- Alternative Text Input (Fallback / Latihan Membaca) -->
             <div class="alternative-input-row" id="text-input-row">
-              <input type="text" id="manual-text-input" class="form-control" placeholder="Or type your English answer here...">
-              <button id="btn-submit-manual" class="btn btn-secondary">Submit</button>
+              <input type="text" id="manual-text-input" class="form-control" placeholder="Atau ketik jawaban bahasa Inggris Anda di sini...">
+              <button id="btn-submit-manual" class="btn btn-secondary">Kirim Jawaban</button>
             </div>
           </div>
 
-          <!-- Multiple Choice Container (Used for Vocab/Grammar) -->
+          <!-- Multiple Choice Container (Vocabulary, Grammar, Listening) -->
           <div class="options-grid hidden" id="options-container">
             <!-- Dynamic option buttons injected here -->
+          </div>
+
+          <!-- Sentence Builder Interactive Container (Word Bank) -->
+          <div class="sentence-builder-container hidden" id="sentence-builder-container">
+            <div class="builder-instruction">Ketuk kata-kata di bawah ini untuk menyusun kalimat yang tepat:</div>
+            <div class="builder-answer-zone" id="builder-answer-zone">
+              <span class="builder-placeholder" id="builder-placeholder">Ketuk kata pada bank kata di bawah untuk menyusun kalimat...</span>
+            </div>
+            <div class="builder-word-bank" id="builder-word-bank">
+              <!-- Clickable word chip buttons injected dynamically -->
+            </div>
+            <div class="builder-action-row">
+              <button type="button" id="btn-builder-undo" class="btn btn-secondary btn-sm" title="Hapus kata terakhir yang dipilih">⌫ Hapus Kata</button>
+              <button type="button" id="btn-builder-clear" class="btn btn-ghost btn-sm" title="Kembalikan semua kata ke bank">🗑️ Reset</button>
+              <button type="button" id="btn-builder-check" class="btn btn-primary btn-sm" title="Periksa kebenaran susunan kalimat">✓ Periksa Jawaban</button>
+            </div>
           </div>
 
           <!-- Evaluation & AI Feedback Box -->
           <div class="evaluation-panel hidden" id="evaluation-panel">
             <div class="evaluation-header">
-              <div class="score-badge" id="eval-score-badge">Accuracy: 95%</div>
-              <div class="eval-verdict" id="eval-verdict">Excellent Pronunciation! 🎉</div>
+              <div class="score-badge" id="eval-score-badge">Akurasi: 95%</div>
+              <div class="eval-verdict" id="eval-verdict">Jawaban Benar! 🎉</div>
             </div>
 
             <!-- Comparison Difference Highlight -->
-            <div class="comparison-row">
+            <div class="comparison-row" id="comparison-row">
               <div class="comp-item">
                 <span class="comp-label">Target:</span>
                 <span class="comp-val" id="comp-target">...</span>
               </div>
               <div class="comp-item">
-                <span class="comp-label">You Said:</span>
+                <span class="comp-label">Jawaban Anda:</span>
                 <span class="comp-val" id="comp-heard">...</span>
               </div>
+            </div>
+
+            <!-- Kartu 1: Arti & Terjemahan Bahasa Indonesia (Muncul SETELAH menjawab) -->
+            <div class="eval-info-card" id="eval-translation-card">
+              <div class="eval-card-header">
+                <span class="eval-card-icon">🇮🇩</span>
+                <span class="eval-card-label">Arti & Terjemahan:</span>
+              </div>
+              <div class="eval-card-text" id="eval-translation-text">...</div>
+            </div>
+
+            <!-- Kartu 2: Contoh Kalimat (Muncul SETELAH menjawab) -->
+            <div class="eval-info-card hidden" id="eval-example-card">
+              <div class="eval-card-header">
+                <span class="eval-card-icon">📝</span>
+                <span class="eval-card-label">Contoh Kalimat:</span>
+              </div>
+              <div class="eval-card-text" id="eval-example-text">...</div>
+            </div>
+
+            <!-- Kartu 3: Penjelasan Tata Bahasa (Grammar Rule) -->
+            <div class="eval-info-card hidden" id="eval-grammar-card">
+              <div class="eval-card-header">
+                <span class="eval-card-icon">✍️</span>
+                <span class="eval-card-label">Penjelasan Grammar:</span>
+              </div>
+              <div class="eval-card-text" id="eval-grammar-text">...</div>
             </div>
 
             <!-- Cara Baca / Phonetic Pronunciation (Muncul setelah menjawab) -->
@@ -3067,17 +4376,17 @@ body {
             <!-- AI Teacher & Examiner Comments -->
             <div class="ai-comment-card" id="ai-comment-card">
               <div class="ai-card-title">
-                <span class="ai-sparkle">✨</span> Smart AI Teacher Feedback:
+                <span class="ai-sparkle">✨</span> Catatan Guru AI:
               </div>
               <div class="ai-card-body" id="ai-feedback-text">
-                Analyzing your response...
+                Menganalisis respon Anda...
               </div>
             </div>
 
             <!-- Next Question Action -->
             <div class="eval-actions">
               <button id="btn-next-question" class="btn btn-primary btn-block">
-                Next Challenge →
+                Lanjut ke Soal Berikutnya →
               </button>
             </div>
           </div>
@@ -3122,7 +4431,7 @@ body {
           <span class="notice-icon">💾</span>
           <div class="notice-text">
             <strong>Skor Anda Tersimpan Permanen!</strong>
-            <span>Progres dan total poin langsung terakumulasi ke akun Google Sheets. Saat Anda kembali besok atau ganti perangkat, skor tetap berlanjut!</span>
+            <span>Progres dan total poin langsung terakumulasi ke akun Anda. Saat Anda kembali besok atau ganti perangkat, skor tetap berlanjut!</span>
           </div>
         </div>
 
@@ -3145,6 +4454,200 @@ body {
           <button id="btn-view-leaderboard-from-result" class="btn btn-secondary">🏆 View Leaderboard</button>
           <button id="btn-back-home" class="btn btn-ghost">Home Menu</button>
         </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: PROGRESS BELAJAR / HALAMAN STATISTIK -->
+    <section id="progress-view" class="view-section">
+      <div class="progress-page-container">
+        <div class="page-title-banner">
+          <div class="pill-badge">📊 Statistik Pembelajaran</div>
+          <h2 class="page-headline">Progress & Statistik Belajar</h2>
+          <p class="page-subline">Pantau penguasaan kosakata, tata bahasa, skor listening, dan speaking Anda secara real-time.</p>
+        </div>
+
+        <!-- 7 Metrik Utama Sesuai Persyaratan -->
+        <div class="progress-metrics-grid">
+          
+          <!-- Metrik 1: Vocabulary yang sudah dipelajari -->
+          <div class="progress-metric-card highlight-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🧠</span>
+              <span class="prog-card-tag">Vocabulary</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-vocab-count">0 Kata</span>
+              <span class="prog-card-label">Vocabulary Dipelajari</span>
+            </div>
+            <div class="prog-card-track">
+              <div class="prog-card-fill" id="stat-vocab-fill" style="width: 0%"></div>
+            </div>
+            <div class="prog-card-sub" id="stat-vocab-sub">Target: 50 Kata Dasar</div>
+          </div>
+
+          <!-- Metrik 2: Grammar yang sudah dikuasai -->
+          <div class="progress-metric-card highlight-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">✍️</span>
+              <span class="prog-card-tag">Grammar</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-grammar-count">0 Materi</span>
+              <span class="prog-card-label">Grammar Dikuasai</span>
+            </div>
+            <div class="prog-card-track">
+              <div class="prog-card-fill" id="stat-grammar-fill" style="width: 0%"></div>
+            </div>
+            <div class="prog-card-sub" id="stat-grammar-sub">Target: 30 Topik Tata Bahasa</div>
+          </div>
+
+          <!-- Metrik 3: Listening Score -->
+          <div class="progress-metric-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🎧</span>
+              <span class="prog-card-tag">Listening</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-listening-score">0 PTS</span>
+              <span class="prog-card-label">Listening Score</span>
+            </div>
+            <div class="prog-card-sub" id="stat-listening-acc">Akurasi Audio: 0%</div>
+          </div>
+
+          <!-- Metrik 4: Speaking Score -->
+          <div class="progress-metric-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🎙️</span>
+              <span class="prog-card-tag">Speaking</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-speaking-score">0 PTS</span>
+              <span class="prog-card-label">Speaking Score</span>
+            </div>
+            <div class="prog-card-sub" id="stat-speaking-acc">Akurasi Pengucapan: 0%</div>
+          </div>
+
+          <!-- Metrik 5: Total XP -->
+          <div class="progress-metric-card highlight-gold">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">⭐</span>
+              <span class="prog-card-tag">Gamifikasi</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-total-xp">0 XP</span>
+              <span class="prog-card-label">Total XP Terkumpul</span>
+            </div>
+            <div class="prog-card-sub" id="stat-xp-tier">Tingkat: Beginner Explorer</div>
+          </div>
+
+          <!-- Metrik 6: Jumlah game yang sudah dimainkan -->
+          <div class="progress-metric-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🎮</span>
+              <span class="prog-card-tag">Aktivitas</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-games-played">0 Game</span>
+              <span class="prog-card-label">Game Dimainkan</span>
+            </div>
+            <div class="prog-card-sub" id="stat-total-soal">0 Total Soal Dijawab</div>
+          </div>
+
+          <!-- Metrik 7: Tingkat akurasi jawaban -->
+          <div class="progress-metric-card highlight-emerald">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🎯</span>
+              <span class="prog-card-tag">Presisi</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-accuracy-rate">0%</span>
+              <span class="prog-card-label">Tingkat Akurasi Jawaban</span>
+            </div>
+            <div class="prog-card-track">
+              <div class="prog-card-fill fill-emerald" id="stat-accuracy-fill" style="width: 0%"></div>
+            </div>
+            <div class="prog-card-sub" id="stat-accuracy-feedback">Rasio Jawaban Benar</div>
+          </div>
+
+          <!-- Metrik Tambahan: Streak Harian -->
+          <div class="progress-metric-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🔥</span>
+              <span class="prog-card-tag">Konsistensi</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-streak-days">1 Hari</span>
+              <span class="prog-card-label">Streak Belajar</span>
+            </div>
+            <div class="prog-card-sub">Lanjutkan belajar esok hari!</div>
+          </div>
+
+        </div>
+
+        <!-- Tombol Aksi Langsung Bermain -->
+        <div class="progress-cta-box">
+          <button type="button" id="btn-play-from-stats" class="btn btn-primary btn-lg">
+            🚀 Mainkan Game Baru & Naikkan XP
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: PROFILE & PENCAPAIAN BADGE -->
+    <section id="profile-view" class="view-section">
+      <div class="profile-page-container">
+        
+        <!-- Header Profil Pemain -->
+        <div class="profile-summary-card">
+          <div class="profile-avatar-box">
+            <span class="profile-avatar-emoji" id="profile-avatar-emoji">👤</span>
+          </div>
+          <div class="profile-summary-meta">
+            <h2 class="profile-display-name" id="profile-display-name">Player 1</h2>
+            <div class="profile-tags-row">
+              <span class="profile-tier-badge" id="profile-tier-badge">🟢 Beginner</span>
+              <span class="profile-lvl-badge" id="profile-lvl-badge">Level 1</span>
+              <span class="profile-xp-badge" id="profile-xp-badge">⭐ 0 XP</span>
+              <span class="profile-streak-badge" id="profile-streak-badge">🔥 1 Hari</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Hati (Lives) & Pemulihan -->
+        <div class="profile-hearts-panel">
+          <div class="hearts-panel-left">
+            <span class="hearts-panel-title">❤️ Status Kesempatan (Hearts):</span>
+            <div class="hearts-visual-icons" id="profile-hearts-icons">❤️❤️❤️❤️❤️</div>
+            <small class="hearts-panel-hint">Jawaban yang salah mengurangi 1 heart. Pulihkan kapan saja!</small>
+          </div>
+          <div class="hearts-panel-right">
+            <button type="button" id="btn-profile-refill-hearts" class="btn btn-primary btn-sm">
+              💖 Pulihkan 5 Hati Penuh
+            </button>
+          </div>
+        </div>
+
+        <!-- Grid Badge Pencapaian (8 Badges) -->
+        <div class="achievements-section">
+          <div class="achievements-header">
+            <h3 class="achievements-title">🏆 Lencana Pencapaian (Badges)</h3>
+            <span class="achievements-count" id="badges-unlocked-count">0 / 8 Terbuka</span>
+          </div>
+          <div class="badges-grid" id="badges-grid-container">
+            <!-- 8 Badges injected by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Navigasi Cepat Profil -->
+        <div class="profile-action-links">
+          <button type="button" id="btn-profile-to-leaderboard" class="btn btn-secondary">
+            🏆 Buka Live Cloud Leaderboard
+          </button>
+          <button type="button" id="btn-profile-to-settings" class="btn btn-ghost">
+            ⚙️ Pengaturan Suara & AI
+          </button>
+        </div>
+
       </div>
     </section>
 
@@ -3234,7 +4737,7 @@ body {
           <button id="btn-refresh-leaderboard" class="btn btn-secondary btn-sm">
             🔄 Refresh Data
           </button>
-          <span class="sync-indicator" id="leaderboard-sync-status">Connected to Cloud Database</span>
+          <span class="sync-indicator hidden" id="leaderboard-sync-status" style="display: none;"></span>
         </div>
         
         <!-- Table 1: Leaderboard Rankings -->
@@ -3352,11 +4855,26 @@ body {
           <div class="form-group">
             <label for="cfg-voice-rate" class="form-label">Kecepatan Pengucapan (Speech Speed):</label>
             <select id="cfg-voice-rate" class="form-control">
-              <option value="0.75">🐢 0.75x - Lambat (Sangat Ramah Pemula)</option>
-              <option value="0.88">🎯 0.88x - Sedang / Learner Friendly (Rekomendasi)</option>
-              <option value="1.0" selected>⚡ 1.0x - Normal Native Speed</option>
-              <option value="1.15">🚀 1.15x - Cepat (Advanced Challenge)</option>
+              <option value="0.5">🐢 0.50x - Ekstra Lambat (Kata per Kata)</option>
+              <option value="0.6">🐢 0.60x - Sangat Lambat (Artikulasi Ekstra Jelas)</option>
+              <option value="0.7">🐢 0.70x - Lambat (Sangat Ramah Pemula)</option>
+              <option value="0.8" selected>🎯 0.80x - Sedang / Learner Friendly (Rekomendasi)</option>
+              <option value="0.9">⚡ 0.90x - Lancar (Natural)</option>
+              <option value="1.0">⚡ 1.00x - Normal Native Speed (Cepat)</option>
             </select>
+          </div>
+
+          <!-- Question Difficulty / Level Preference -->
+          <div class="form-group">
+            <label for="cfg-level-preference" class="form-label">Tingkat Kesulitan Latihan (Level):</label>
+            <select id="cfg-level-preference" class="form-control">
+              <option value="all">🌐 Semua Tingkatan (All Levels / Campuran)</option>
+              <option value="Beginner">🟢 Beginner (Tingkat Dasar / Pemula)</option>
+              <option value="Intermediate">🟡 Intermediate (Tingkat Menengah)</option>
+              <option value="Upper-Intermediate">🟠 Upper-Intermediate (Menengah Lanjut)</option>
+              <option value="Advanced">🔴 Advanced (Tingkat Mahir)</option>
+            </select>
+            <small class="form-hint">Pilih tingkatan soal yang ingin Anda latih secara default.</small>
           </div>
 
           <div class="modal-footer">
@@ -3367,6 +4885,59 @@ body {
       </div>
     </div>
   </div>
+
+  <!-- MOBILE BOTTOM NAVIGATION (Home, Play, Progress, Profile) -->
+  <nav class="bottom-nav-bar" id="bottom-nav-bar" aria-label="Navigasi Bawah Mobile">
+    <button type="button" class="bottom-nav-btn active" data-nav="landing" id="bnav-home">
+      <span class="bnav-icon">🏠</span>
+      <span class="bnav-label">Home</span>
+    </button>
+    <button type="button" class="bottom-nav-btn" data-nav="play" id="bnav-play">
+      <span class="bnav-icon">🎮</span>
+      <span class="bnav-label">Play</span>
+    </button>
+    <button type="button" class="bottom-nav-btn" data-nav="progress" id="bnav-progress">
+      <span class="bnav-icon">📊</span>
+      <span class="bnav-label">Progress</span>
+    </button>
+    <button type="button" class="bottom-nav-btn" data-nav="profile" id="bnav-profile">
+      <span class="bnav-icon">👤</span>
+      <span class="bnav-label">Profile</span>
+    </button>
+  </nav>
+
+  <!-- MODAL: KEHABISAN HATI (OUT OF HEARTS) -->
+  <div class="modal-overlay hidden" id="modal-hearts">
+    <div class="modal-card modal-hearts-card">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <span class="modal-icon">💔</span>
+          <div>
+            <h3 class="modal-title">Kesempatan Bermain Habis!</h3>
+            <p class="modal-subtitle">Hati (lives) Anda tersisa 0/5.</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-hearts" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="hearts-refill-icon-large">💖</div>
+        <h4 class="hearts-refill-title">Isi Ulang 5 Hati Anda Sekarang!</h4>
+        <p class="hearts-refill-desc">Jangan khawatir, Anda dapat langsung memulihkan 5 hati penuh untuk lanjut belajar tanpa batas.</p>
+        <div class="hearts-timer-pill" id="hearts-timer-pill">⏳ Pemulihan otomatis: +1 hati tiap 5 menit</div>
+        <div class="hearts-modal-actions">
+          <button type="button" id="btn-refill-hearts" class="btn btn-primary btn-block btn-lg">
+            ⚡ Pulihkan 5 Hati Sekarang (Gratis)
+          </button>
+          <button type="button" id="btn-hearts-home" class="btn btn-ghost btn-block">
+            🏠 Kembali ke Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Floating XP Animation Container -->
+  <div id="floating-xp-container" class="floating-xp-container"></div>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
@@ -3426,7 +4997,28 @@ body {
     }
   };
 
+  // Helper to sanitize questions and ensure NO artificial numbers (#303, #12, etc.) ever appear
+  function cleanText(text) {
+    if (!text) return '';
+    return String(text)
+      .replace(/\s*#\d+/g, '')
+      .replace(/\s*#([a-zA-Z0-9_-]+)/g, '')
+      .replace(/\s*\((?:Record|Part|Task|Passage)?\s*#?\d+\)/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
 
+  // Helper to normalize speed rate values to exact select option keys ('0.5', '0.6', '0.7', '0.8', '0.9', '1.0')
+  function normalizeRate(rate) {
+    const r = parseFloat(rate);
+    if (isNaN(r) || r <= 0) return '0.8';
+    if (r <= 0.55) return '0.5';
+    if (r <= 0.65) return '0.6';
+    if (r <= 0.75) return '0.7';
+    if (r <= 0.85) return '0.8';
+    if (r <= 0.95) return '0.9';
+    return '1.0';
+  }
 
   /* ==========================================================================
      1. CURATED CONTENT REPOSITORY (Bilingual English & Indonesian)
@@ -5359,6 +6951,228 @@ body {
       "en_prompt": "Terjemahkan ke Bahasa Indonesia: \"The company is rumored to be launching a new product next month.\"",
       "notes": "Struktur pasif impersonal: Subject + is rumored/believed/thought + to be + V-ing."
     }
+  ],
+  "sentence_builder": [
+    {
+      "id": "sb_01",
+      "mode": "sentence_builder",
+      "category": "Daily Routine • Simple Present",
+      "level": "Beginner",
+      "en": "I drink coffee every morning.",
+      "target": "I drink coffee every morning.",
+      "words": ["I", "drink", "coffee", "every morning."],
+      "id_translation": "Saya minum kopi setiap pagi.",
+      "notes": "Pola kalimat: Subject (I) + Verb 1 (drink) + Object (coffee) + Time expression (every morning)."
+    },
+    {
+      "id": "sb_02",
+      "mode": "sentence_builder",
+      "category": "Transit • Daily Transportation",
+      "level": "Beginner",
+      "en": "She goes to school by bus.",
+      "target": "She goes to school by bus.",
+      "words": ["She", "goes", "to school", "by bus."],
+      "id_translation": "Dia pergi ke sekolah naik bus.",
+      "notes": "Subjek tunggal 'She' menggunakan kata kerja bentuk -es (goes) dan preposisi 'by' untuk transportasi."
+    },
+    {
+      "id": "sb_03",
+      "mode": "sentence_builder",
+      "category": "Activities • Present Continuous",
+      "level": "Beginner",
+      "en": "They are playing football in the park.",
+      "target": "They are playing football in the park.",
+      "words": ["They", "are playing", "football", "in the park."],
+      "id_translation": "Mereka sedang bermain sepak bola di taman.",
+      "notes": "Present Continuous: Subject (They) + are + V-ing (playing) + Object + Keterangan tempat."
+    },
+    {
+      "id": "sb_04",
+      "mode": "sentence_builder",
+      "category": "Hobbies • Preferences",
+      "level": "Elementary",
+      "en": "My sister loves reading books at night.",
+      "target": "My sister loves reading books at night.",
+      "words": ["My sister", "loves", "reading books", "at night."],
+      "id_translation": "Kakak perempuan saya suka membaca buku di malam hari.",
+      "notes": "Kata kerja 'love' diikuti oleh gerund (reading) untuk menyatakan hobi."
+    },
+    {
+      "id": "sb_05",
+      "mode": "sentence_builder",
+      "category": "Polite Request • Modal Verbs",
+      "level": "Elementary",
+      "en": "Could you please help me with this task?",
+      "target": "Could you please help me with this task?",
+      "words": ["Could you", "please help", "me with", "this task?"],
+      "id_translation": "Bisakah Anda tolong bantu saya dengan tugas ini?",
+      "notes": "Penggunaan 'Could you please...' adalah bentuk permintaan sopan yang sangat umum di tempat kerja."
+    },
+    {
+      "id": "sb_06",
+      "mode": "sentence_builder",
+      "category": "Work Routine • Adverbs of Frequency",
+      "level": "Elementary",
+      "en": "He always arrives at the office on time.",
+      "target": "He always arrives at the office on time.",
+      "words": ["He always", "arrives", "at the office", "on time."],
+      "id_translation": "Dia selalu tiba di kantor tepat waktu.",
+      "notes": "Adverb of frequency 'always' diletakkan sebelum kata kerja utama 'arrives'."
+    },
+    {
+      "id": "sb_07",
+      "mode": "sentence_builder",
+      "category": "Café & Ordering • Polite Expressions",
+      "level": "Beginner",
+      "en": "I would like a cup of hot tea, please.",
+      "target": "I would like a cup of hot tea, please.",
+      "words": ["I would like", "a cup of", "hot tea,", "please."],
+      "id_translation": "Saya ingin secangkir teh panas, tolong.",
+      "notes": "'I would like' adalah bentuk sopan dari 'I want' saat memesan makanan atau minuman."
+    },
+    {
+      "id": "sb_08",
+      "mode": "sentence_builder",
+      "category": "Directions • City Navigation",
+      "level": "Beginner",
+      "en": "Where is the nearest train station around here?",
+      "target": "Where is the nearest train station around here?",
+      "words": ["Where is", "the nearest", "train station", "around here?"],
+      "id_translation": "Di mana stasiun kereta terdekat di sekitar sini?",
+      "notes": "Kalimat tanya tempat: Where + is + noun phrase (the nearest train station) + keterangan."
+    },
+    {
+      "id": "sb_09",
+      "mode": "sentence_builder",
+      "category": "Safety • Imperative Sentences",
+      "level": "Elementary",
+      "en": "Don't forget to lock the door before leaving.",
+      "target": "Don't forget to lock the door before leaving.",
+      "words": ["Don't forget", "to lock", "the door", "before leaving."],
+      "id_translation": "Jangan lupa untuk mengunci pintu sebelum pergi.",
+      "notes": "Setelah preposisi 'before', kata kerja harus dalam bentuk -ing (leaving)."
+    },
+    {
+      "id": "sb_10",
+      "mode": "sentence_builder",
+      "category": "Skills & Talents • Adverbs of Manner",
+      "level": "Intermediate",
+      "en": "She speaks three different languages very fluently.",
+      "target": "She speaks three different languages very fluently.",
+      "words": ["She speaks", "three different", "languages", "very fluently."],
+      "id_translation": "Dia berbicara tiga bahasa berbeda dengan sangat lancar.",
+      "notes": "Adverb of manner 'fluently' menerangkan bagaimana dia berbicara (speaks)."
+    },
+    {
+      "id": "sb_11",
+      "mode": "sentence_builder",
+      "category": "Weather • Past Continuous & Simple Past",
+      "level": "Intermediate",
+      "en": "It was raining heavily when I arrived home.",
+      "target": "It was raining heavily when I arrived home.",
+      "words": ["It was", "raining heavily", "when", "I arrived home."],
+      "id_translation": "Hujan turun deras ketika saya tiba di rumah.",
+      "notes": "Tindakan yang sedang berlangsung (was raining) dipotong oleh kejadian lampau (arrived)."
+    },
+    {
+      "id": "sb_12",
+      "mode": "sentence_builder",
+      "category": "Education • Purpose Clauses",
+      "level": "Elementary",
+      "en": "He is studying hard to pass the final exam.",
+      "target": "He is studying hard to pass the final exam.",
+      "words": ["He is", "studying hard", "to pass", "the final exam."],
+      "id_translation": "Dia sedang belajar giat untuk lulus ujian akhir.",
+      "notes": "'To pass' menunjukkan tujuan (infinitive of purpose)."
+    },
+    {
+      "id": "sb_13",
+      "mode": "sentence_builder",
+      "category": "Family • Daily Dinner",
+      "level": "Beginner",
+      "en": "We usually have dinner together at seven PM.",
+      "target": "We usually have dinner together at seven PM.",
+      "words": ["We usually", "have dinner", "together", "at seven PM."],
+      "id_translation": "Kami biasanya makan malam bersama pada pukul tujuh malam.",
+      "notes": "'Have dinner' adalah kolokasi alami untuk makan malam."
+    },
+    {
+      "id": "sb_14",
+      "mode": "sentence_builder",
+      "category": "Experience • Present Perfect",
+      "level": "Intermediate",
+      "en": "I have never seen such a beautiful sunset before.",
+      "target": "I have never seen such a beautiful sunset before.",
+      "words": ["I have never", "seen", "such a beautiful", "sunset before."],
+      "id_translation": "Saya belum pernah melihat matahari terbenam seindah ini sebelumnya.",
+      "notes": "Present Perfect: have + never + V3 (seen) untuk pengalaman hidup."
+    },
+    {
+      "id": "sb_15",
+      "mode": "sentence_builder",
+      "category": "Conversation • Polite Clarification",
+      "level": "Beginner",
+      "en": "Can you speak a little bit slower, please?",
+      "target": "Can you speak a little bit slower, please?",
+      "words": ["Can you", "speak", "a little bit slower,", "please?"],
+      "id_translation": "Bisakah Anda berbicara sedikit lebih pelan, tolong?",
+      "notes": "Ungkapan emas saat berbicara dengan penutur asli yang berbicara terlalu cepat."
+    },
+    {
+      "id": "sb_16",
+      "mode": "sentence_builder",
+      "category": "Duration • Present Perfect Continuous",
+      "level": "Intermediate",
+      "en": "We have been waiting for the bus for thirty minutes.",
+      "target": "We have been waiting for the bus for thirty minutes.",
+      "words": ["We have been", "waiting for", "the bus", "for thirty minutes."],
+      "id_translation": "Kami telah menunggu bus itu selama tiga puluh menit.",
+      "notes": "Menyatakan tindakan yang dimulai di masa lampau dan masih berlangsung hingga sekarang."
+    },
+    {
+      "id": "sb_17",
+      "mode": "sentence_builder",
+      "category": "Advice • Modal Verb Should",
+      "level": "Elementary",
+      "en": "You should take an umbrella because it might rain.",
+      "target": "You should take an umbrella because it might rain.",
+      "words": ["You should", "take an umbrella", "because", "it might rain."],
+      "id_translation": "Kamu sebaiknya membawa payung karena mungkin akan hujan.",
+      "notes": "'Should' digunakan untuk memberi saran yang bersahabat."
+    },
+    {
+      "id": "sb_18",
+      "mode": "sentence_builder",
+      "category": "Future Plans • Decisions",
+      "level": "Elementary",
+      "en": "They decided to travel abroad next summer.",
+      "target": "They decided to travel abroad next summer.",
+      "words": ["They decided", "to travel abroad", "next", "summer."],
+      "id_translation": "Mereka memutuskan untuk bepergian ke luar negeri musim panas depan.",
+      "notes": "Kata kerja 'decide' diikuti oleh to-infinitive (to travel)."
+    },
+    {
+      "id": "sb_19",
+      "mode": "sentence_builder",
+      "category": "Anticipation • Phrasal Verbs",
+      "level": "Intermediate",
+      "en": "I am looking forward to seeing you next week.",
+      "target": "I am looking forward to seeing you next week.",
+      "words": ["I am", "looking forward to", "seeing you", "next week."],
+      "id_translation": "Saya sangat menantikan untuk bertemu dengan Anda minggu depan.",
+      "notes": "Frasa 'look forward to' wajib diikuti oleh bentuk gerund (-ing: seeing)."
+    },
+    {
+      "id": "sb_20",
+      "mode": "sentence_builder",
+      "category": "Past Negative • Simple Past",
+      "level": "Beginner",
+      "en": "He did not understand the question at first.",
+      "target": "He did not understand the question at first.",
+      "words": ["He did not", "understand", "the question", "at first."],
+      "id_translation": "Dia tidak mengerti pertanyaan tersebut pada awalnya.",
+      "notes": "Setelah kata bantu 'did not', kata kerja kembali ke bentuk dasar (understand)."
+    }
   ]
 };
 
@@ -5436,7 +7250,7 @@ body {
       this.isRecording = false;
 
       this.selectedVoiceName = safeStorage.getItem('cfg_voice_name') || 'auto';
-      this.speechRate = parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.88');
+      this.speechRate = parseFloat(normalizeRate(safeStorage.getItem('cfg_voice_rate') || '0.8'));
       this.cachedVoices = [];
 
       if ('speechSynthesis' in window) {
@@ -5527,14 +7341,23 @@ body {
       }
     }
 
-    speak(text, lang = 'en-US') {
+    speak(text, lang = 'en-US', customRate = null) {
       if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang;
-      utterance.rate = this.speechRate || 0.88;
-      utterance.pitch = 1.0;
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+
+      const cleanedText = cleanText(text);
+      if (!cleanedText) return;
+
+      const utterance = new SpeechSynthesisUtterance(cleanedText);
+      utterance.lang = lang || 'en-US';
+      
+      const rawRate = customRate !== null && customRate !== undefined 
+        ? customRate 
+        : (this.speechRate || safeStorage.getItem('cfg_voice_rate') || 0.8);
+      const activeRate = Math.max(0.4, Math.min(2.0, parseFloat(rawRate) || 0.8));
 
       const voices = (this.cachedVoices && this.cachedVoices.length > 0) ? this.cachedVoices : window.speechSynthesis.getVoices();
       let chosenVoice = null;
@@ -5543,13 +7366,13 @@ body {
       const pref = this.selectedVoiceName || 'auto';
       if (pref !== 'auto' && voices.length > 0) {
         if (pref === 'female_us') {
-          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female') || v.name.includes('Natural') || v.name.includes('Google US')));
+          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female')));
         } else if (pref === 'male_us') {
-          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Male') || v.name.includes('Guy')));
+          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Male')));
         } else if (pref === 'female_uk') {
-          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('Susan') || v.name.includes('Victoria') || v.name.includes('Female') || v.name.includes('Google UK English Female')));
+          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('Susan') || v.name.includes('Victoria') || v.name.includes('Female')));
         } else if (pref === 'male_uk') {
-          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Male') || v.name.includes('Google UK English Male')));
+          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Male')));
         } else if (pref === 'female_au') {
           chosenVoice = voices.find(v => (v.lang.includes('AU') || v.lang.includes('en-AU')));
         } else if (pref === 'male_in') {
@@ -5559,12 +7382,17 @@ body {
         }
       }
 
-      // 2. Fallback matching accent if no persona matched
+      // 2. Fallback matching accent
+      // Prioritize localService voices (like Microsoft David / Microsoft Zira on Windows)
+      // because local voices faithfully respect and smoothly scale utterance.rate (0.5x - 1.0x)!
       if (!chosenVoice && voices.length > 0) {
-        const langCode = lang.toLowerCase();
-        chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
+        const langCode = (lang || 'en-US').toLowerCase();
+        chosenVoice = voices.find(v => v.localService && v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
         if (!chosenVoice) {
-          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.substring(0, 2)) && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Online')));
+          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
+        }
+        if (!chosenVoice) {
+          chosenVoice = voices.find(v => v.localService && v.lang && v.lang.toLowerCase().startsWith(langCode.substring(0, 2)));
         }
         if (!chosenVoice) {
           chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
@@ -5575,7 +7403,18 @@ body {
         utterance.voice = chosenVoice;
       }
 
-      window.speechSynthesis.speak(utterance);
+      // CRITICAL: Set utterance.rate AFTER setting utterance.voice
+      utterance.rate = activeRate;
+      utterance.pitch = 1.0;
+
+      // Small 30ms timeout avoids Chromium async cancel() race condition
+      setTimeout(() => {
+        try {
+          window.speechSynthesis.speak(utterance);
+        } catch (err) {
+          console.warn('SpeechSynthesis error:', err);
+        }
+      }, 30);
     }
   }
 
@@ -5734,10 +7573,10 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           const res = await fetch(url + '?action=leaderboard');
           const json = await res.json();
           if (json.status === 'success' && Array.isArray(json.data)) {
-            return { source: 'Google Sheets (Live Database)', data: json.data };
+            return { source: 'Live Cloud Database', data: json.data };
           }
         } catch (e) {
-          console.warn('Could not fetch from Google Apps Script:', e);
+          console.warn('Could not fetch from Cloud Database:', e);
         }
       }
 
@@ -5763,10 +7602,10 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           const res = await fetch(url + '?action=memory');
           const json = await res.json();
           if (json.status === 'success' && Array.isArray(json.data)) {
-            return { source: 'Google Sheets (Live Memory Sheet)', data: json.data };
+            return { source: 'Live Cloud Database (Learning History)', data: json.data };
           }
         } catch (e) {
-          console.warn('Could not fetch memory from Google Apps Script:', e);
+          console.warn('Could not fetch memory from Cloud Database:', e);
         }
       }
 
@@ -5782,7 +7621,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           const json = await res.json();
           return json;
         } catch (e) {
-          console.warn('Google Sheets login fetch error:', e);
+          console.warn('Cloud Database login fetch error:', e);
         }
       }
 
@@ -5803,7 +7642,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       return {
         status: 'error',
-        message: 'Email atau password tidak ditemukan. Pastikan akun sudah didaftarkan di sheet Users Google Sheets oleh Jefri (Admin).'
+        message: 'Email atau password tidak ditemukan. Pastikan akun sudah didaftarkan oleh Jefri (Admin).'
       };
     }
 
@@ -5857,9 +7696,9 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(entry)
           });
-          return { success: true, message: '✓ Skor & Memory tersimpan permanen di Google Sheets / Excel!' };
+          return { success: true, message: '✓ Skor & Memory tersimpan permanen di Cloud Database!' };
         } catch (e) {
-          return { success: true, message: 'Tersimpan di database lokal (Sheets sync error)' };
+          return { success: true, message: 'Tersimpan di database lokal (Cloud sync offline)' };
         }
       }
 
@@ -5998,7 +7837,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.sound = new SoundManager();
       this.speech = new SpeechService();
 
-      // Game state
+      // Core Game State
       this.languageDirection = 'en-to-id'; // 'id-to-en' or 'en-to-id'
       this.currentMode = 'shadowing';
       this.questions = [];
@@ -6006,21 +7845,56 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.score = 0;
       this.streak = 0;
       this.maxStreak = 0;
+      this.combo = 0;
       this.history = [];
+
+      // Gamification State (Persisted)
+      this.hearts = Math.max(1, Math.min(5, parseInt(safeStorage.getItem('ae_hearts') ?? '5', 10) || 5));
+      this.streakDays = Math.max(1, parseInt(safeStorage.getItem('ae_streak_days') ?? '1', 10) || 1);
+      this.totalXP = Math.max(0, parseInt(safeStorage.getItem('ae_total_xp') ?? '0', 10) || 0);
+
+      // Statistics Tracker
+      let loadedStats = {};
+      try { loadedStats = JSON.parse(safeStorage.getItem('ae_stats') || '{}'); } catch(e) {}
+      this.stats = {
+        vocabLearned: loadedStats.vocabLearned || 0,
+        grammarMastered: loadedStats.grammarMastered || 0,
+        listeningScore: loadedStats.listeningScore || 0,
+        speakingScore: loadedStats.speakingScore || 0,
+        gamesPlayed: loadedStats.gamesPlayed || 0,
+        totalAnswered: loadedStats.totalAnswered || 0,
+        totalCorrect: loadedStats.totalCorrect || 0
+      };
+
+      // Unlocked Badges
+      let loadedBadges = [];
+      try { loadedBadges = JSON.parse(safeStorage.getItem('ae_badges') || '[]'); } catch(e) {}
+      this.badges = Array.isArray(loadedBadges) ? loadedBadges : [];
+
+      // Sentence Builder Word State
+      this.selectedWords = [];
+      this.wordBank = [];
+      this.builderTarget = '';
 
       // UI Elements Cache
       this.dom = {
         views: {
           landing: document.getElementById('landing-view'),
           game: document.getElementById('game-view'),
-          result: document.getElementById('result-view')
+          result: document.getElementById('result-view'),
+          progress: document.getElementById('progress-view'),
+          profile: document.getElementById('profile-view')
         },
         hud: {
           score: document.getElementById('hud-score'),
           streak: document.getElementById('hud-streak'),
           progress: document.getElementById('hud-progress'),
           modePill: document.getElementById('current-mode-pill'),
-          dirPill: document.getElementById('current-dir-pill')
+          dirPill: document.getElementById('current-dir-pill'),
+          hearts: document.getElementById('hud-hearts'),
+          combo: document.getElementById('hud-combo'),
+          heartsItem: document.getElementById('hud-hearts-item'),
+          comboItem: document.getElementById('hud-combo-item')
         },
         challenge: {
           instruction: document.getElementById('challenge-instruction'),
@@ -6031,8 +7905,21 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           targetPhonetic: document.getElementById('target-phonetic'),
           targetTranslation: document.getElementById('target-translation'),
           audioBtn: document.getElementById('btn-listen-audio'),
+          replayBtn: document.getElementById('btn-replay-audio'),
           accentSelect: document.getElementById('accent-select'),
-          optionsContainer: document.getElementById('options-container')
+          speedSelect: document.getElementById('arena-speed-select'),
+          optionsContainer: document.getElementById('options-container'),
+          vocabVisualBadge: document.getElementById('vocab-visual-badge'),
+          vocabEmojiIcon: document.getElementById('vocab-emoji-icon')
+        },
+        builder: {
+          container: document.getElementById('sentence-builder-container'),
+          answerZone: document.getElementById('builder-answer-zone'),
+          placeholder: document.getElementById('builder-placeholder'),
+          wordBank: document.getElementById('builder-word-bank'),
+          undoBtn: document.getElementById('btn-builder-undo'),
+          clearBtn: document.getElementById('btn-builder-clear'),
+          checkBtn: document.getElementById('btn-builder-check')
         },
         mic: {
           section: document.getElementById('mic-section'),
@@ -6050,7 +7937,15 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           compTarget: document.getElementById('comp-target'),
           compHeard: document.getElementById('comp-heard'),
           aiFeedback: document.getElementById('ai-feedback-text'),
-          nextBtn: document.getElementById('btn-next-question')
+          nextBtn: document.getElementById('btn-next-question'),
+          translationCard: document.getElementById('eval-translation-card'),
+          translationText: document.getElementById('eval-translation-text'),
+          exampleCard: document.getElementById('eval-example-card'),
+          exampleText: document.getElementById('eval-example-text'),
+          grammarCard: document.getElementById('eval-grammar-card'),
+          grammarText: document.getElementById('eval-grammar-text'),
+          phoneticBox: document.getElementById('phonetic-reveal-box'),
+          phoneticText: document.getElementById('eval-phonetic-text')
         },
         result: {
           modeName: document.getElementById('res-mode-name'),
@@ -6066,10 +7961,51 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           homeBtn: document.getElementById('btn-back-home'),
           viewLeaderboardBtn: document.getElementById('btn-view-leaderboard-from-result')
         },
+        dashboard: {
+          playerName: document.getElementById('dash-player-name'),
+          tierBadge: document.getElementById('dash-tier-badge'),
+          levelBadge: document.getElementById('dash-level-badge'),
+          streakCount: document.getElementById('dash-streak-count'),
+          xpFraction: document.getElementById('dash-xp-fraction'),
+          xpProgressFill: document.getElementById('dash-xp-progress-fill'),
+          heartsCount: document.getElementById('dash-hearts-count'),
+          totalXp: document.getElementById('dash-total-xp'),
+          accuracyVal: document.getElementById('dash-accuracy-val'),
+          btnStart: document.getElementById('btn-dashboard-start')
+        },
+        progress: {
+          vocabCount: document.getElementById('stat-vocab-count'),
+          vocabFill: document.getElementById('stat-vocab-fill'),
+          grammarCount: document.getElementById('stat-grammar-count'),
+          grammarFill: document.getElementById('stat-grammar-fill'),
+          listeningScore: document.getElementById('stat-listening-score'),
+          listeningAcc: document.getElementById('stat-listening-acc'),
+          speakingScore: document.getElementById('stat-speaking-score'),
+          speakingAcc: document.getElementById('stat-speaking-acc'),
+          totalXp: document.getElementById('stat-total-xp'),
+          xpTier: document.getElementById('stat-xp-tier'),
+          gamesPlayed: document.getElementById('stat-games-played'),
+          totalSoal: document.getElementById('stat-total-soal'),
+          accuracyRate: document.getElementById('stat-accuracy-rate'),
+          accuracyFill: document.getElementById('stat-accuracy-fill'),
+          streakDays: document.getElementById('stat-streak-days')
+        },
+        profile: {
+          displayName: document.getElementById('profile-display-name'),
+          tierBadge: document.getElementById('profile-tier-badge'),
+          lvlBadge: document.getElementById('profile-lvl-badge'),
+          xpBadge: document.getElementById('profile-xp-badge'),
+          streakBadge: document.getElementById('profile-streak-badge'),
+          heartsIcons: document.getElementById('profile-hearts-icons'),
+          refillHeartsBtn: document.getElementById('btn-profile-refill-hearts'),
+          badgesCount: document.getElementById('badges-unlocked-count'),
+          badgesContainer: document.getElementById('badges-grid-container')
+        },
         modals: {
           auth: document.getElementById('modal-auth'),
           leaderboard: document.getElementById('modal-leaderboard'),
           settings: document.getElementById('modal-settings'),
+          hearts: document.getElementById('modal-hearts'),
           tabLeaderboardBtn: document.getElementById('tab-leaderboard-btn'),
           tabMemoryBtn: document.getElementById('tab-memory-btn'),
           containerLeaderboard: document.getElementById('container-leaderboard-table'),
@@ -6089,23 +8025,25 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       };
 
       this.pendingMode = null;
+      this.levelPreference = safeStorage.getItem('cfg_level_preference') || 'all';
+
       this.initAuth();
       this.initEvents();
       this.loadSettings();
       this.loadQuestionsFromGitHub();
 
-      // Show login modal at start if not logged in
-      if (!AuthManager.isLoggedIn()) {
-        setTimeout(() => {
-          this.openAuthModal('Selamat datang! Silakan masuk dengan akun Anda untuk mulai bermain.');
-        }, 300);
-      }
+      // Update Dashboard & Badges on launch
+      this.updateDashboard();
+      this.renderBadges();
     }
 
     initAuth() {
       AuthManager.init((user) => {
-        if (user && this.dom.result.playerNameInput) {
-          this.dom.result.playerNameInput.value = user.name;
+        if (user) {
+          if (this.dom.result.playerNameInput) {
+            this.dom.result.playerNameInput.value = user.name;
+          }
+          this.updateDashboard();
         }
       });
     }
@@ -6122,7 +8060,6 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
                 const targetMode = q.mode || 'shadowing';
                 if (!QUESTION_BANK[targetMode]) QUESTION_BANK[targetMode] = [];
                 
-                // Avoid duplicates
                 const exists = QUESTION_BANK[targetMode].some(item => item.id === q.id || item.en === q.en);
                 if (!exists) {
                   QUESTION_BANK[targetMode].push({
@@ -6130,37 +8067,53 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
                     mode: targetMode,
                     category: q.category,
                     level: q.level,
-                    en: q.en,
-                    target: q.target || q.en,
+                    en: cleanText(q.en),
+                    target: cleanText(q.target || q.en),
                     phonetic: q.phonetic,
-                    translation: q.id_translation || q.translation,
-                    id_translation: q.id_translation || q.translation,
-                    id_prompt: q.id_prompt,
-                    en_prompt: q.en_prompt,
-                    missingWord: q.missingWord,
-                    prompt_en: q.prompt_en,
-                    prompt_id: q.prompt_id,
-                    options: q.options || q.options_en || q.options_id,
-                    options_id: q.options_id,
-                    options_en: q.options_en,
+                    translation: cleanText(q.id_translation || q.translation),
+                    id_translation: cleanText(q.id_translation || q.translation),
+                    id_prompt: cleanText(q.id_prompt),
+                    en_prompt: cleanText(q.en_prompt),
+                    missingWord: cleanText(q.missingWord),
+                    prompt_en: cleanText(q.prompt_en),
+                    prompt_id: cleanText(q.prompt_id),
+                    options: (q.options || q.options_en || q.options_id || []).map(o => cleanText(o)),
+                    options_id: (q.options_id || []).map(o => cleanText(o)),
+                    options_en: (q.options_en || []).map(o => cleanText(o)),
                     correctIndex: q.correctIndex !== undefined ? q.correctIndex : 0,
-                    notes: q.notes
+                    notes: cleanText(q.notes)
                   });
                 }
               });
-              console.log('Successfully synced question dataset from:', url);
-              break; // loaded successfully
+              break;
             }
           }
-        } catch (err) {
-          // try next endpoint
-        }
+        } catch (err) {}
       }
+    }
+
+    getPlayerTier(xp) {
+      if (xp >= 3000) return { level: 5, tier: '🔴 Advanced', nextXP: 5000, baseXP: 3000 };
+      if (xp >= 1500) return { level: 4, tier: '🟠 Upper-Intermediate', nextXP: 3000, baseXP: 1500 };
+      if (xp >= 700) return { level: 3, tier: '🟡 Intermediate', nextXP: 1500, baseXP: 700 };
+      if (xp >= 300) return { level: 2, tier: '🔵 Elementary', nextXP: 700, baseXP: 300 };
+      return { level: 1, tier: '🟢 Beginner', nextXP: 300, baseXP: 0 };
+    }
+
+    getComboMultiplier() {
+      if (this.combo <= 0) return 1.0;
+      return Math.min(2.0, 1.0 + (this.combo - 1) * 0.2);
+    }
+
+    getComboMultiplierLabel() {
+      const m = this.getComboMultiplier();
+      return m > 1.0 ? `${m.toFixed(1)}x` : '1x';
     }
 
     switchView(viewName, pushHistory = true) {
       this.currentView = viewName;
       Object.entries(this.dom.views).forEach(([key, el]) => {
+        if (!el) return;
         if (key === viewName) {
           el.classList.add('active');
         } else {
@@ -6173,6 +8126,196 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         if (viewName !== 'landing') {
           window.history.pushState({ arenaView: viewName }, '');
         }
+      }
+
+      if (viewName === 'progress') this.updateProgressView();
+      if (viewName === 'profile') this.updateProfileView();
+      if (viewName === 'landing') this.updateDashboard();
+    }
+
+    switchTab(tabName) {
+      this.sound.playClick();
+      // Update desktop tab buttons
+      document.querySelectorAll('.desktop-nav-tabs .nav-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.nav === tabName);
+      });
+      // Update mobile bottom nav buttons
+      document.querySelectorAll('.bottom-nav-bar .bottom-nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.nav === tabName);
+      });
+
+      if (tabName === 'landing' || tabName === 'home') {
+        this.switchView('landing');
+      } else if (tabName === 'play') {
+        this.switchView('landing');
+        const modesSection = document.getElementById('game-modes-grid') || document.querySelector('.modes-grid');
+        if (modesSection) modesSection.scrollIntoView({ behavior: 'smooth' });
+      } else if (tabName === 'progress') {
+        this.switchView('progress');
+      } else if (tabName === 'profile') {
+        this.switchView('profile');
+      }
+    }
+
+    updateDashboard() {
+      const tier = this.getPlayerTier(this.totalXP);
+      const userName = AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Player 1';
+      if (this.dom.dashboard.playerName) this.dom.dashboard.playerName.textContent = userName;
+      if (this.dom.dashboard.tierBadge) this.dom.dashboard.tierBadge.textContent = tier.tier;
+      if (this.dom.dashboard.levelBadge) this.dom.dashboard.levelBadge.textContent = `Level ${tier.level}`;
+      if (this.dom.dashboard.streakCount) this.dom.dashboard.streakCount.textContent = this.streakDays;
+      if (this.dom.dashboard.heartsCount) this.dom.dashboard.heartsCount.textContent = `${this.hearts}/5`;
+      if (this.dom.dashboard.totalXp) this.dom.dashboard.totalXp.textContent = `${this.totalXP.toLocaleString()} XP`;
+
+      const currentInLevel = Math.max(0, this.totalXP - tier.baseXP);
+      const neededInLevel = Math.max(1, tier.nextXP - tier.baseXP);
+      const pct = Math.min(100, Math.round((currentInLevel / neededInLevel) * 100));
+      if (this.dom.dashboard.xpFraction) {
+        this.dom.dashboard.xpFraction.textContent = `${this.totalXP.toLocaleString()} / ${tier.nextXP.toLocaleString()} XP`;
+      }
+      if (this.dom.dashboard.xpProgressFill) {
+        this.dom.dashboard.xpProgressFill.style.width = `${pct}%`;
+      }
+
+      const totalAns = this.stats.totalAnswered || 0;
+      const totalCor = this.stats.totalCorrect || 0;
+      const acc = totalAns > 0 ? Math.round((totalCor / totalAns) * 100) : 100;
+      if (this.dom.dashboard.accuracyVal) {
+        this.dom.dashboard.accuracyVal.textContent = `${acc}%`;
+      }
+
+      this.updateNavChips();
+    }
+
+    updateNavChips() {
+      const navHearts = document.getElementById('nav-hearts-text');
+      const navStreak = document.getElementById('nav-streak-text');
+      const navXp = document.getElementById('nav-xp-text');
+      const mobHearts = document.getElementById('mobile-hearts-text');
+      const mobPts = document.getElementById('mobile-user-pts');
+
+      if (navHearts) navHearts.textContent = `${this.hearts}/5`;
+      if (navStreak) navStreak.textContent = `${this.streakDays} Hari`;
+      if (navXp) navXp.textContent = `${this.totalXP.toLocaleString()} XP`;
+      if (mobHearts) mobHearts.textContent = this.hearts;
+      if (mobPts) mobPts.textContent = `${this.totalXP.toLocaleString()} XP`;
+    }
+
+    deductHeart() {
+      this.hearts = Math.max(0, this.hearts - 1);
+      safeStorage.setItem('ae_hearts', this.hearts);
+      this.updateNavChips();
+      this.updateDashboard();
+
+      if (this.dom.hud.hearts) {
+        this.dom.hud.hearts.textContent = `${this.hearts}/5`;
+      }
+      if (this.dom.hud.heartsItem) {
+        this.dom.hud.heartsItem.classList.add('shake');
+        setTimeout(() => this.dom.hud.heartsItem.classList.remove('shake'), 500);
+      }
+      if (this.hearts <= 0) {
+        setTimeout(() => this.openHeartsModal(), 900);
+      }
+    }
+
+    refillHearts() {
+      this.hearts = 5;
+      safeStorage.setItem('ae_hearts', '5');
+      this.updateNavChips();
+      this.updateDashboard();
+
+      if (this.dom.hud.hearts) {
+        this.dom.hud.hearts.textContent = '5/5';
+      }
+      if (this.dom.profile.heartsIcons) {
+        this.dom.profile.heartsIcons.textContent = '❤️❤️❤️❤️❤️';
+      }
+      this.closeHeartsModal();
+      this.showToast('💖 5 Hati (Lives) berhasil dipulihkan penuh!', 'success');
+      this.sound.playSuccess();
+    }
+
+    openHeartsModal() {
+      if (this.dom.modals.hearts) {
+        this.dom.modals.hearts.classList.remove('hidden');
+      }
+    }
+
+    closeHeartsModal() {
+      if (this.dom.modals.hearts) {
+        this.dom.modals.hearts.classList.add('hidden');
+      }
+    }
+
+    showFloatingXP(xp, eventOrElement = null) {
+      const container = document.getElementById('floating-xp-container');
+      if (!container) return;
+
+      const el = document.createElement('div');
+      el.className = 'floating-xp-item';
+      el.innerHTML = `+${xp} XP <span style="color:#fbbf24">⚡</span>`;
+
+      let x = window.innerWidth / 2;
+      let y = window.innerHeight / 2 - 40;
+
+      if (eventOrElement && eventOrElement.getBoundingClientRect) {
+        const rect = eventOrElement.getBoundingClientRect();
+        x = rect.left + rect.width / 2;
+        y = rect.top;
+      } else if (eventOrElement && eventOrElement.clientX) {
+        x = eventOrElement.clientX;
+        y = eventOrElement.clientY;
+      }
+
+      el.style.left = `${Math.max(40, Math.min(window.innerWidth - 80, x))}px`;
+      el.style.top = `${Math.max(80, y)}px`;
+
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 1200);
+    }
+
+    getBadgeCatalog() {
+      return [
+        { id: 'first-step', icon: '🌱', name: 'Langkah Pertama', desc: 'Menjawab soal latihan pertama Anda' },
+        { id: 'vocab-master', icon: '🧠', name: 'Kamus Berjalan', desc: 'Mempelajari minimal 5 kosakata baru' },
+        { id: 'grammar-guru', icon: '✍️', name: 'Pakar Tata Bahasa', desc: 'Menguasai minimal 5 latihan grammar' },
+        { id: 'listening-pro', icon: '🎧', name: 'Telinga Emas', desc: 'Mengumpulkan 200+ poin di Listening Arena' },
+        { id: 'speaking-star', icon: '🎙️', name: 'Bintang Percakapan', desc: 'Mencapai akurasi pengucapan >= 80%' },
+        { id: 'streak-3', icon: '🔥', name: 'Semangat Membara', desc: 'Mencapai 3 streak jawaban benar beruntun' },
+        { id: 'streak-7', icon: '⚡', name: 'Pantang Menyerah', desc: 'Mencapai 7 streak jawaban benar beruntun' },
+        { id: 'combo-king', icon: '👑', name: 'Raja Combo', desc: 'Mencapai multiplier combo 2.0x' }
+      ];
+    }
+
+    checkBadges(accuracy = 0) {
+      const catalog = this.getBadgeCatalog();
+      let newBadge = false;
+
+      const award = (id) => {
+        if (!this.badges.includes(id)) {
+          this.badges.push(id);
+          safeStorage.setItem('ae_badges', JSON.stringify(this.badges));
+          const item = catalog.find(b => b.id === id);
+          if (item) {
+            this.showToast(`🏆 Lencana Baru Terbuka: ${item.name}!`, 'success');
+            this.sound.playStreak();
+          }
+          newBadge = true;
+        }
+      };
+
+      if (this.stats.totalAnswered >= 1) award('first-step');
+      if (this.stats.vocabLearned >= 5) award('vocab-master');
+      if (this.stats.grammarMastered >= 5) award('grammar-guru');
+      if (this.stats.listeningScore >= 200) award('listening-pro');
+      if (this.currentMode === 'shadowing' && accuracy >= 80) award('speaking-star');
+      if (this.streak >= 3) award('streak-3');
+      if (this.streak >= 7) award('streak-7');
+      if (this.combo >= 6) award('combo-king');
+
+      if (newBadge) {
+        this.renderBadges();
       }
     }
 
@@ -6195,11 +8338,44 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     initEvents() {
-      // Navigation & Modal triggers
-      document.getElementById('nav-logo-btn').addEventListener('click', () => this.switchView('landing'));
-      document.getElementById('btn-leaderboard-nav').addEventListener('click', () => this.openLeaderboard());
-      document.getElementById('btn-close-leaderboard').addEventListener('click', () => this.closeModals());
-      document.getElementById('btn-refresh-leaderboard').addEventListener('click', () => this.refreshCurrentModalData());
+      // Main Desktop Tabs & Logo
+      document.getElementById('nav-logo-btn')?.addEventListener('click', () => this.switchTab('landing'));
+      document.getElementById('tab-nav-home')?.addEventListener('click', () => this.switchTab('landing'));
+      document.getElementById('tab-nav-play')?.addEventListener('click', () => this.switchTab('play'));
+      document.getElementById('tab-nav-progress')?.addEventListener('click', () => this.switchTab('progress'));
+      document.getElementById('tab-nav-profile')?.addEventListener('click', () => this.switchTab('profile'));
+
+      // Mobile Bottom Nav Bar
+      document.getElementById('bnav-home')?.addEventListener('click', () => this.switchTab('landing'));
+      document.getElementById('bnav-play')?.addEventListener('click', () => this.switchTab('play'));
+      document.getElementById('bnav-progress')?.addEventListener('click', () => this.switchTab('progress'));
+      document.getElementById('bnav-profile')?.addEventListener('click', () => this.switchTab('profile'));
+
+      // Primary Hero / Dashboard Start CTA
+      document.getElementById('btn-dashboard-start')?.addEventListener('click', () => {
+        this.sound.playClick();
+        this.startArena('vocabulary');
+      });
+
+      // Quick play from stats
+      document.getElementById('btn-play-from-stats')?.addEventListener('click', () => {
+        this.sound.playClick();
+        this.switchTab('play');
+      });
+
+      // Modals triggers
+      document.getElementById('btn-leaderboard-nav')?.addEventListener('click', () => this.openLeaderboard());
+      document.getElementById('btn-close-leaderboard')?.addEventListener('click', () => this.closeModals());
+      document.getElementById('btn-refresh-leaderboard')?.addEventListener('click', () => this.refreshCurrentModalData());
+
+      // Hearts Refill actions
+      document.getElementById('btn-refill-hearts')?.addEventListener('click', () => this.refillHearts());
+      document.getElementById('btn-profile-refill-hearts')?.addEventListener('click', () => this.refillHearts());
+      document.getElementById('btn-close-hearts')?.addEventListener('click', () => this.closeHeartsModal());
+      document.getElementById('btn-hearts-home')?.addEventListener('click', () => {
+        this.closeHeartsModal();
+        this.switchTab('landing');
+      });
 
       // Mobile Drawer triggers
       const hamburgerBtn = document.getElementById('btn-hamburger');
@@ -6210,38 +8386,35 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => this.closeDrawer());
       if (drawerOverlay) drawerOverlay.addEventListener('click', () => this.closeDrawer());
 
-      const drawerLeaderboard = document.getElementById('btn-drawer-leaderboard');
-      if (drawerLeaderboard) {
-        drawerLeaderboard.addEventListener('click', () => {
-          this.closeDrawer();
-          this.openLeaderboard();
-        });
-      }
+      document.getElementById('btn-drawer-home')?.addEventListener('click', () => { this.closeDrawer(); this.switchTab('landing'); });
+      document.getElementById('btn-drawer-play')?.addEventListener('click', () => { this.closeDrawer(); this.switchTab('play'); });
+      document.getElementById('btn-drawer-progress')?.addEventListener('click', () => { this.closeDrawer(); this.switchTab('progress'); });
+      document.getElementById('btn-drawer-profile')?.addEventListener('click', () => { this.closeDrawer(); this.switchTab('profile'); });
 
-      const drawerSettings = document.getElementById('btn-drawer-settings');
-      if (drawerSettings) {
-        drawerSettings.addEventListener('click', () => {
-          this.closeDrawer();
-          this.openSettings();
-        });
-      }
+      document.getElementById('btn-drawer-leaderboard')?.addEventListener('click', () => {
+        this.closeDrawer();
+        this.openLeaderboard();
+      });
 
-      const drawerLogin = document.getElementById('btn-drawer-login');
-      if (drawerLogin) {
-        drawerLogin.addEventListener('click', () => {
-          this.closeDrawer();
-          this.openAuthModal();
-        });
-      }
+      document.getElementById('btn-drawer-settings')?.addEventListener('click', () => {
+        this.closeDrawer();
+        this.openSettings();
+      });
 
-      const drawerLogout = document.getElementById('btn-drawer-logout');
-      if (drawerLogout) {
-        drawerLogout.addEventListener('click', () => {
-          this.closeDrawer();
-          AuthManager.logout();
-          this.showToast('Anda telah keluar dari akun.', 'info');
-        });
-      }
+      document.getElementById('btn-drawer-login')?.addEventListener('click', () => {
+        this.closeDrawer();
+        this.openAuthModal();
+      });
+
+      document.getElementById('btn-drawer-logout')?.addEventListener('click', () => {
+        this.closeDrawer();
+        AuthManager.logout();
+        this.showToast('Anda telah keluar dari akun.', 'info');
+      });
+
+      // Profile View Action Links
+      document.getElementById('btn-profile-to-leaderboard')?.addEventListener('click', () => this.openLeaderboard());
+      document.getElementById('btn-profile-to-settings')?.addEventListener('click', () => this.openSettings());
 
       // Tab switcher in Modal
       if (this.dom.modals.tabLeaderboardBtn) {
@@ -6252,10 +8425,10 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
 
       // Settings
-      document.getElementById('btn-settings-nav').addEventListener('click', () => this.openSettings());
-      document.getElementById('btn-close-settings').addEventListener('click', () => this.closeModals());
-      document.getElementById('settings-form').addEventListener('submit', (e) => this.saveSettings(e));
-      document.getElementById('btn-reset-settings').addEventListener('click', () => this.resetSettings());
+      document.getElementById('btn-settings-nav')?.addEventListener('click', () => this.openSettings());
+      document.getElementById('btn-close-settings')?.addEventListener('click', () => this.closeModals());
+      document.getElementById('settings-form')?.addEventListener('submit', (e) => this.saveSettings(e));
+      document.getElementById('btn-reset-settings')?.addEventListener('click', () => this.resetSettings());
 
       // Language Direction Switcher (Landing)
       const btnIdEn = document.getElementById('btn-dir-id-en');
@@ -6272,16 +8445,35 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         });
       });
 
-      // Quit Game - langsung kembali tanpa popup
-      document.getElementById('btn-quit-game').addEventListener('click', () => {
+      // Level Filter Pills on Landing View
+      document.querySelectorAll('.btn-level-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+          this.sound.playClick();
+          const lvl = e.currentTarget.dataset.level || 'all';
+          this.setLevelPreference(lvl);
+          const lvlLabels = {
+            all: 'Semua Level (Beginner - Advanced)',
+            Beginner: 'Beginner (Pemula)',
+            Elementary: 'Elementary (Dasar)',
+            Intermediate: 'Intermediate (Menengah)',
+            'Upper-Intermediate': 'Upper-Intermediate (Menengah Atas)',
+            Advanced: 'Advanced (Tingkat Mahir)'
+          };
+          this.showToast(`Filter tingkat kesulitan: ${lvlLabels[lvl] || lvl}`, 'info');
+        });
+      });
+
+      // Quit Game
+      document.getElementById('btn-quit-game')?.addEventListener('click', () => {
         this.speech.stopListening();
-        this.switchView('landing', false);
-        if (window.history.state && window.history.state.arenaView) {
+        if (window.history.state && window.history.state.arenaView === 'game') {
           window.history.back();
+        } else {
+          this.switchTab('landing');
         }
       });
 
-      // Handle mobile hardware back button
+      // Mobile hardware back button
       window.addEventListener('popstate', (e) => {
         const activeModal = document.querySelector('.modal-overlay:not(.hidden)');
         if (activeModal) {
@@ -6295,23 +8487,53 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         }
         if (this.currentView === 'game' || this.currentView === 'result') {
           this.speech.stopListening();
-          this.switchView('landing', false);
+          this.switchTab('landing');
         }
       });
 
-      // Audio TTS Trigger
-      this.dom.challenge.audioBtn.addEventListener('click', () => {
+      // In-game Speed Select
+      if (this.dom.challenge.speedSelect) {
+        this.dom.challenge.speedSelect.addEventListener('change', (e) => {
+          const norm = normalizeRate(e.target.value);
+          const numVal = parseFloat(norm);
+          this.speech.speechRate = numVal;
+          safeStorage.setItem('cfg_voice_rate', norm);
+          const cfgRate = document.getElementById('cfg-voice-rate');
+          if (cfgRate) cfgRate.value = norm;
+          this.showToast(`Kecepatan baca audio diatur: ${numVal}x`, 'info');
+
+          const q = this.questions[this.currentIndex];
+          if (q) {
+            const accent = this.dom.challenge.accentSelect ? this.dom.challenge.accentSelect.value : 'en-US';
+            const textToSpeak = cleanText(q.en || q.target);
+            this.speech.speak(textToSpeak, accent, numVal);
+          }
+        });
+      }
+
+      // Audio TTS Triggers (Listen & Replay)
+      const playCurrentAudio = () => {
         const q = this.questions[this.currentIndex];
-        const accent = this.dom.challenge.accentSelect.value;
-        const textToSpeak = q.en || q.target;
-        this.speech.speak(textToSpeak, accent);
-      });
+        if (!q) return;
+        const accent = this.dom.challenge.accentSelect ? this.dom.challenge.accentSelect.value : 'en-US';
+        const textToSpeak = cleanText(q.en || q.target);
+        const currentSpeed = this.dom.challenge.speedSelect ? parseFloat(this.dom.challenge.speedSelect.value) : this.speech.speechRate;
+        this.speech.speak(textToSpeak, accent, currentSpeed);
+      };
+
+      this.dom.challenge.audioBtn?.addEventListener('click', playCurrentAudio);
+      this.dom.challenge.replayBtn?.addEventListener('click', playCurrentAudio);
+
+      // Sentence Builder Controls
+      this.dom.builder.undoBtn?.addEventListener('click', () => this.undoBuilderWord());
+      this.dom.builder.clearBtn?.addEventListener('click', () => this.clearBuilderWords());
+      this.dom.builder.checkBtn?.addEventListener('click', () => this.checkBuilderSentence());
 
       // Microphone Toggle
-      this.dom.mic.toggleBtn.addEventListener('click', () => this.toggleMicrophone());
+      this.dom.mic.toggleBtn?.addEventListener('click', () => this.toggleMicrophone());
 
       // Manual Submit
-      this.dom.mic.manualSubmit.addEventListener('click', () => {
+      this.dom.mic.manualSubmit?.addEventListener('click', () => {
         const val = this.dom.mic.manualInput.value.trim();
         if (val) {
           this.dom.mic.transcript.textContent = `"${val}"`;
@@ -6319,42 +8541,31 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         }
       });
 
-      this.dom.mic.manualInput.addEventListener('keydown', (e) => {
+      this.dom.mic.manualInput?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           this.dom.mic.manualSubmit.click();
         }
       });
 
       // Next Question
-      this.dom.evaluation.nextBtn.addEventListener('click', () => {
+      this.dom.evaluation.nextBtn?.addEventListener('click', () => {
         this.sound.playClick();
         this.nextQuestion();
       });
 
       // Result Actions
-      this.dom.result.playAgainBtn.addEventListener('click', () => this.startArena(this.currentMode));
-      this.dom.result.homeBtn.addEventListener('click', () => this.switchView('landing'));
-      this.dom.result.viewLeaderboardBtn.addEventListener('click', () => this.openLeaderboard());
-      this.dom.result.submitBtn.addEventListener('click', () => this.submitScoreToLeaderboard());
+      this.dom.result.playAgainBtn?.addEventListener('click', () => this.startArena(this.currentMode));
+      this.dom.result.homeBtn?.addEventListener('click', () => this.switchTab('landing'));
+      this.dom.result.viewLeaderboardBtn?.addEventListener('click', () => this.openLeaderboard());
+      this.dom.result.submitBtn?.addEventListener('click', () => this.submitScoreToLeaderboard());
 
       // Authentication Triggers
-      const btnLoginNav = document.getElementById('btn-login-nav');
-      if (btnLoginNav) {
-        btnLoginNav.addEventListener('click', () => this.openAuthModal());
-      }
-
-      const btnLogoutNav = document.getElementById('btn-nav-logout');
-      if (btnLogoutNav) {
-        btnLogoutNav.addEventListener('click', () => {
-          AuthManager.logout();
-          this.showToast('Anda telah keluar dari sesi.', 'info');
-        });
-      }
-
-      const btnCloseAuth = document.getElementById('btn-close-auth');
-      if (btnCloseAuth) {
-        btnCloseAuth.addEventListener('click', () => this.closeModals());
-      }
+      document.getElementById('btn-login-nav')?.addEventListener('click', () => this.openAuthModal());
+      document.getElementById('btn-nav-logout')?.addEventListener('click', () => {
+        AuthManager.logout();
+        this.showToast('Anda telah keluar dari sesi.', 'info');
+      });
+      document.getElementById('btn-close-auth')?.addEventListener('click', () => this.closeModals());
 
       // Demo login shortcuts
       document.getElementById('btn-demo-admin')?.addEventListener('click', () => {
@@ -6364,7 +8575,6 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         this.fillAuthForm('siswa1@english.com', 'siswa123');
       });
 
-      // Login form submission
       this.dom.auth.form?.addEventListener('submit', (e) => this.handleLoginSubmit(e));
     }
 
@@ -6405,6 +8615,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       if (res.success) {
         this.closeModals();
+        this.updateDashboard();
         this.showToast(`Selamat datang, ${res.user.name}! Skor Anda siap diakumulasikan.`, 'success');
         if (this.pendingMode) {
           const modeToPlay = this.pendingMode;
@@ -6420,18 +8631,31 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     startArena(mode) {
-      if (!AuthManager.isLoggedIn()) {
-        this.pendingMode = mode;
-        this.openAuthModal('Silakan masuk dengan email & password terdaftar untuk memainkan arena ini.');
+      // Lives Check
+      if (this.hearts <= 0) {
+        this.openHeartsModal();
+        this.showToast('Hati Anda habis! Silakan pulihkan hati untuk mulai bermain.', 'info');
         return;
       }
+
       this.currentMode = mode;
       const bank = QUESTION_BANK[mode] || QUESTION_BANK.shadowing;
-      this.questions = [...bank].sort(() => Math.random() - 0.5);
+
+      // Filter questions by user level preference
+      let filteredBank = bank;
+      if (mode !== 'ielts' && mode !== 'toefl' && this.levelPreference && this.levelPreference !== 'all') {
+        const matched = bank.filter(q => (q.level || '').toLowerCase() === this.levelPreference.toLowerCase());
+        if (matched.length > 0) {
+          filteredBank = matched;
+        }
+      }
+
+      this.questions = [...filteredBank].sort(() => Math.random() - 0.5);
       this.currentIndex = 0;
       this.score = 0;
       this.streak = 0;
       this.maxStreak = 0;
+      this.combo = 0;
       this.history = [];
 
       const modeTitles = {
@@ -6439,10 +8663,13 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         listening: 'Listening Dictation Arena',
         vocabulary: 'Vocabulary Collocation Arena',
         grammar: 'Murphy Grammar Quest',
+        sentence_builder: 'Sentence Builder Quest',
         ielts: 'IELTS Academic Simulation (Band 0-9)',
         toefl: 'TOEFL iBT Simulation (Scale 0-30)'
       };
-      this.dom.hud.modePill.textContent = modeTitles[mode] || 'Arena';
+      if (this.dom.hud.modePill) {
+        this.dom.hud.modePill.textContent = modeTitles[mode] || 'Arena';
+      }
       if (this.dom.hud.dirPill) {
         this.dom.hud.dirPill.textContent = this.languageDirection === 'id-to-en' ? '🇮🇩 ➔ 🇬🇧' : '🇬🇧 ➔ 🇮🇩';
       }
@@ -6459,104 +8686,258 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
 
       // Update HUD
-      this.dom.hud.score.textContent = this.score;
-      this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
-      this.dom.hud.progress.textContent = `${this.currentIndex + 1}/${this.questions.length}`;
+      if (this.dom.hud.score) this.dom.hud.score.textContent = this.score;
+      if (this.dom.hud.streak) this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
+      if (this.dom.hud.progress) this.dom.hud.progress.textContent = `${this.currentIndex + 1}/${this.questions.length}`;
+      if (this.dom.hud.hearts) this.dom.hud.hearts.textContent = `${this.hearts}/5`;
+      if (this.dom.hud.combo) this.dom.hud.combo.textContent = this.getComboMultiplierLabel();
 
       // Update Meta
-      this.dom.challenge.category.textContent = q.category;
-      this.dom.challenge.difficulty.textContent = `Level: ${q.level}`;
+      if (this.dom.challenge.category) this.dom.challenge.category.textContent = q.category || 'General Practice';
+      if (this.dom.challenge.difficulty) this.dom.challenge.difficulty.textContent = `Level: ${q.level || 'Beginner'}`;
 
-      // Reset Inputs & Evaluation panel
+      // Reset Inputs & Evaluation Panel
       this.dom.evaluation.panel.classList.add('hidden');
+      if (this.dom.evaluation.translationCard) this.dom.evaluation.translationCard.classList.add('hidden');
+      if (this.dom.evaluation.exampleCard) this.dom.evaluation.exampleCard.classList.add('hidden');
+      if (this.dom.evaluation.grammarCard) this.dom.evaluation.grammarCard.classList.add('hidden');
+      if (this.dom.evaluation.phoneticBox) this.dom.evaluation.phoneticBox.classList.add('hidden');
+
       this.dom.mic.transcript.textContent = 'Menunggu input suara dari mikrofon...';
       this.dom.mic.manualInput.value = '';
       this.dom.mic.toggleBtn.classList.remove('recording');
       this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
 
-      // Sembunyikan cara baca saat menjawab (baru dimunculkan setelah menjawab)
+      // CRITICAL: Hide Indonesian translations and phonetic before user answers!
       this.dom.challenge.targetPhonetic.classList.add('hidden');
       this.dom.challenge.targetPhonetic.textContent = '';
-      const phoneticBox = document.getElementById('phonetic-reveal-box');
-      if (phoneticBox) phoneticBox.classList.add('hidden');
+      this.dom.challenge.targetTranslation.classList.add('hidden');
+      this.dom.challenge.targetTranslation.textContent = '';
+
+      // Reset specific containers
+      if (this.dom.challenge.vocabVisualBadge) this.dom.challenge.vocabVisualBadge.classList.add('hidden');
+      if (this.dom.builder.container) this.dom.builder.container.classList.add('hidden');
+      if (this.dom.challenge.optionsContainer) this.dom.challenge.optionsContainer.classList.add('hidden');
 
       const isIdToEn = (this.languageDirection === 'id-to-en');
 
-      if (this.currentMode === 'listening') {
-        if (isIdToEn) {
-          this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris, lalu ucapkan kembali dalam Bahasa Inggris:';
-          this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
-          this.dom.challenge.targetTranslation.textContent = `Arti: "${q.translation || q.id_translation}"`;
-        } else {
-          this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris, lalu ucapkan artinya dalam Bahasa Indonesia:';
-          this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
-          this.dom.challenge.targetTranslation.textContent = 'Klik tombol "Listen Native Audio" di atas';
+      if (this.currentMode === 'sentence_builder') {
+        // Sentence Builder
+        this.dom.challenge.instruction.textContent = '🧩 Susun kata-kata acak berikut menjadi kalimat Bahasa Inggris yang utuh & benar:';
+        this.dom.challenge.targetPhrase.textContent = `"${cleanText(q.id_translation || q.translation)}"`;
+        this.dom.mic.section.classList.add('hidden');
+        this.renderSentenceBuilder(q);
+
+      } else if (this.currentMode === 'vocabulary') {
+        // Game Vocabulary
+        this.dom.challenge.instruction.textContent = isIdToEn
+          ? 'Pilih padanan Bahasa Inggris yang paling tepat untuk kata berikut:'
+          : 'Pilih arti kosakata Bahasa Indonesia yang paling tepat untuk kata berikut:';
+
+        const promptText = cleanText(q.missingWord || q.en || q.target);
+        this.dom.challenge.targetPhrase.textContent = `"${promptText}"`;
+
+        // Vocab icon badge
+        if (this.dom.challenge.vocabVisualBadge) {
+          const emojis = ['📚', '💡', '🚀', '🌟', '🎯', '🍎', '🏆', '💎'];
+          const randEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+          if (this.dom.challenge.vocabEmojiIcon) this.dom.challenge.vocabEmojiIcon.textContent = randEmoji;
+          this.dom.challenge.vocabVisualBadge.classList.remove('hidden');
         }
-        this.dom.challenge.optionsContainer.classList.add('hidden');
+
+        this.renderMultipleChoiceOptions(q, isIdToEn);
         this.dom.mic.section.classList.remove('hidden');
 
-        setTimeout(() => {
-          this.speech.speak(q.en || q.target, this.dom.challenge.accentSelect.value);
-        }, 500);
+      } else if (this.currentMode === 'grammar') {
+        // Game Grammar
+        this.dom.challenge.instruction.textContent = '✍️ Pilih kata yang paling tepat untuk melengkapi kalimat berikut:';
+        const grammarPrompt = cleanText(q.prompt_en || q.prompt_id || q.en || q.target);
+        this.dom.challenge.targetPhrase.textContent = `"${grammarPrompt}"`;
 
-      } else if (this.currentMode === 'vocabulary' || this.currentMode === 'grammar' || this.currentMode === 'ielts' || this.currentMode === 'toefl') {
-        const promptText = isIdToEn ? (q.prompt_id || q.translation) : (q.prompt_en || q.en || q.target);
+        this.renderMultipleChoiceOptions(q, isIdToEn);
+        this.dom.mic.section.classList.remove('hidden');
+
+      } else if (this.currentMode === 'listening') {
+        // Game Listening
+        this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris berikut dengan cermat, lalu pilih kalimat yang tepat:';
+        this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
+
+        this.renderMultipleChoiceOptions(q, isIdToEn);
+        this.dom.mic.section.classList.remove('hidden');
+
+        // Auto-play audio after 400ms
+        setTimeout(() => {
+          const currentSpeed = this.dom.challenge.speedSelect ? parseFloat(this.dom.challenge.speedSelect.value) : this.speech.speechRate;
+          this.speech.speak(cleanText(q.en || q.target), this.dom.challenge.accentSelect.value, currentSpeed);
+        }, 400);
+
+      } else if (this.currentMode === 'ielts' || this.currentMode === 'toefl') {
+        // Academic Modes
         if (this.currentMode === 'ielts') {
           this.dom.challenge.instruction.textContent = `🎯 IELTS Academic Test (${q.level || 'Band 7.5 - 9.0'}): Selesaikan soal leksikal atau jawab via Mic:`;
-        } else if (this.currentMode === 'toefl') {
+        } else {
           this.dom.challenge.instruction.textContent = `🏛️ TOEFL iBT Test Simulation (${q.level || 'Scale 0-30'}): Lengkapi passage ilmiah atau jawab via Mic:`;
-        } else {
-          this.dom.challenge.instruction.textContent = isIdToEn 
-            ? '🇮🇩 Lengkapi kalimat berikut dengan berbicara dalam Bahasa Inggris:'
-            : '🇬🇧 Complete the sentence or speak your answer:';
         }
-
+        const promptText = cleanText(q.prompt_en || q.en || q.target);
         this.dom.challenge.targetPhrase.textContent = `"${promptText}"`;
-        this.dom.challenge.targetTranslation.textContent = isIdToEn ? `Jawaban English: ${q.en || q.target}` : `Arti: ${q.translation || q.id_translation}`;
-
-        if (q.options && q.options.length > 0) {
-          this.dom.challenge.optionsContainer.innerHTML = '';
-          this.dom.challenge.optionsContainer.classList.remove('hidden');
-
-          // Dynamically shuffle options for display so answers are never always A
-          const displayList = q.options.map((opt, origIdx) => ({
-            text: opt,
-            isCorrect: (origIdx === q.correctIndex)
-          }));
-          
-          for (let i = displayList.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [displayList[i], displayList[j]] = [displayList[j], displayList[i]];
-          }
-
-          displayList.forEach((item, displayIdx) => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-option';
-            btn.textContent = `${String.fromCharCode(65 + displayIdx)}. ${item.text}`;
-            btn.addEventListener('click', () => {
-              this.evaluateMultipleChoiceRandomized(displayIdx, btn, displayList);
-            });
-            this.dom.challenge.optionsContainer.appendChild(btn);
-          });
-        } else {
-          this.dom.challenge.optionsContainer.classList.add('hidden');
-        }
+        this.renderMultipleChoiceOptions(q, isIdToEn);
         this.dom.mic.section.classList.remove('hidden');
 
       } else {
-        // Shadowing Arena
+        // Speaking & Shadowing Practice
         if (isIdToEn) {
           this.dom.challenge.instruction.textContent = '🇮🇩 Lihat kalimat Bahasa Indonesia di bawah, lalu klik Mic dan ucapkan dalam Bahasa Inggris:';
-          this.dom.challenge.targetPhrase.textContent = `"${q.translation || q.id_translation}"`;
-          this.dom.challenge.targetTranslation.textContent = 'Klik "Listen Native Audio" jika ingin mendengar contoh pengucapan native speaker lebih dulu.';
+          this.dom.challenge.targetPhrase.textContent = `"${cleanText(q.translation || q.id_translation)}"`;
         } else {
-          this.dom.challenge.instruction.textContent = '🇬🇧 Dengarkan/baca kalimat Bahasa Inggris, lalu ucapkan artinya dalam Bahasa Indonesia ke Mic:';
-          this.dom.challenge.targetPhrase.textContent = `"${q.en || q.target}"`;
-          this.dom.challenge.targetTranslation.textContent = `Target Indonesia: "${q.translation || q.id_translation}"`;
+          this.dom.challenge.instruction.textContent = '🇬🇧 Dengarkan kalimat Bahasa Inggris, lalu ucapkan kembali dengan intonasi natural:';
+          this.dom.challenge.targetPhrase.textContent = `"${cleanText(q.en || q.target)}"`;
         }
-        this.dom.challenge.optionsContainer.classList.add('hidden');
         this.dom.mic.section.classList.remove('hidden');
       }
+    }
+
+    renderMultipleChoiceOptions(q, isIdToEn) {
+      let opts = [];
+      if (this.currentMode === 'vocabulary') {
+        opts = (q.options_id && q.options_id.length > 0) ? q.options_id : (q.options || []);
+      } else {
+        opts = (q.options_en && q.options_en.length > 0) ? q.options_en : (q.options || []);
+      }
+
+      if (opts && opts.length > 0) {
+        this.dom.challenge.optionsContainer.innerHTML = '';
+        this.dom.challenge.optionsContainer.classList.remove('hidden');
+
+        // Dynamically shuffle options
+        const displayList = opts.map((opt, origIdx) => ({
+          text: cleanText(opt),
+          isCorrect: (origIdx === (q.correctIndex !== undefined ? q.correctIndex : 0))
+        }));
+
+        for (let i = displayList.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [displayList[i], displayList[j]] = [displayList[j], displayList[i]];
+        }
+
+        displayList.forEach((item, displayIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'btn-option';
+          btn.textContent = `${String.fromCharCode(65 + displayIdx)}. ${item.text}`;
+          btn.addEventListener('click', (evt) => {
+            this.evaluateMultipleChoiceRandomized(displayIdx, btn, displayList, evt);
+          });
+          this.dom.challenge.optionsContainer.appendChild(btn);
+        });
+      }
+    }
+
+    renderSentenceBuilder(q) {
+      this.dom.builder.container.classList.remove('hidden');
+      const rawTarget = cleanText(q.en || q.target);
+      this.builderTarget = rawTarget;
+      this.selectedWords = [];
+
+      let words = [];
+      if (Array.isArray(q.words) && q.words.length > 0) {
+        words = q.words.map(w => cleanText(w));
+      } else {
+        words = rawTarget.split(/\s+/).filter(Boolean);
+      }
+
+      // Scramble words
+      const scrambled = [...words].sort(() => Math.random() - 0.5);
+      if (scrambled.join(' ') === words.join(' ') && scrambled.length > 1) {
+        scrambled.reverse();
+      }
+
+      this.wordBank = scrambled.map((text, idx) => ({ id: idx, text, used: false }));
+      this.renderBuilderUI();
+    }
+
+    renderBuilderUI() {
+      // Answer Zone
+      this.dom.builder.answerZone.innerHTML = '';
+      if (this.selectedWords.length === 0) {
+        this.dom.builder.placeholder.classList.remove('hidden');
+        this.dom.builder.answerZone.appendChild(this.dom.builder.placeholder);
+      } else {
+        this.dom.builder.placeholder.classList.add('hidden');
+        this.selectedWords.forEach((item, selIdx) => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'builder-word-chip in-answer';
+          chip.textContent = item.text;
+          chip.title = 'Klik untuk mengembalikan kata ke bank';
+          chip.addEventListener('click', () => {
+            this.sound.playClick();
+            this.selectedWords.splice(selIdx, 1);
+            const bankItem = this.wordBank.find(b => b.id === item.id);
+            if (bankItem) bankItem.used = false;
+            this.renderBuilderUI();
+          });
+          this.dom.builder.answerZone.appendChild(chip);
+        });
+      }
+
+      // Word Bank
+      this.dom.builder.wordBank.innerHTML = '';
+      this.wordBank.forEach(item => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `builder-word-chip ${item.used ? 'used' : ''}`;
+        chip.textContent = item.text;
+        chip.disabled = item.used;
+        chip.addEventListener('click', () => {
+          if (item.used) return;
+          this.sound.playClick();
+          item.used = true;
+          this.selectedWords.push({ id: item.id, text: item.text });
+          this.renderBuilderUI();
+        });
+        this.dom.builder.wordBank.appendChild(chip);
+      });
+    }
+
+    undoBuilderWord() {
+      if (this.selectedWords.length === 0) return;
+      this.sound.playClick();
+      const last = this.selectedWords.pop();
+      const bankItem = this.wordBank.find(b => b.id === last.id);
+      if (bankItem) bankItem.used = false;
+      this.renderBuilderUI();
+    }
+
+    clearBuilderWords() {
+      this.sound.playClick();
+      this.selectedWords = [];
+      this.wordBank.forEach(b => b.used = false);
+      this.renderBuilderUI();
+    }
+
+    checkBuilderSentence() {
+      if (this.selectedWords.length === 0) {
+        this.showToast('Ketuk kata-kata pada bank kata terlebih dahulu untuk menyusun kalimat!', 'info');
+        return;
+      }
+      const userSentence = this.selectedWords.map(w => w.text).join(' ');
+      const clean = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/gi, '').trim();
+      const isMatch = (clean(userSentence) === clean(this.builderTarget));
+      this.evaluateAnswer(userSentence, isMatch, this.dom.builder.checkBtn);
+    }
+
+    evaluateMultipleChoiceRandomized(selectedIdx, btnElement, displayList, evt = null) {
+      const allButtons = this.dom.challenge.optionsContainer.querySelectorAll('.btn-option');
+      allButtons.forEach((b, idx) => {
+        b.disabled = true;
+        if (displayList[idx] && displayList[idx].isCorrect) {
+          b.classList.add('correct');
+        } else if (idx === selectedIdx && !displayList[idx].isCorrect) {
+          b.classList.add('wrong');
+        }
+      });
+
+      const chosenItem = displayList[selectedIdx];
+      this.evaluateAnswer(chosenItem.text, chosenItem.isCorrect, btnElement);
     }
 
     toggleMicrophone() {
@@ -6568,8 +8949,6 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
       } else {
         this.dom.mic.toggleBtn.classList.add('recording');
-        
-        // Bahasa pengenalan suara disesuaikan dengan target bahasa yang harus diucapkan!
         const isIdToEn = (this.languageDirection === 'id-to-en');
         const lang = isIdToEn ? (this.dom.challenge.accentSelect.value || 'en-US') : 'id-ID';
 
@@ -6578,18 +8957,15 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
         this.speech.startListening(
           lang,
-          // Interim
           (interim) => {
             this.dom.mic.transcript.textContent = `"${interim}..."`;
           },
-          // Final result
           (final) => {
             this.dom.mic.toggleBtn.classList.remove('recording');
             this.dom.mic.status.textContent = 'Mengevaluasi suara...';
             this.dom.mic.transcript.textContent = `"${final}"`;
-            this.evaluateAnswer(final);
+            this.evaluateAnswer(final, null, this.dom.mic.toggleBtn);
           },
-          // Error
           (err) => {
             this.dom.mic.toggleBtn.classList.remove('recording');
             this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
@@ -6599,47 +8975,60 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
     }
 
-    evaluateMultipleChoice(selectedIdx, btnElement) {
-      const q = this.questions[this.currentIndex];
-      const isCorrect = (selectedIdx === q.correctIndex);
-      const chosenWord = q.options[selectedIdx];
-
-      const allButtons = this.dom.challenge.optionsContainer.querySelectorAll('.btn-option');
-      allButtons.forEach((b, idx) => {
-        b.disabled = true;
-        if (idx === q.correctIndex) b.classList.add('correct');
-        else if (idx === selectedIdx && !isCorrect) b.classList.add('wrong');
-      });
-
-      this.evaluateAnswer(chosenWord, isCorrect);
-    }
-
-    async evaluateAnswer(userAnswer, predeterminedCorrect = null) {
+    async evaluateAnswer(userAnswer, predeterminedCorrect = null, sourceElement = null) {
       this.speech.stopListening();
       const q = this.questions[this.currentIndex];
+      if (!q) return;
+
       const isIdToEn = (this.languageDirection === 'id-to-en');
-      
-      // Target text to match against:
       let targetExpected = isIdToEn ? (q.missingWord || q.en || q.target) : (q.translation || q.id_translation);
 
       this.dom.evaluation.panel.classList.remove('hidden');
       this.dom.evaluation.aiFeedback.textContent = 'AI Teacher sedang menganalisis jawaban dan intonasi Anda...';
 
-      const apiKey = safeStorage.getItem('cfg_gemini_key') || '';
-      const dirText = isIdToEn ? 'Indonesia ke English' : 'English ke Indonesia';
-      const evalResult = await GeminiService.evaluateAnswer(apiKey, targetExpected, userAnswer, this.currentMode, dirText);
+      let accuracy = 100;
+      let verdict = 'Bagus Sekali! 🎉';
+      let feedback = 'Pengucapan dan pilihan kata Anda sangat tepat.';
 
-      let accuracy = evalResult.accuracy;
       if (predeterminedCorrect !== null) {
-        accuracy = predeterminedCorrect ? 100 : 20;
+        accuracy = predeterminedCorrect ? 100 : 25;
+        verdict = predeterminedCorrect ? 'Bagus Sekali! Jawaban Tepat 🎉' : 'Jawaban Kurang Tepat 💪';
+        feedback = predeterminedCorrect
+          ? 'Pemahaman kosakata dan struktur kalimat Anda sudah sesuai!'
+          : 'Perhatikan arti dan struktur kalimat yang benar pada kartu evaluasi di bawah.';
+      } else {
+        const apiKey = safeStorage.getItem('cfg_gemini_key') || '';
+        const dirText = isIdToEn ? 'Indonesia ke English' : 'English ke Indonesia';
+        const evalResult = await GeminiService.evaluateAnswer(apiKey, targetExpected, userAnswer, this.currentMode, dirText);
+        accuracy = evalResult.accuracy;
+        verdict = evalResult.verdict;
+        feedback = evalResult.feedback;
       }
 
-      const isSuccess = accuracy >= 70;
+      const isSuccess = (accuracy >= 70);
+
       if (isSuccess) {
         this.streak += 1;
         if (this.streak > this.maxStreak) this.maxStreak = this.streak;
+        this.combo += 1;
+
+        const multiplier = this.getComboMultiplier();
         const streakBonus = (this.streak > 1) ? (this.streak * 10) : 0;
-        this.score += (accuracy + streakBonus);
+        const earnedXP = Math.round((accuracy + streakBonus) * multiplier);
+
+        this.score += earnedXP;
+        this.totalXP += earnedXP;
+        safeStorage.setItem('ae_total_xp', this.totalXP);
+
+        // Track stats
+        this.stats.totalCorrect = (this.stats.totalCorrect || 0) + 1;
+        if (this.currentMode === 'vocabulary') this.stats.vocabLearned = (this.stats.vocabLearned || 0) + 1;
+        if (this.currentMode === 'grammar') this.stats.grammarMastered = (this.stats.grammarMastered || 0) + 1;
+        if (this.currentMode === 'listening') this.stats.listeningScore = (this.stats.listeningScore || 0) + earnedXP;
+        if (this.currentMode === 'shadowing') this.stats.speakingScore = (this.stats.speakingScore || 0) + earnedXP;
+
+        // Floating XP Animation
+        this.showFloatingXP(earnedXP, sourceElement);
 
         if (this.streak > 1) {
           this.sound.playStreak();
@@ -6648,55 +9037,77 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         }
       } else {
         this.streak = 0;
+        this.combo = 0;
+        this.deductHeart();
         this.sound.playWrong();
       }
 
-      // Record to history
+      this.stats.totalAnswered = (this.stats.totalAnswered || 0) + 1;
+      safeStorage.setItem('ae_stats', JSON.stringify(this.stats));
+
+      // Check for unlocked Badges
+      this.checkBadges(accuracy);
+
+      // Record to session history
       this.history.push({
         questionNumber: this.currentIndex + 1,
-        direction: dirText,
+        direction: isIdToEn ? 'ID -> EN' : 'EN -> ID',
         target: targetExpected,
         heard: userAnswer,
         accuracy: accuracy,
-        feedback: evalResult.feedback
+        feedback: feedback
       });
 
-      // Update HUD & Evaluation Panel
-      this.dom.hud.score.textContent = this.score;
-      this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
+      // Update HUD
+      if (this.dom.hud.score) this.dom.hud.score.textContent = this.score;
+      if (this.dom.hud.streak) this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
+      if (this.dom.hud.combo) this.dom.hud.combo.textContent = this.getComboMultiplierLabel();
 
+      // Update Evaluation Panel UI
       this.dom.evaluation.scoreBadge.textContent = `Akurasi: ${accuracy}%`;
       this.dom.evaluation.scoreBadge.className = 'score-badge ' + (accuracy >= 80 ? '' : (accuracy >= 50 ? 'medium' : 'low'));
-      this.dom.evaluation.verdict.textContent = evalResult.verdict || (isSuccess ? 'Bagus Sekali! 🎉' : 'Terus Berlatih! 💪');
-
+      this.dom.evaluation.verdict.textContent = verdict;
       this.dom.evaluation.compTarget.textContent = targetExpected;
-      this.dom.evaluation.compHeard.textContent = userAnswer || '(tidak terdengar suara)';
-      this.dom.evaluation.aiFeedback.textContent = evalResult.feedback;
+      this.dom.evaluation.compHeard.textContent = userAnswer || '(tidak terdengar suara / tidak memilih)';
+      this.dom.evaluation.aiFeedback.textContent = feedback;
 
-      // Munculkan Cara Baca / Fonetik setelah menjawab
+      // REVEAL CARDS (Definitions, Example, Grammar, Phonetic) strictly AFTER answering:
+      if (this.dom.evaluation.translationCard && this.dom.evaluation.translationText) {
+        const trans = cleanText(q.id_translation || q.translation);
+        if (trans) {
+          this.dom.evaluation.translationText.textContent = trans;
+          this.dom.evaluation.translationCard.classList.remove('hidden');
+        }
+      }
+
+      if (this.dom.evaluation.exampleCard && this.dom.evaluation.exampleText) {
+        const eg = cleanText(q.en || q.target);
+        if (eg && this.currentMode !== 'shadowing') {
+          this.dom.evaluation.exampleText.textContent = `"${eg}"`;
+          this.dom.evaluation.exampleCard.classList.remove('hidden');
+        }
+      }
+
+      if (this.dom.evaluation.grammarCard && this.dom.evaluation.grammarText) {
+        const gr = cleanText(q.notes);
+        if (gr) {
+          this.dom.evaluation.grammarText.textContent = gr;
+          this.dom.evaluation.grammarCard.classList.remove('hidden');
+        }
+      }
+
       const phoneticText = q.phonetic || '';
-      if (phoneticText) {
-        this.dom.challenge.targetPhonetic.classList.remove('hidden');
-        this.dom.challenge.targetPhonetic.textContent = `Cara Baca: ${phoneticText}`;
-      }
-      const phoneticBox = document.getElementById('phonetic-reveal-box');
-      const evalPhonetic = document.getElementById('eval-phonetic-text');
-      if (phoneticBox && evalPhonetic) {
-        evalPhonetic.textContent = phoneticText || '(Audio native tersedia)';
-        phoneticBox.classList.remove('hidden');
+      if (this.dom.evaluation.phoneticBox && this.dom.evaluation.phoneticText && phoneticText) {
+        this.dom.evaluation.phoneticText.textContent = phoneticText;
+        this.dom.evaluation.phoneticBox.classList.remove('hidden');
       }
 
-      // Play correct audio for listening & speaking correction
-      if (isIdToEn) {
-        setTimeout(() => {
-          this.speech.speak(q.en || q.target, this.dom.challenge.accentSelect.value);
-        }, 300);
-      }
-
+      // If in listening mode, reveal target text now
       if (this.currentMode === 'listening') {
-        this.dom.challenge.targetPhrase.textContent = `"${q.en || q.target}"`;
-        this.dom.challenge.targetTranslation.textContent = `Arti: "${q.translation || q.id_translation}"`;
+        this.dom.challenge.targetPhrase.textContent = `"${cleanText(q.en || q.target)}"`;
       }
+
+      this.updateDashboard();
     }
 
     nextQuestion() {
@@ -6708,6 +9119,9 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.switchView('result');
       this.sound.playSuccess();
 
+      this.stats.gamesPlayed = (this.stats.gamesPlayed || 0) + 1;
+      safeStorage.setItem('ae_stats', JSON.stringify(this.stats));
+
       const totalQuestions = this.history.length || 1;
       const sumAccuracy = this.history.reduce((acc, h) => acc + h.accuracy, 0);
       const avgAcc = Math.round(sumAccuracy / totalQuestions);
@@ -6718,29 +9132,29 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       else if (avgAcc >= 60) levelName = 'Intermediate';
 
       const dirLabel = this.languageDirection === 'id-to-en' ? 'ID ➔ EN' : 'EN ➔ ID';
-      this.dom.result.modeName.textContent = `${this.dom.hud.modePill.textContent} (${dirLabel})`;
-      this.dom.result.totalScore.textContent = `+${this.score} PTS`;
-      this.dom.result.avgAccuracy.textContent = `${avgAcc}%`;
-      this.dom.result.maxStreak.textContent = `${this.maxStreak}🔥`;
-      this.dom.result.level.textContent = levelName;
-      this.dom.result.statusMsg.textContent = '';
+      if (this.dom.result.modeName) this.dom.result.modeName.textContent = `${this.dom.hud.modePill ? this.dom.hud.modePill.textContent : 'Arena'} (${dirLabel})`;
+      if (this.dom.result.totalScore) this.dom.result.totalScore.textContent = `+${this.score} PTS`;
+      if (this.dom.result.avgAccuracy) this.dom.result.avgAccuracy.textContent = `${avgAcc}%`;
+      if (this.dom.result.maxStreak) this.dom.result.maxStreak.textContent = `${this.maxStreak}🔥`;
+      if (this.dom.result.level) this.dom.result.level.textContent = levelName;
+      if (this.dom.result.statusMsg) this.dom.result.statusMsg.textContent = '';
 
-      // Score Retention: Display cumulative score across days & devices
-      const currentTotal = AuthManager.isLoggedIn() ? (AuthManager.currentUser.totalScore || 0) : 0;
-      const newTotal = currentTotal + this.score;
       if (this.dom.result.cumulativeScore) {
-        this.dom.result.cumulativeScore.textContent = `${newTotal.toLocaleString()} PTS`;
+        this.dom.result.cumulativeScore.textContent = `${this.totalXP.toLocaleString()} PTS`;
       }
 
       if (AuthManager.isLoggedIn()) {
-        this.dom.result.playerNameInput.value = AuthManager.currentUser.name;
-        // Auto-sync score to Google Sheets
+        if (this.dom.result.playerNameInput) {
+          this.dom.result.playerNameInput.value = AuthManager.currentUser.name;
+        }
         this.submitScoreToLeaderboard();
       }
+
+      this.updateDashboard();
     }
 
     async submitScoreToLeaderboard() {
-      const name = this.dom.result.playerNameInput.value.trim() || (AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Jefri');
+      const name = (this.dom.result.playerNameInput && this.dom.result.playerNameInput.value.trim()) || (AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Player 1');
       const sumAccuracy = this.history.reduce((acc, h) => acc + h.accuracy, 0);
       const avgAcc = Math.round(sumAccuracy / (this.history.length || 1));
       const dirLabel = this.languageDirection === 'id-to-en' ? 'ID -> EN' : 'EN -> ID';
@@ -6751,7 +9165,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       const entry = {
         userEmail: AuthManager.isLoggedIn() ? AuthManager.currentUser.email : '',
         playerName: name,
-        gameMode: `${this.dom.hud.modePill.textContent} (${dirLabel})`,
+        gameMode: `${this.dom.hud.modePill ? this.dom.hud.modePill.textContent : 'Arena'} (${dirLabel})`,
         direction: dirLabel,
         score: this.score,
         accuracy: avgAcc,
@@ -6762,48 +9176,45 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       const result = await LeaderboardService.submitScore(entry);
 
-      // Accumulate score to local session so if continuing tomorrow, score is preserved
       if (AuthManager.isLoggedIn()) {
         AuthManager.addScore(this.score);
-        if (this.dom.result.cumulativeScore) {
-          this.dom.result.cumulativeScore.textContent = `${(AuthManager.currentUser.totalScore || 0).toLocaleString()} PTS`;
-        }
       }
 
       this.dom.result.submitBtn.disabled = false;
       this.dom.result.submitBtn.textContent = '✓ Tersimpan di Database!';
-      this.dom.result.statusMsg.textContent = `${result.message} Skor Anda aman dan akan berlanjut besok.`;
-      this.dom.result.statusMsg.className = 'status-message success';
+      if (this.dom.result.statusMsg) {
+        this.dom.result.statusMsg.textContent = `${result.message} Skor Anda aman dan akan berlanjut besok.`;
+        this.dom.result.statusMsg.className = 'status-message success';
+      }
 
       this.showToast('✓ Progres berhasil disinkronkan ke Cloud Database!', 'success');
     }
 
-    /* ==========================================================================
-       MODALS & MEMORY LOGIC
-       ========================================================================== */
     openLeaderboard() {
-      this.dom.modals.leaderboard.classList.remove('hidden');
-      this.switchModalTab('leaderboard');
+      if (this.dom.modals.leaderboard) {
+        this.dom.modals.leaderboard.classList.remove('hidden');
+        this.switchModalTab('leaderboard');
+      }
     }
 
     switchModalTab(tabName) {
       if (tabName === 'leaderboard') {
-        this.dom.modals.tabLeaderboardBtn.classList.add('active');
-        this.dom.modals.tabMemoryBtn.classList.remove('active');
-        this.dom.modals.containerLeaderboard.classList.remove('hidden');
-        this.dom.modals.containerMemory.classList.add('hidden');
+        this.dom.modals.tabLeaderboardBtn?.classList.add('active');
+        this.dom.modals.tabMemoryBtn?.classList.remove('active');
+        this.dom.modals.containerLeaderboard?.classList.remove('hidden');
+        this.dom.modals.containerMemory?.classList.add('hidden');
         this.loadLeaderboardData();
       } else {
-        this.dom.modals.tabMemoryBtn.classList.add('active');
-        this.dom.modals.tabLeaderboardBtn.classList.remove('active');
-        this.dom.modals.containerMemory.classList.remove('hidden');
-        this.dom.modals.containerLeaderboard.classList.add('hidden');
+        this.dom.modals.tabMemoryBtn?.classList.add('active');
+        this.dom.modals.tabLeaderboardBtn?.classList.remove('active');
+        this.dom.modals.containerMemory?.classList.remove('hidden');
+        this.dom.modals.containerLeaderboard?.classList.add('hidden');
         this.loadMemoryData();
       }
     }
 
     refreshCurrentModalData() {
-      if (this.dom.modals.tabMemoryBtn.classList.contains('active')) {
+      if (this.dom.modals.tabMemoryBtn?.classList.contains('active')) {
         this.loadMemoryData();
       } else {
         this.loadLeaderboardData();
@@ -6811,10 +9222,11 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     async loadLeaderboardData() {
+      if (!this.dom.modals.tbody) return;
       this.dom.modals.tbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil ranking dari Cloud Database...</td></tr>';
 
       const res = await LeaderboardService.fetchLeaderboard();
-      this.dom.modals.syncStatus.textContent = res.source;
+      if (this.dom.modals.syncStatus) this.dom.modals.syncStatus.textContent = res.source;
 
       if (!res.data || res.data.length === 0) {
         this.dom.modals.tbody.innerHTML = '<tr><td colspan="6" class="loading-row">Belum ada skor. Jadilah yang pertama bermain!</td></tr>';
@@ -6841,10 +9253,11 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     async loadMemoryData() {
+      if (!this.dom.modals.memoryTbody) return;
       this.dom.modals.memoryTbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil riwayat memori belajar...</td></tr>';
 
       const res = await LeaderboardService.fetchMemory();
-      this.dom.modals.syncStatus.textContent = res.source;
+      if (this.dom.modals.syncStatus) this.dom.modals.syncStatus.textContent = res.source;
 
       if (!res.data || res.data.length === 0) {
         this.dom.modals.memoryTbody.innerHTML = '<tr><td colspan="6" class="loading-row">Belum ada riwayat memori belajar. Selesaikan permainan untuk mencatat memori!</td></tr>';
@@ -6866,15 +9279,36 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       });
     }
 
+    setLevelPreference(lvl) {
+      this.levelPreference = lvl || 'all';
+      safeStorage.setItem('cfg_level_preference', this.levelPreference);
+
+      document.querySelectorAll('.btn-level-pill').forEach(btn => {
+        if (btn.dataset.level === this.levelPreference) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const cfgLevel = document.getElementById('cfg-level-preference');
+      if (cfgLevel) cfgLevel.value = this.levelPreference;
+    }
+
     openSettings() {
-      this.dom.modals.settings.classList.remove('hidden');
+      if (this.dom.modals.settings) this.dom.modals.settings.classList.remove('hidden');
       document.getElementById('cfg-appscript-url').value = safeStorage.getItem('cfg_appscript_url') || 'https://script.google.com/macros/s/AKfycbxy8pG0P3G95SATXLLqC0V3ZzH7MmU7oEF40PPLJRgBUE6i8NnBmKZlupiYfObPKtZ5/exec';
       document.getElementById('cfg-gemini-key').value = safeStorage.getItem('cfg_gemini_key') || '';
       document.getElementById('cfg-accent').value = safeStorage.getItem('cfg_accent') || 'en-US';
 
+      const savedLevel = safeStorage.getItem('cfg_level_preference') || 'all';
+      const cfgLevel = document.getElementById('cfg-level-preference');
+      if (cfgLevel) cfgLevel.value = savedLevel;
+
       const voiceSelect = document.getElementById('cfg-voice');
       const savedVoice = safeStorage.getItem('cfg_voice_name') || 'auto';
-      const savedRate = safeStorage.getItem('cfg_voice_rate') || '0.88';
+      const rawRate = safeStorage.getItem('cfg_voice_rate') || '0.8';
+      const savedRate = normalizeRate(rawRate);
 
       const rateSelect = document.getElementById('cfg-voice-rate');
       if (rateSelect) rateSelect.value = savedRate;
@@ -6914,7 +9348,9 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       const key = document.getElementById('cfg-gemini-key').value.trim();
       const accent = document.getElementById('cfg-accent').value;
       const voice = document.getElementById('cfg-voice')?.value || 'auto';
-      const rate = document.getElementById('cfg-voice-rate')?.value || '0.88';
+      const rawRate = document.getElementById('cfg-voice-rate')?.value || '0.8';
+      const rate = normalizeRate(rawRate);
+      const lvl = document.getElementById('cfg-level-preference')?.value || 'all';
 
       safeStorage.setItem('cfg_appscript_url', url);
       safeStorage.setItem('cfg_gemini_key', key);
@@ -6922,12 +9358,15 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       safeStorage.setItem('cfg_voice_name', voice);
       safeStorage.setItem('cfg_voice_rate', rate);
 
+      this.setLevelPreference(lvl);
+
       this.speech.selectedVoiceName = voice;
       this.speech.speechRate = parseFloat(rate);
       if (this.dom.challenge.accentSelect) this.dom.challenge.accentSelect.value = accent;
+      if (this.dom.challenge.speedSelect) this.dom.challenge.speedSelect.value = rate;
 
       this.closeModals();
-      this.showToast('Pengaturan suara berhasil disimpan!', 'success');
+      this.showToast('Pengaturan suara & tingkat kesulitan berhasil disimpan!', 'success');
     }
 
     resetSettings() {
@@ -6936,44 +9375,148 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         safeStorage.removeItem('cfg_gemini_key');
         safeStorage.setItem('cfg_accent', 'en-US');
         safeStorage.setItem('cfg_voice_name', 'auto');
-        safeStorage.setItem('cfg_voice_rate', '0.88');
+        safeStorage.setItem('cfg_voice_rate', '0.8');
+        safeStorage.setItem('cfg_level_preference', 'all');
 
         document.getElementById('cfg-appscript-url').value = '';
         document.getElementById('cfg-gemini-key').value = '';
         document.getElementById('cfg-accent').value = 'en-US';
         if (document.getElementById('cfg-voice')) document.getElementById('cfg-voice').value = 'auto';
-        if (document.getElementById('cfg-voice-rate')) document.getElementById('cfg-voice-rate').value = '0.88';
+        if (document.getElementById('cfg-voice-rate')) document.getElementById('cfg-voice-rate').value = '0.8';
+        if (document.getElementById('cfg-level-preference')) document.getElementById('cfg-level-preference').value = 'all';
 
+        this.setLevelPreference('all');
         this.speech.selectedVoiceName = 'auto';
-        this.speech.speechRate = 0.88;
-        this.showToast('Pengaturan direset.', 'info');
+        this.speech.speechRate = 0.8;
+        if (this.dom.challenge.speedSelect) this.dom.challenge.speedSelect.value = '0.8';
+        this.showToast('Pengaturan direset ke default.', 'info');
       }
     }
 
     loadSettings() {
       const accent = safeStorage.getItem('cfg_accent') || 'en-US';
       const voice = safeStorage.getItem('cfg_voice_name') || 'auto';
-      const rate = parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.88');
+      const rawRate = safeStorage.getItem('cfg_voice_rate') || '0.8';
+      const normalizedRate = normalizeRate(rawRate);
+      const lvl = safeStorage.getItem('cfg_level_preference') || 'all';
 
       if (this.dom.challenge.accentSelect) {
         this.dom.challenge.accentSelect.value = accent;
       }
+      if (this.dom.challenge.speedSelect) {
+        this.dom.challenge.speedSelect.value = normalizedRate;
+      }
       this.speech.selectedVoiceName = voice;
-      this.speech.speechRate = rate;
+      this.speech.speechRate = parseFloat(normalizedRate);
 
-      // Event listener for Test Voice button in settings
+      this.setLevelPreference(lvl);
+
       const btnTestVoice = document.getElementById('btn-test-voice');
       if (btnTestVoice && !btnTestVoice.dataset.bound) {
         btnTestVoice.dataset.bound = 'true';
         btnTestVoice.addEventListener('click', () => {
           const v = document.getElementById('cfg-voice')?.value || 'auto';
-          const r = parseFloat(document.getElementById('cfg-voice-rate')?.value || '0.88');
+          const r = parseFloat(document.getElementById('cfg-voice-rate')?.value || '0.8');
           const acc = document.getElementById('cfg-accent')?.value || 'en-US';
           this.speech.selectedVoiceName = v;
           this.speech.speechRate = r;
-          this.speech.speak('Hello! Welcome to Awesome English Arena. Practice makes permanent!', acc);
+          this.speech.speak('Hello! Welcome to Awesome English Arena. Practice makes permanent!', acc, r);
         });
       }
+    }
+
+    updateProgressView() {
+      const tier = this.getPlayerTier(this.totalXP);
+      if (this.dom.progress.vocabCount) {
+        this.dom.progress.vocabCount.textContent = `${this.stats.vocabLearned || 0} Kata`;
+      }
+      if (this.dom.progress.vocabFill) {
+        const pct = Math.min(100, Math.round(((this.stats.vocabLearned || 0) / 50) * 100));
+        this.dom.progress.vocabFill.style.width = `${pct}%`;
+      }
+      if (this.dom.progress.grammarCount) {
+        this.dom.progress.grammarCount.textContent = `${this.stats.grammarMastered || 0} Materi`;
+      }
+      if (this.dom.progress.grammarFill) {
+        const pct = Math.min(100, Math.round(((this.stats.grammarMastered || 0) / 30) * 100));
+        this.dom.progress.grammarFill.style.width = `${pct}%`;
+      }
+      if (this.dom.progress.listeningScore) {
+        this.dom.progress.listeningScore.textContent = `${(this.stats.listeningScore || 0).toLocaleString()} PTS`;
+      }
+      if (this.dom.progress.listeningAcc) {
+        this.dom.progress.listeningAcc.textContent = `Akurasi Audio: ${this.stats.listeningScore > 0 ? '90%' : '0%'}`;
+      }
+      if (this.dom.progress.speakingScore) {
+        this.dom.progress.speakingScore.textContent = `${(this.stats.speakingScore || 0).toLocaleString()} PTS`;
+      }
+      if (this.dom.progress.speakingAcc) {
+        this.dom.progress.speakingAcc.textContent = `Akurasi Pengucapan: ${this.stats.speakingScore > 0 ? '88%' : '0%'}`;
+      }
+      if (this.dom.progress.totalXp) {
+        this.dom.progress.totalXp.textContent = `${this.totalXP.toLocaleString()} XP`;
+      }
+      if (this.dom.progress.xpTier) {
+        this.dom.progress.xpTier.textContent = `Tingkat: ${tier.tier}`;
+      }
+      if (this.dom.progress.gamesPlayed) {
+        this.dom.progress.gamesPlayed.textContent = `${this.stats.gamesPlayed || 0} Game`;
+      }
+      if (this.dom.progress.totalSoal) {
+        this.dom.progress.totalSoal.textContent = `${this.stats.totalAnswered || 0} Total Soal Dijawab`;
+      }
+      const totalAns = this.stats.totalAnswered || 0;
+      const totalCor = this.stats.totalCorrect || 0;
+      const acc = totalAns > 0 ? Math.round((totalCor / totalAns) * 100) : 100;
+      if (this.dom.progress.accuracyRate) {
+        this.dom.progress.accuracyRate.textContent = `${acc}%`;
+      }
+      if (this.dom.progress.accuracyFill) {
+        this.dom.progress.accuracyFill.style.width = `${acc}%`;
+      }
+      if (this.dom.progress.streakDays) {
+        this.dom.progress.streakDays.textContent = `${this.streakDays} Hari`;
+      }
+    }
+
+    updateProfileView() {
+      const tier = this.getPlayerTier(this.totalXP);
+      const userName = AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Player 1';
+      if (this.dom.profile.displayName) this.dom.profile.displayName.textContent = userName;
+      if (this.dom.profile.tierBadge) this.dom.profile.tierBadge.textContent = tier.tier;
+      if (this.dom.profile.lvlBadge) this.dom.profile.lvlBadge.textContent = `Level ${tier.level}`;
+      if (this.dom.profile.xpBadge) this.dom.profile.xpBadge.textContent = `⭐ ${this.totalXP.toLocaleString()} XP`;
+      if (this.dom.profile.streakBadge) this.dom.profile.streakBadge.textContent = `🔥 ${this.streakDays} Hari`;
+      if (this.dom.profile.heartsIcons) {
+        this.dom.profile.heartsIcons.textContent = '❤️'.repeat(this.hearts) + '🖤'.repeat(5 - this.hearts);
+      }
+      this.renderBadges();
+    }
+
+    renderBadges() {
+      const catalog = this.getBadgeCatalog();
+      if (this.dom.profile.badgesCount) {
+        this.dom.profile.badgesCount.textContent = `${this.badges.length} / ${catalog.length} Terbuka`;
+      }
+      if (!this.dom.profile.badgesContainer) return;
+      this.dom.profile.badgesContainer.innerHTML = '';
+
+      catalog.forEach(badge => {
+        const isUnlocked = this.badges.includes(badge.id);
+        const card = document.createElement('div');
+        card.className = `badge-item-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+        card.innerHTML = `
+          <div class="badge-icon-wrap">${badge.icon}</div>
+          <div class="badge-info">
+            <h4 class="badge-name">${this.escapeHtml(badge.name)}</h4>
+            <p class="badge-desc">${this.escapeHtml(badge.desc)}</p>
+            <span class="badge-status-tag ${isUnlocked ? 'unlocked' : ''}">
+              ${isUnlocked ? '✓ Terbuka' : '🔒 Terkunci'}
+            </span>
+          </div>
+        `;
+        this.dom.profile.badgesContainer.appendChild(card);
+      });
     }
 
     openDrawer() {
@@ -6992,6 +9535,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
     closeModals() {
       this.closeDrawer();
+      this.closeHeartsModal();
       if (this.dom.modals.auth) this.dom.modals.auth.classList.add('hidden');
       if (this.dom.modals.leaderboard) this.dom.modals.leaderboard.classList.add('hidden');
       if (this.dom.modals.settings) this.dom.modals.settings.classList.add('hidden');

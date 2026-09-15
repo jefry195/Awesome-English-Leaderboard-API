@@ -51,7 +51,28 @@
     }
   };
 
+  // Helper to sanitize questions and ensure NO artificial numbers (#303, #12, etc.) ever appear
+  function cleanText(text) {
+    if (!text) return '';
+    return String(text)
+      .replace(/\s*#\d+/g, '')
+      .replace(/\s*#([a-zA-Z0-9_-]+)/g, '')
+      .replace(/\s*\((?:Record|Part|Task|Passage)?\s*#?\d+\)/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
 
+  // Helper to normalize speed rate values to exact select option keys ('0.5', '0.6', '0.7', '0.8', '0.9', '1.0')
+  function normalizeRate(rate) {
+    const r = parseFloat(rate);
+    if (isNaN(r) || r <= 0) return '0.8';
+    if (r <= 0.55) return '0.5';
+    if (r <= 0.65) return '0.6';
+    if (r <= 0.75) return '0.7';
+    if (r <= 0.85) return '0.8';
+    if (r <= 0.95) return '0.9';
+    return '1.0';
+  }
 
   /* ==========================================================================
      1. CURATED CONTENT REPOSITORY (Bilingual English & Indonesian)
@@ -1984,6 +2005,228 @@
       "en_prompt": "Terjemahkan ke Bahasa Indonesia: \"The company is rumored to be launching a new product next month.\"",
       "notes": "Struktur pasif impersonal: Subject + is rumored/believed/thought + to be + V-ing."
     }
+  ],
+  "sentence_builder": [
+    {
+      "id": "sb_01",
+      "mode": "sentence_builder",
+      "category": "Daily Routine • Simple Present",
+      "level": "Beginner",
+      "en": "I drink coffee every morning.",
+      "target": "I drink coffee every morning.",
+      "words": ["I", "drink", "coffee", "every morning."],
+      "id_translation": "Saya minum kopi setiap pagi.",
+      "notes": "Pola kalimat: Subject (I) + Verb 1 (drink) + Object (coffee) + Time expression (every morning)."
+    },
+    {
+      "id": "sb_02",
+      "mode": "sentence_builder",
+      "category": "Transit • Daily Transportation",
+      "level": "Beginner",
+      "en": "She goes to school by bus.",
+      "target": "She goes to school by bus.",
+      "words": ["She", "goes", "to school", "by bus."],
+      "id_translation": "Dia pergi ke sekolah naik bus.",
+      "notes": "Subjek tunggal 'She' menggunakan kata kerja bentuk -es (goes) dan preposisi 'by' untuk transportasi."
+    },
+    {
+      "id": "sb_03",
+      "mode": "sentence_builder",
+      "category": "Activities • Present Continuous",
+      "level": "Beginner",
+      "en": "They are playing football in the park.",
+      "target": "They are playing football in the park.",
+      "words": ["They", "are playing", "football", "in the park."],
+      "id_translation": "Mereka sedang bermain sepak bola di taman.",
+      "notes": "Present Continuous: Subject (They) + are + V-ing (playing) + Object + Keterangan tempat."
+    },
+    {
+      "id": "sb_04",
+      "mode": "sentence_builder",
+      "category": "Hobbies • Preferences",
+      "level": "Elementary",
+      "en": "My sister loves reading books at night.",
+      "target": "My sister loves reading books at night.",
+      "words": ["My sister", "loves", "reading books", "at night."],
+      "id_translation": "Kakak perempuan saya suka membaca buku di malam hari.",
+      "notes": "Kata kerja 'love' diikuti oleh gerund (reading) untuk menyatakan hobi."
+    },
+    {
+      "id": "sb_05",
+      "mode": "sentence_builder",
+      "category": "Polite Request • Modal Verbs",
+      "level": "Elementary",
+      "en": "Could you please help me with this task?",
+      "target": "Could you please help me with this task?",
+      "words": ["Could you", "please help", "me with", "this task?"],
+      "id_translation": "Bisakah Anda tolong bantu saya dengan tugas ini?",
+      "notes": "Penggunaan 'Could you please...' adalah bentuk permintaan sopan yang sangat umum di tempat kerja."
+    },
+    {
+      "id": "sb_06",
+      "mode": "sentence_builder",
+      "category": "Work Routine • Adverbs of Frequency",
+      "level": "Elementary",
+      "en": "He always arrives at the office on time.",
+      "target": "He always arrives at the office on time.",
+      "words": ["He always", "arrives", "at the office", "on time."],
+      "id_translation": "Dia selalu tiba di kantor tepat waktu.",
+      "notes": "Adverb of frequency 'always' diletakkan sebelum kata kerja utama 'arrives'."
+    },
+    {
+      "id": "sb_07",
+      "mode": "sentence_builder",
+      "category": "Café & Ordering • Polite Expressions",
+      "level": "Beginner",
+      "en": "I would like a cup of hot tea, please.",
+      "target": "I would like a cup of hot tea, please.",
+      "words": ["I would like", "a cup of", "hot tea,", "please."],
+      "id_translation": "Saya ingin secangkir teh panas, tolong.",
+      "notes": "'I would like' adalah bentuk sopan dari 'I want' saat memesan makanan atau minuman."
+    },
+    {
+      "id": "sb_08",
+      "mode": "sentence_builder",
+      "category": "Directions • City Navigation",
+      "level": "Beginner",
+      "en": "Where is the nearest train station around here?",
+      "target": "Where is the nearest train station around here?",
+      "words": ["Where is", "the nearest", "train station", "around here?"],
+      "id_translation": "Di mana stasiun kereta terdekat di sekitar sini?",
+      "notes": "Kalimat tanya tempat: Where + is + noun phrase (the nearest train station) + keterangan."
+    },
+    {
+      "id": "sb_09",
+      "mode": "sentence_builder",
+      "category": "Safety • Imperative Sentences",
+      "level": "Elementary",
+      "en": "Don't forget to lock the door before leaving.",
+      "target": "Don't forget to lock the door before leaving.",
+      "words": ["Don't forget", "to lock", "the door", "before leaving."],
+      "id_translation": "Jangan lupa untuk mengunci pintu sebelum pergi.",
+      "notes": "Setelah preposisi 'before', kata kerja harus dalam bentuk -ing (leaving)."
+    },
+    {
+      "id": "sb_10",
+      "mode": "sentence_builder",
+      "category": "Skills & Talents • Adverbs of Manner",
+      "level": "Intermediate",
+      "en": "She speaks three different languages very fluently.",
+      "target": "She speaks three different languages very fluently.",
+      "words": ["She speaks", "three different", "languages", "very fluently."],
+      "id_translation": "Dia berbicara tiga bahasa berbeda dengan sangat lancar.",
+      "notes": "Adverb of manner 'fluently' menerangkan bagaimana dia berbicara (speaks)."
+    },
+    {
+      "id": "sb_11",
+      "mode": "sentence_builder",
+      "category": "Weather • Past Continuous & Simple Past",
+      "level": "Intermediate",
+      "en": "It was raining heavily when I arrived home.",
+      "target": "It was raining heavily when I arrived home.",
+      "words": ["It was", "raining heavily", "when", "I arrived home."],
+      "id_translation": "Hujan turun deras ketika saya tiba di rumah.",
+      "notes": "Tindakan yang sedang berlangsung (was raining) dipotong oleh kejadian lampau (arrived)."
+    },
+    {
+      "id": "sb_12",
+      "mode": "sentence_builder",
+      "category": "Education • Purpose Clauses",
+      "level": "Elementary",
+      "en": "He is studying hard to pass the final exam.",
+      "target": "He is studying hard to pass the final exam.",
+      "words": ["He is", "studying hard", "to pass", "the final exam."],
+      "id_translation": "Dia sedang belajar giat untuk lulus ujian akhir.",
+      "notes": "'To pass' menunjukkan tujuan (infinitive of purpose)."
+    },
+    {
+      "id": "sb_13",
+      "mode": "sentence_builder",
+      "category": "Family • Daily Dinner",
+      "level": "Beginner",
+      "en": "We usually have dinner together at seven PM.",
+      "target": "We usually have dinner together at seven PM.",
+      "words": ["We usually", "have dinner", "together", "at seven PM."],
+      "id_translation": "Kami biasanya makan malam bersama pada pukul tujuh malam.",
+      "notes": "'Have dinner' adalah kolokasi alami untuk makan malam."
+    },
+    {
+      "id": "sb_14",
+      "mode": "sentence_builder",
+      "category": "Experience • Present Perfect",
+      "level": "Intermediate",
+      "en": "I have never seen such a beautiful sunset before.",
+      "target": "I have never seen such a beautiful sunset before.",
+      "words": ["I have never", "seen", "such a beautiful", "sunset before."],
+      "id_translation": "Saya belum pernah melihat matahari terbenam seindah ini sebelumnya.",
+      "notes": "Present Perfect: have + never + V3 (seen) untuk pengalaman hidup."
+    },
+    {
+      "id": "sb_15",
+      "mode": "sentence_builder",
+      "category": "Conversation • Polite Clarification",
+      "level": "Beginner",
+      "en": "Can you speak a little bit slower, please?",
+      "target": "Can you speak a little bit slower, please?",
+      "words": ["Can you", "speak", "a little bit slower,", "please?"],
+      "id_translation": "Bisakah Anda berbicara sedikit lebih pelan, tolong?",
+      "notes": "Ungkapan emas saat berbicara dengan penutur asli yang berbicara terlalu cepat."
+    },
+    {
+      "id": "sb_16",
+      "mode": "sentence_builder",
+      "category": "Duration • Present Perfect Continuous",
+      "level": "Intermediate",
+      "en": "We have been waiting for the bus for thirty minutes.",
+      "target": "We have been waiting for the bus for thirty minutes.",
+      "words": ["We have been", "waiting for", "the bus", "for thirty minutes."],
+      "id_translation": "Kami telah menunggu bus itu selama tiga puluh menit.",
+      "notes": "Menyatakan tindakan yang dimulai di masa lampau dan masih berlangsung hingga sekarang."
+    },
+    {
+      "id": "sb_17",
+      "mode": "sentence_builder",
+      "category": "Advice • Modal Verb Should",
+      "level": "Elementary",
+      "en": "You should take an umbrella because it might rain.",
+      "target": "You should take an umbrella because it might rain.",
+      "words": ["You should", "take an umbrella", "because", "it might rain."],
+      "id_translation": "Kamu sebaiknya membawa payung karena mungkin akan hujan.",
+      "notes": "'Should' digunakan untuk memberi saran yang bersahabat."
+    },
+    {
+      "id": "sb_18",
+      "mode": "sentence_builder",
+      "category": "Future Plans • Decisions",
+      "level": "Elementary",
+      "en": "They decided to travel abroad next summer.",
+      "target": "They decided to travel abroad next summer.",
+      "words": ["They decided", "to travel abroad", "next", "summer."],
+      "id_translation": "Mereka memutuskan untuk bepergian ke luar negeri musim panas depan.",
+      "notes": "Kata kerja 'decide' diikuti oleh to-infinitive (to travel)."
+    },
+    {
+      "id": "sb_19",
+      "mode": "sentence_builder",
+      "category": "Anticipation • Phrasal Verbs",
+      "level": "Intermediate",
+      "en": "I am looking forward to seeing you next week.",
+      "target": "I am looking forward to seeing you next week.",
+      "words": ["I am", "looking forward to", "seeing you", "next week."],
+      "id_translation": "Saya sangat menantikan untuk bertemu dengan Anda minggu depan.",
+      "notes": "Frasa 'look forward to' wajib diikuti oleh bentuk gerund (-ing: seeing)."
+    },
+    {
+      "id": "sb_20",
+      "mode": "sentence_builder",
+      "category": "Past Negative • Simple Past",
+      "level": "Beginner",
+      "en": "He did not understand the question at first.",
+      "target": "He did not understand the question at first.",
+      "words": ["He did not", "understand", "the question", "at first."],
+      "id_translation": "Dia tidak mengerti pertanyaan tersebut pada awalnya.",
+      "notes": "Setelah kata bantu 'did not', kata kerja kembali ke bentuk dasar (understand)."
+    }
   ]
 };
 
@@ -2061,7 +2304,7 @@
       this.isRecording = false;
 
       this.selectedVoiceName = safeStorage.getItem('cfg_voice_name') || 'auto';
-      this.speechRate = parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.88');
+      this.speechRate = parseFloat(normalizeRate(safeStorage.getItem('cfg_voice_rate') || '0.8'));
       this.cachedVoices = [];
 
       if ('speechSynthesis' in window) {
@@ -2152,14 +2395,23 @@
       }
     }
 
-    speak(text, lang = 'en-US') {
+    speak(text, lang = 'en-US', customRate = null) {
       if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang;
-      utterance.rate = this.speechRate || 0.88;
-      utterance.pitch = 1.0;
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+
+      const cleanedText = cleanText(text);
+      if (!cleanedText) return;
+
+      const utterance = new SpeechSynthesisUtterance(cleanedText);
+      utterance.lang = lang || 'en-US';
+      
+      const rawRate = customRate !== null && customRate !== undefined 
+        ? customRate 
+        : (this.speechRate || safeStorage.getItem('cfg_voice_rate') || 0.8);
+      const activeRate = Math.max(0.4, Math.min(2.0, parseFloat(rawRate) || 0.8));
 
       const voices = (this.cachedVoices && this.cachedVoices.length > 0) ? this.cachedVoices : window.speechSynthesis.getVoices();
       let chosenVoice = null;
@@ -2168,13 +2420,13 @@
       const pref = this.selectedVoiceName || 'auto';
       if (pref !== 'auto' && voices.length > 0) {
         if (pref === 'female_us') {
-          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female') || v.name.includes('Natural') || v.name.includes('Google US')));
+          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female')));
         } else if (pref === 'male_us') {
-          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Male') || v.name.includes('Guy')));
+          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Male')));
         } else if (pref === 'female_uk') {
-          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('Susan') || v.name.includes('Victoria') || v.name.includes('Female') || v.name.includes('Google UK English Female')));
+          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('Susan') || v.name.includes('Victoria') || v.name.includes('Female')));
         } else if (pref === 'male_uk') {
-          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Male') || v.name.includes('Google UK English Male')));
+          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Male')));
         } else if (pref === 'female_au') {
           chosenVoice = voices.find(v => (v.lang.includes('AU') || v.lang.includes('en-AU')));
         } else if (pref === 'male_in') {
@@ -2184,12 +2436,17 @@
         }
       }
 
-      // 2. Fallback matching accent if no persona matched
+      // 2. Fallback matching accent
+      // Prioritize localService voices (like Microsoft David / Microsoft Zira on Windows)
+      // because local voices faithfully respect and smoothly scale utterance.rate (0.5x - 1.0x)!
       if (!chosenVoice && voices.length > 0) {
-        const langCode = lang.toLowerCase();
-        chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
+        const langCode = (lang || 'en-US').toLowerCase();
+        chosenVoice = voices.find(v => v.localService && v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
         if (!chosenVoice) {
-          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.substring(0, 2)) && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Online')));
+          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
+        }
+        if (!chosenVoice) {
+          chosenVoice = voices.find(v => v.localService && v.lang && v.lang.toLowerCase().startsWith(langCode.substring(0, 2)));
         }
         if (!chosenVoice) {
           chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
@@ -2200,7 +2457,18 @@
         utterance.voice = chosenVoice;
       }
 
-      window.speechSynthesis.speak(utterance);
+      // CRITICAL: Set utterance.rate AFTER setting utterance.voice
+      utterance.rate = activeRate;
+      utterance.pitch = 1.0;
+
+      // Small 30ms timeout avoids Chromium async cancel() race condition
+      setTimeout(() => {
+        try {
+          window.speechSynthesis.speak(utterance);
+        } catch (err) {
+          console.warn('SpeechSynthesis error:', err);
+        }
+      }, 30);
     }
   }
 
@@ -2359,10 +2627,10 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           const res = await fetch(url + '?action=leaderboard');
           const json = await res.json();
           if (json.status === 'success' && Array.isArray(json.data)) {
-            return { source: 'Google Sheets (Live Database)', data: json.data };
+            return { source: 'Live Cloud Database', data: json.data };
           }
         } catch (e) {
-          console.warn('Could not fetch from Google Apps Script:', e);
+          console.warn('Could not fetch from Cloud Database:', e);
         }
       }
 
@@ -2388,10 +2656,10 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           const res = await fetch(url + '?action=memory');
           const json = await res.json();
           if (json.status === 'success' && Array.isArray(json.data)) {
-            return { source: 'Google Sheets (Live Memory Sheet)', data: json.data };
+            return { source: 'Live Cloud Database (Learning History)', data: json.data };
           }
         } catch (e) {
-          console.warn('Could not fetch memory from Google Apps Script:', e);
+          console.warn('Could not fetch memory from Cloud Database:', e);
         }
       }
 
@@ -2407,7 +2675,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           const json = await res.json();
           return json;
         } catch (e) {
-          console.warn('Google Sheets login fetch error:', e);
+          console.warn('Cloud Database login fetch error:', e);
         }
       }
 
@@ -2428,7 +2696,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       return {
         status: 'error',
-        message: 'Email atau password tidak ditemukan. Pastikan akun sudah didaftarkan di sheet Users Google Sheets oleh Jefri (Admin).'
+        message: 'Email atau password tidak ditemukan. Pastikan akun sudah didaftarkan oleh Jefri (Admin).'
       };
     }
 
@@ -2482,9 +2750,9 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(entry)
           });
-          return { success: true, message: '✓ Skor & Memory tersimpan permanen di Google Sheets / Excel!' };
+          return { success: true, message: '✓ Skor & Memory tersimpan permanen di Cloud Database!' };
         } catch (e) {
-          return { success: true, message: 'Tersimpan di database lokal (Sheets sync error)' };
+          return { success: true, message: 'Tersimpan di database lokal (Cloud sync offline)' };
         }
       }
 
@@ -2623,7 +2891,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.sound = new SoundManager();
       this.speech = new SpeechService();
 
-      // Game state
+      // Core Game State
       this.languageDirection = 'en-to-id'; // 'id-to-en' or 'en-to-id'
       this.currentMode = 'shadowing';
       this.questions = [];
@@ -2631,21 +2899,56 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.score = 0;
       this.streak = 0;
       this.maxStreak = 0;
+      this.combo = 0;
       this.history = [];
+
+      // Gamification State (Persisted)
+      this.hearts = Math.max(1, Math.min(5, parseInt(safeStorage.getItem('ae_hearts') ?? '5', 10) || 5));
+      this.streakDays = Math.max(1, parseInt(safeStorage.getItem('ae_streak_days') ?? '1', 10) || 1);
+      this.totalXP = Math.max(0, parseInt(safeStorage.getItem('ae_total_xp') ?? '0', 10) || 0);
+
+      // Statistics Tracker
+      let loadedStats = {};
+      try { loadedStats = JSON.parse(safeStorage.getItem('ae_stats') || '{}'); } catch(e) {}
+      this.stats = {
+        vocabLearned: loadedStats.vocabLearned || 0,
+        grammarMastered: loadedStats.grammarMastered || 0,
+        listeningScore: loadedStats.listeningScore || 0,
+        speakingScore: loadedStats.speakingScore || 0,
+        gamesPlayed: loadedStats.gamesPlayed || 0,
+        totalAnswered: loadedStats.totalAnswered || 0,
+        totalCorrect: loadedStats.totalCorrect || 0
+      };
+
+      // Unlocked Badges
+      let loadedBadges = [];
+      try { loadedBadges = JSON.parse(safeStorage.getItem('ae_badges') || '[]'); } catch(e) {}
+      this.badges = Array.isArray(loadedBadges) ? loadedBadges : [];
+
+      // Sentence Builder Word State
+      this.selectedWords = [];
+      this.wordBank = [];
+      this.builderTarget = '';
 
       // UI Elements Cache
       this.dom = {
         views: {
           landing: document.getElementById('landing-view'),
           game: document.getElementById('game-view'),
-          result: document.getElementById('result-view')
+          result: document.getElementById('result-view'),
+          progress: document.getElementById('progress-view'),
+          profile: document.getElementById('profile-view')
         },
         hud: {
           score: document.getElementById('hud-score'),
           streak: document.getElementById('hud-streak'),
           progress: document.getElementById('hud-progress'),
           modePill: document.getElementById('current-mode-pill'),
-          dirPill: document.getElementById('current-dir-pill')
+          dirPill: document.getElementById('current-dir-pill'),
+          hearts: document.getElementById('hud-hearts'),
+          combo: document.getElementById('hud-combo'),
+          heartsItem: document.getElementById('hud-hearts-item'),
+          comboItem: document.getElementById('hud-combo-item')
         },
         challenge: {
           instruction: document.getElementById('challenge-instruction'),
@@ -2656,8 +2959,21 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           targetPhonetic: document.getElementById('target-phonetic'),
           targetTranslation: document.getElementById('target-translation'),
           audioBtn: document.getElementById('btn-listen-audio'),
+          replayBtn: document.getElementById('btn-replay-audio'),
           accentSelect: document.getElementById('accent-select'),
-          optionsContainer: document.getElementById('options-container')
+          speedSelect: document.getElementById('arena-speed-select'),
+          optionsContainer: document.getElementById('options-container'),
+          vocabVisualBadge: document.getElementById('vocab-visual-badge'),
+          vocabEmojiIcon: document.getElementById('vocab-emoji-icon')
+        },
+        builder: {
+          container: document.getElementById('sentence-builder-container'),
+          answerZone: document.getElementById('builder-answer-zone'),
+          placeholder: document.getElementById('builder-placeholder'),
+          wordBank: document.getElementById('builder-word-bank'),
+          undoBtn: document.getElementById('btn-builder-undo'),
+          clearBtn: document.getElementById('btn-builder-clear'),
+          checkBtn: document.getElementById('btn-builder-check')
         },
         mic: {
           section: document.getElementById('mic-section'),
@@ -2675,7 +2991,15 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           compTarget: document.getElementById('comp-target'),
           compHeard: document.getElementById('comp-heard'),
           aiFeedback: document.getElementById('ai-feedback-text'),
-          nextBtn: document.getElementById('btn-next-question')
+          nextBtn: document.getElementById('btn-next-question'),
+          translationCard: document.getElementById('eval-translation-card'),
+          translationText: document.getElementById('eval-translation-text'),
+          exampleCard: document.getElementById('eval-example-card'),
+          exampleText: document.getElementById('eval-example-text'),
+          grammarCard: document.getElementById('eval-grammar-card'),
+          grammarText: document.getElementById('eval-grammar-text'),
+          phoneticBox: document.getElementById('phonetic-reveal-box'),
+          phoneticText: document.getElementById('eval-phonetic-text')
         },
         result: {
           modeName: document.getElementById('res-mode-name'),
@@ -2691,10 +3015,51 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
           homeBtn: document.getElementById('btn-back-home'),
           viewLeaderboardBtn: document.getElementById('btn-view-leaderboard-from-result')
         },
+        dashboard: {
+          playerName: document.getElementById('dash-player-name'),
+          tierBadge: document.getElementById('dash-tier-badge'),
+          levelBadge: document.getElementById('dash-level-badge'),
+          streakCount: document.getElementById('dash-streak-count'),
+          xpFraction: document.getElementById('dash-xp-fraction'),
+          xpProgressFill: document.getElementById('dash-xp-progress-fill'),
+          heartsCount: document.getElementById('dash-hearts-count'),
+          totalXp: document.getElementById('dash-total-xp'),
+          accuracyVal: document.getElementById('dash-accuracy-val'),
+          btnStart: document.getElementById('btn-dashboard-start')
+        },
+        progress: {
+          vocabCount: document.getElementById('stat-vocab-count'),
+          vocabFill: document.getElementById('stat-vocab-fill'),
+          grammarCount: document.getElementById('stat-grammar-count'),
+          grammarFill: document.getElementById('stat-grammar-fill'),
+          listeningScore: document.getElementById('stat-listening-score'),
+          listeningAcc: document.getElementById('stat-listening-acc'),
+          speakingScore: document.getElementById('stat-speaking-score'),
+          speakingAcc: document.getElementById('stat-speaking-acc'),
+          totalXp: document.getElementById('stat-total-xp'),
+          xpTier: document.getElementById('stat-xp-tier'),
+          gamesPlayed: document.getElementById('stat-games-played'),
+          totalSoal: document.getElementById('stat-total-soal'),
+          accuracyRate: document.getElementById('stat-accuracy-rate'),
+          accuracyFill: document.getElementById('stat-accuracy-fill'),
+          streakDays: document.getElementById('stat-streak-days')
+        },
+        profile: {
+          displayName: document.getElementById('profile-display-name'),
+          tierBadge: document.getElementById('profile-tier-badge'),
+          lvlBadge: document.getElementById('profile-lvl-badge'),
+          xpBadge: document.getElementById('profile-xp-badge'),
+          streakBadge: document.getElementById('profile-streak-badge'),
+          heartsIcons: document.getElementById('profile-hearts-icons'),
+          refillHeartsBtn: document.getElementById('btn-profile-refill-hearts'),
+          badgesCount: document.getElementById('badges-unlocked-count'),
+          badgesContainer: document.getElementById('badges-grid-container')
+        },
         modals: {
           auth: document.getElementById('modal-auth'),
           leaderboard: document.getElementById('modal-leaderboard'),
           settings: document.getElementById('modal-settings'),
+          hearts: document.getElementById('modal-hearts'),
           tabLeaderboardBtn: document.getElementById('tab-leaderboard-btn'),
           tabMemoryBtn: document.getElementById('tab-memory-btn'),
           containerLeaderboard: document.getElementById('container-leaderboard-table'),
@@ -2714,23 +3079,25 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       };
 
       this.pendingMode = null;
+      this.levelPreference = safeStorage.getItem('cfg_level_preference') || 'all';
+
       this.initAuth();
       this.initEvents();
       this.loadSettings();
       this.loadQuestionsFromGitHub();
 
-      // Show login modal at start if not logged in
-      if (!AuthManager.isLoggedIn()) {
-        setTimeout(() => {
-          this.openAuthModal('Selamat datang! Silakan masuk dengan akun Anda untuk mulai bermain.');
-        }, 300);
-      }
+      // Update Dashboard & Badges on launch
+      this.updateDashboard();
+      this.renderBadges();
     }
 
     initAuth() {
       AuthManager.init((user) => {
-        if (user && this.dom.result.playerNameInput) {
-          this.dom.result.playerNameInput.value = user.name;
+        if (user) {
+          if (this.dom.result.playerNameInput) {
+            this.dom.result.playerNameInput.value = user.name;
+          }
+          this.updateDashboard();
         }
       });
     }
@@ -2747,7 +3114,6 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
                 const targetMode = q.mode || 'shadowing';
                 if (!QUESTION_BANK[targetMode]) QUESTION_BANK[targetMode] = [];
                 
-                // Avoid duplicates
                 const exists = QUESTION_BANK[targetMode].some(item => item.id === q.id || item.en === q.en);
                 if (!exists) {
                   QUESTION_BANK[targetMode].push({
@@ -2755,37 +3121,53 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
                     mode: targetMode,
                     category: q.category,
                     level: q.level,
-                    en: q.en,
-                    target: q.target || q.en,
+                    en: cleanText(q.en),
+                    target: cleanText(q.target || q.en),
                     phonetic: q.phonetic,
-                    translation: q.id_translation || q.translation,
-                    id_translation: q.id_translation || q.translation,
-                    id_prompt: q.id_prompt,
-                    en_prompt: q.en_prompt,
-                    missingWord: q.missingWord,
-                    prompt_en: q.prompt_en,
-                    prompt_id: q.prompt_id,
-                    options: q.options || q.options_en || q.options_id,
-                    options_id: q.options_id,
-                    options_en: q.options_en,
+                    translation: cleanText(q.id_translation || q.translation),
+                    id_translation: cleanText(q.id_translation || q.translation),
+                    id_prompt: cleanText(q.id_prompt),
+                    en_prompt: cleanText(q.en_prompt),
+                    missingWord: cleanText(q.missingWord),
+                    prompt_en: cleanText(q.prompt_en),
+                    prompt_id: cleanText(q.prompt_id),
+                    options: (q.options || q.options_en || q.options_id || []).map(o => cleanText(o)),
+                    options_id: (q.options_id || []).map(o => cleanText(o)),
+                    options_en: (q.options_en || []).map(o => cleanText(o)),
                     correctIndex: q.correctIndex !== undefined ? q.correctIndex : 0,
-                    notes: q.notes
+                    notes: cleanText(q.notes)
                   });
                 }
               });
-              console.log('Successfully synced question dataset from:', url);
-              break; // loaded successfully
+              break;
             }
           }
-        } catch (err) {
-          // try next endpoint
-        }
+        } catch (err) {}
       }
+    }
+
+    getPlayerTier(xp) {
+      if (xp >= 3000) return { level: 5, tier: '🔴 Advanced', nextXP: 5000, baseXP: 3000 };
+      if (xp >= 1500) return { level: 4, tier: '🟠 Upper-Intermediate', nextXP: 3000, baseXP: 1500 };
+      if (xp >= 700) return { level: 3, tier: '🟡 Intermediate', nextXP: 1500, baseXP: 700 };
+      if (xp >= 300) return { level: 2, tier: '🔵 Elementary', nextXP: 700, baseXP: 300 };
+      return { level: 1, tier: '🟢 Beginner', nextXP: 300, baseXP: 0 };
+    }
+
+    getComboMultiplier() {
+      if (this.combo <= 0) return 1.0;
+      return Math.min(2.0, 1.0 + (this.combo - 1) * 0.2);
+    }
+
+    getComboMultiplierLabel() {
+      const m = this.getComboMultiplier();
+      return m > 1.0 ? `${m.toFixed(1)}x` : '1x';
     }
 
     switchView(viewName, pushHistory = true) {
       this.currentView = viewName;
       Object.entries(this.dom.views).forEach(([key, el]) => {
+        if (!el) return;
         if (key === viewName) {
           el.classList.add('active');
         } else {
@@ -2798,6 +3180,196 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         if (viewName !== 'landing') {
           window.history.pushState({ arenaView: viewName }, '');
         }
+      }
+
+      if (viewName === 'progress') this.updateProgressView();
+      if (viewName === 'profile') this.updateProfileView();
+      if (viewName === 'landing') this.updateDashboard();
+    }
+
+    switchTab(tabName) {
+      this.sound.playClick();
+      // Update desktop tab buttons
+      document.querySelectorAll('.desktop-nav-tabs .nav-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.nav === tabName);
+      });
+      // Update mobile bottom nav buttons
+      document.querySelectorAll('.bottom-nav-bar .bottom-nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.nav === tabName);
+      });
+
+      if (tabName === 'landing' || tabName === 'home') {
+        this.switchView('landing');
+      } else if (tabName === 'play') {
+        this.switchView('landing');
+        const modesSection = document.getElementById('game-modes-grid') || document.querySelector('.modes-grid');
+        if (modesSection) modesSection.scrollIntoView({ behavior: 'smooth' });
+      } else if (tabName === 'progress') {
+        this.switchView('progress');
+      } else if (tabName === 'profile') {
+        this.switchView('profile');
+      }
+    }
+
+    updateDashboard() {
+      const tier = this.getPlayerTier(this.totalXP);
+      const userName = AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Player 1';
+      if (this.dom.dashboard.playerName) this.dom.dashboard.playerName.textContent = userName;
+      if (this.dom.dashboard.tierBadge) this.dom.dashboard.tierBadge.textContent = tier.tier;
+      if (this.dom.dashboard.levelBadge) this.dom.dashboard.levelBadge.textContent = `Level ${tier.level}`;
+      if (this.dom.dashboard.streakCount) this.dom.dashboard.streakCount.textContent = this.streakDays;
+      if (this.dom.dashboard.heartsCount) this.dom.dashboard.heartsCount.textContent = `${this.hearts}/5`;
+      if (this.dom.dashboard.totalXp) this.dom.dashboard.totalXp.textContent = `${this.totalXP.toLocaleString()} XP`;
+
+      const currentInLevel = Math.max(0, this.totalXP - tier.baseXP);
+      const neededInLevel = Math.max(1, tier.nextXP - tier.baseXP);
+      const pct = Math.min(100, Math.round((currentInLevel / neededInLevel) * 100));
+      if (this.dom.dashboard.xpFraction) {
+        this.dom.dashboard.xpFraction.textContent = `${this.totalXP.toLocaleString()} / ${tier.nextXP.toLocaleString()} XP`;
+      }
+      if (this.dom.dashboard.xpProgressFill) {
+        this.dom.dashboard.xpProgressFill.style.width = `${pct}%`;
+      }
+
+      const totalAns = this.stats.totalAnswered || 0;
+      const totalCor = this.stats.totalCorrect || 0;
+      const acc = totalAns > 0 ? Math.round((totalCor / totalAns) * 100) : 100;
+      if (this.dom.dashboard.accuracyVal) {
+        this.dom.dashboard.accuracyVal.textContent = `${acc}%`;
+      }
+
+      this.updateNavChips();
+    }
+
+    updateNavChips() {
+      const navHearts = document.getElementById('nav-hearts-text');
+      const navStreak = document.getElementById('nav-streak-text');
+      const navXp = document.getElementById('nav-xp-text');
+      const mobHearts = document.getElementById('mobile-hearts-text');
+      const mobPts = document.getElementById('mobile-user-pts');
+
+      if (navHearts) navHearts.textContent = `${this.hearts}/5`;
+      if (navStreak) navStreak.textContent = `${this.streakDays} Hari`;
+      if (navXp) navXp.textContent = `${this.totalXP.toLocaleString()} XP`;
+      if (mobHearts) mobHearts.textContent = this.hearts;
+      if (mobPts) mobPts.textContent = `${this.totalXP.toLocaleString()} XP`;
+    }
+
+    deductHeart() {
+      this.hearts = Math.max(0, this.hearts - 1);
+      safeStorage.setItem('ae_hearts', this.hearts);
+      this.updateNavChips();
+      this.updateDashboard();
+
+      if (this.dom.hud.hearts) {
+        this.dom.hud.hearts.textContent = `${this.hearts}/5`;
+      }
+      if (this.dom.hud.heartsItem) {
+        this.dom.hud.heartsItem.classList.add('shake');
+        setTimeout(() => this.dom.hud.heartsItem.classList.remove('shake'), 500);
+      }
+      if (this.hearts <= 0) {
+        setTimeout(() => this.openHeartsModal(), 900);
+      }
+    }
+
+    refillHearts() {
+      this.hearts = 5;
+      safeStorage.setItem('ae_hearts', '5');
+      this.updateNavChips();
+      this.updateDashboard();
+
+      if (this.dom.hud.hearts) {
+        this.dom.hud.hearts.textContent = '5/5';
+      }
+      if (this.dom.profile.heartsIcons) {
+        this.dom.profile.heartsIcons.textContent = '❤️❤️❤️❤️❤️';
+      }
+      this.closeHeartsModal();
+      this.showToast('💖 5 Hati (Lives) berhasil dipulihkan penuh!', 'success');
+      this.sound.playSuccess();
+    }
+
+    openHeartsModal() {
+      if (this.dom.modals.hearts) {
+        this.dom.modals.hearts.classList.remove('hidden');
+      }
+    }
+
+    closeHeartsModal() {
+      if (this.dom.modals.hearts) {
+        this.dom.modals.hearts.classList.add('hidden');
+      }
+    }
+
+    showFloatingXP(xp, eventOrElement = null) {
+      const container = document.getElementById('floating-xp-container');
+      if (!container) return;
+
+      const el = document.createElement('div');
+      el.className = 'floating-xp-item';
+      el.innerHTML = `+${xp} XP <span style="color:#fbbf24">⚡</span>`;
+
+      let x = window.innerWidth / 2;
+      let y = window.innerHeight / 2 - 40;
+
+      if (eventOrElement && eventOrElement.getBoundingClientRect) {
+        const rect = eventOrElement.getBoundingClientRect();
+        x = rect.left + rect.width / 2;
+        y = rect.top;
+      } else if (eventOrElement && eventOrElement.clientX) {
+        x = eventOrElement.clientX;
+        y = eventOrElement.clientY;
+      }
+
+      el.style.left = `${Math.max(40, Math.min(window.innerWidth - 80, x))}px`;
+      el.style.top = `${Math.max(80, y)}px`;
+
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 1200);
+    }
+
+    getBadgeCatalog() {
+      return [
+        { id: 'first-step', icon: '🌱', name: 'Langkah Pertama', desc: 'Menjawab soal latihan pertama Anda' },
+        { id: 'vocab-master', icon: '🧠', name: 'Kamus Berjalan', desc: 'Mempelajari minimal 5 kosakata baru' },
+        { id: 'grammar-guru', icon: '✍️', name: 'Pakar Tata Bahasa', desc: 'Menguasai minimal 5 latihan grammar' },
+        { id: 'listening-pro', icon: '🎧', name: 'Telinga Emas', desc: 'Mengumpulkan 200+ poin di Listening Arena' },
+        { id: 'speaking-star', icon: '🎙️', name: 'Bintang Percakapan', desc: 'Mencapai akurasi pengucapan >= 80%' },
+        { id: 'streak-3', icon: '🔥', name: 'Semangat Membara', desc: 'Mencapai 3 streak jawaban benar beruntun' },
+        { id: 'streak-7', icon: '⚡', name: 'Pantang Menyerah', desc: 'Mencapai 7 streak jawaban benar beruntun' },
+        { id: 'combo-king', icon: '👑', name: 'Raja Combo', desc: 'Mencapai multiplier combo 2.0x' }
+      ];
+    }
+
+    checkBadges(accuracy = 0) {
+      const catalog = this.getBadgeCatalog();
+      let newBadge = false;
+
+      const award = (id) => {
+        if (!this.badges.includes(id)) {
+          this.badges.push(id);
+          safeStorage.setItem('ae_badges', JSON.stringify(this.badges));
+          const item = catalog.find(b => b.id === id);
+          if (item) {
+            this.showToast(`🏆 Lencana Baru Terbuka: ${item.name}!`, 'success');
+            this.sound.playStreak();
+          }
+          newBadge = true;
+        }
+      };
+
+      if (this.stats.totalAnswered >= 1) award('first-step');
+      if (this.stats.vocabLearned >= 5) award('vocab-master');
+      if (this.stats.grammarMastered >= 5) award('grammar-guru');
+      if (this.stats.listeningScore >= 200) award('listening-pro');
+      if (this.currentMode === 'shadowing' && accuracy >= 80) award('speaking-star');
+      if (this.streak >= 3) award('streak-3');
+      if (this.streak >= 7) award('streak-7');
+      if (this.combo >= 6) award('combo-king');
+
+      if (newBadge) {
+        this.renderBadges();
       }
     }
 
@@ -2820,11 +3392,44 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     initEvents() {
-      // Navigation & Modal triggers
-      document.getElementById('nav-logo-btn').addEventListener('click', () => this.switchView('landing'));
-      document.getElementById('btn-leaderboard-nav').addEventListener('click', () => this.openLeaderboard());
-      document.getElementById('btn-close-leaderboard').addEventListener('click', () => this.closeModals());
-      document.getElementById('btn-refresh-leaderboard').addEventListener('click', () => this.refreshCurrentModalData());
+      // Main Desktop Tabs & Logo
+      document.getElementById('nav-logo-btn')?.addEventListener('click', () => this.switchTab('landing'));
+      document.getElementById('tab-nav-home')?.addEventListener('click', () => this.switchTab('landing'));
+      document.getElementById('tab-nav-play')?.addEventListener('click', () => this.switchTab('play'));
+      document.getElementById('tab-nav-progress')?.addEventListener('click', () => this.switchTab('progress'));
+      document.getElementById('tab-nav-profile')?.addEventListener('click', () => this.switchTab('profile'));
+
+      // Mobile Bottom Nav Bar
+      document.getElementById('bnav-home')?.addEventListener('click', () => this.switchTab('landing'));
+      document.getElementById('bnav-play')?.addEventListener('click', () => this.switchTab('play'));
+      document.getElementById('bnav-progress')?.addEventListener('click', () => this.switchTab('progress'));
+      document.getElementById('bnav-profile')?.addEventListener('click', () => this.switchTab('profile'));
+
+      // Primary Hero / Dashboard Start CTA
+      document.getElementById('btn-dashboard-start')?.addEventListener('click', () => {
+        this.sound.playClick();
+        this.startArena('vocabulary');
+      });
+
+      // Quick play from stats
+      document.getElementById('btn-play-from-stats')?.addEventListener('click', () => {
+        this.sound.playClick();
+        this.switchTab('play');
+      });
+
+      // Modals triggers
+      document.getElementById('btn-leaderboard-nav')?.addEventListener('click', () => this.openLeaderboard());
+      document.getElementById('btn-close-leaderboard')?.addEventListener('click', () => this.closeModals());
+      document.getElementById('btn-refresh-leaderboard')?.addEventListener('click', () => this.refreshCurrentModalData());
+
+      // Hearts Refill actions
+      document.getElementById('btn-refill-hearts')?.addEventListener('click', () => this.refillHearts());
+      document.getElementById('btn-profile-refill-hearts')?.addEventListener('click', () => this.refillHearts());
+      document.getElementById('btn-close-hearts')?.addEventListener('click', () => this.closeHeartsModal());
+      document.getElementById('btn-hearts-home')?.addEventListener('click', () => {
+        this.closeHeartsModal();
+        this.switchTab('landing');
+      });
 
       // Mobile Drawer triggers
       const hamburgerBtn = document.getElementById('btn-hamburger');
@@ -2835,38 +3440,35 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => this.closeDrawer());
       if (drawerOverlay) drawerOverlay.addEventListener('click', () => this.closeDrawer());
 
-      const drawerLeaderboard = document.getElementById('btn-drawer-leaderboard');
-      if (drawerLeaderboard) {
-        drawerLeaderboard.addEventListener('click', () => {
-          this.closeDrawer();
-          this.openLeaderboard();
-        });
-      }
+      document.getElementById('btn-drawer-home')?.addEventListener('click', () => { this.closeDrawer(); this.switchTab('landing'); });
+      document.getElementById('btn-drawer-play')?.addEventListener('click', () => { this.closeDrawer(); this.switchTab('play'); });
+      document.getElementById('btn-drawer-progress')?.addEventListener('click', () => { this.closeDrawer(); this.switchTab('progress'); });
+      document.getElementById('btn-drawer-profile')?.addEventListener('click', () => { this.closeDrawer(); this.switchTab('profile'); });
 
-      const drawerSettings = document.getElementById('btn-drawer-settings');
-      if (drawerSettings) {
-        drawerSettings.addEventListener('click', () => {
-          this.closeDrawer();
-          this.openSettings();
-        });
-      }
+      document.getElementById('btn-drawer-leaderboard')?.addEventListener('click', () => {
+        this.closeDrawer();
+        this.openLeaderboard();
+      });
 
-      const drawerLogin = document.getElementById('btn-drawer-login');
-      if (drawerLogin) {
-        drawerLogin.addEventListener('click', () => {
-          this.closeDrawer();
-          this.openAuthModal();
-        });
-      }
+      document.getElementById('btn-drawer-settings')?.addEventListener('click', () => {
+        this.closeDrawer();
+        this.openSettings();
+      });
 
-      const drawerLogout = document.getElementById('btn-drawer-logout');
-      if (drawerLogout) {
-        drawerLogout.addEventListener('click', () => {
-          this.closeDrawer();
-          AuthManager.logout();
-          this.showToast('Anda telah keluar dari akun.', 'info');
-        });
-      }
+      document.getElementById('btn-drawer-login')?.addEventListener('click', () => {
+        this.closeDrawer();
+        this.openAuthModal();
+      });
+
+      document.getElementById('btn-drawer-logout')?.addEventListener('click', () => {
+        this.closeDrawer();
+        AuthManager.logout();
+        this.showToast('Anda telah keluar dari akun.', 'info');
+      });
+
+      // Profile View Action Links
+      document.getElementById('btn-profile-to-leaderboard')?.addEventListener('click', () => this.openLeaderboard());
+      document.getElementById('btn-profile-to-settings')?.addEventListener('click', () => this.openSettings());
 
       // Tab switcher in Modal
       if (this.dom.modals.tabLeaderboardBtn) {
@@ -2877,10 +3479,10 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
 
       // Settings
-      document.getElementById('btn-settings-nav').addEventListener('click', () => this.openSettings());
-      document.getElementById('btn-close-settings').addEventListener('click', () => this.closeModals());
-      document.getElementById('settings-form').addEventListener('submit', (e) => this.saveSettings(e));
-      document.getElementById('btn-reset-settings').addEventListener('click', () => this.resetSettings());
+      document.getElementById('btn-settings-nav')?.addEventListener('click', () => this.openSettings());
+      document.getElementById('btn-close-settings')?.addEventListener('click', () => this.closeModals());
+      document.getElementById('settings-form')?.addEventListener('submit', (e) => this.saveSettings(e));
+      document.getElementById('btn-reset-settings')?.addEventListener('click', () => this.resetSettings());
 
       // Language Direction Switcher (Landing)
       const btnIdEn = document.getElementById('btn-dir-id-en');
@@ -2897,16 +3499,35 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         });
       });
 
-      // Quit Game - langsung kembali tanpa popup
-      document.getElementById('btn-quit-game').addEventListener('click', () => {
+      // Level Filter Pills on Landing View
+      document.querySelectorAll('.btn-level-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+          this.sound.playClick();
+          const lvl = e.currentTarget.dataset.level || 'all';
+          this.setLevelPreference(lvl);
+          const lvlLabels = {
+            all: 'Semua Level (Beginner - Advanced)',
+            Beginner: 'Beginner (Pemula)',
+            Elementary: 'Elementary (Dasar)',
+            Intermediate: 'Intermediate (Menengah)',
+            'Upper-Intermediate': 'Upper-Intermediate (Menengah Atas)',
+            Advanced: 'Advanced (Tingkat Mahir)'
+          };
+          this.showToast(`Filter tingkat kesulitan: ${lvlLabels[lvl] || lvl}`, 'info');
+        });
+      });
+
+      // Quit Game
+      document.getElementById('btn-quit-game')?.addEventListener('click', () => {
         this.speech.stopListening();
-        this.switchView('landing', false);
-        if (window.history.state && window.history.state.arenaView) {
+        if (window.history.state && window.history.state.arenaView === 'game') {
           window.history.back();
+        } else {
+          this.switchTab('landing');
         }
       });
 
-      // Handle mobile hardware back button
+      // Mobile hardware back button
       window.addEventListener('popstate', (e) => {
         const activeModal = document.querySelector('.modal-overlay:not(.hidden)');
         if (activeModal) {
@@ -2920,23 +3541,53 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         }
         if (this.currentView === 'game' || this.currentView === 'result') {
           this.speech.stopListening();
-          this.switchView('landing', false);
+          this.switchTab('landing');
         }
       });
 
-      // Audio TTS Trigger
-      this.dom.challenge.audioBtn.addEventListener('click', () => {
+      // In-game Speed Select
+      if (this.dom.challenge.speedSelect) {
+        this.dom.challenge.speedSelect.addEventListener('change', (e) => {
+          const norm = normalizeRate(e.target.value);
+          const numVal = parseFloat(norm);
+          this.speech.speechRate = numVal;
+          safeStorage.setItem('cfg_voice_rate', norm);
+          const cfgRate = document.getElementById('cfg-voice-rate');
+          if (cfgRate) cfgRate.value = norm;
+          this.showToast(`Kecepatan baca audio diatur: ${numVal}x`, 'info');
+
+          const q = this.questions[this.currentIndex];
+          if (q) {
+            const accent = this.dom.challenge.accentSelect ? this.dom.challenge.accentSelect.value : 'en-US';
+            const textToSpeak = cleanText(q.en || q.target);
+            this.speech.speak(textToSpeak, accent, numVal);
+          }
+        });
+      }
+
+      // Audio TTS Triggers (Listen & Replay)
+      const playCurrentAudio = () => {
         const q = this.questions[this.currentIndex];
-        const accent = this.dom.challenge.accentSelect.value;
-        const textToSpeak = q.en || q.target;
-        this.speech.speak(textToSpeak, accent);
-      });
+        if (!q) return;
+        const accent = this.dom.challenge.accentSelect ? this.dom.challenge.accentSelect.value : 'en-US';
+        const textToSpeak = cleanText(q.en || q.target);
+        const currentSpeed = this.dom.challenge.speedSelect ? parseFloat(this.dom.challenge.speedSelect.value) : this.speech.speechRate;
+        this.speech.speak(textToSpeak, accent, currentSpeed);
+      };
+
+      this.dom.challenge.audioBtn?.addEventListener('click', playCurrentAudio);
+      this.dom.challenge.replayBtn?.addEventListener('click', playCurrentAudio);
+
+      // Sentence Builder Controls
+      this.dom.builder.undoBtn?.addEventListener('click', () => this.undoBuilderWord());
+      this.dom.builder.clearBtn?.addEventListener('click', () => this.clearBuilderWords());
+      this.dom.builder.checkBtn?.addEventListener('click', () => this.checkBuilderSentence());
 
       // Microphone Toggle
-      this.dom.mic.toggleBtn.addEventListener('click', () => this.toggleMicrophone());
+      this.dom.mic.toggleBtn?.addEventListener('click', () => this.toggleMicrophone());
 
       // Manual Submit
-      this.dom.mic.manualSubmit.addEventListener('click', () => {
+      this.dom.mic.manualSubmit?.addEventListener('click', () => {
         const val = this.dom.mic.manualInput.value.trim();
         if (val) {
           this.dom.mic.transcript.textContent = `"${val}"`;
@@ -2944,42 +3595,31 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         }
       });
 
-      this.dom.mic.manualInput.addEventListener('keydown', (e) => {
+      this.dom.mic.manualInput?.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           this.dom.mic.manualSubmit.click();
         }
       });
 
       // Next Question
-      this.dom.evaluation.nextBtn.addEventListener('click', () => {
+      this.dom.evaluation.nextBtn?.addEventListener('click', () => {
         this.sound.playClick();
         this.nextQuestion();
       });
 
       // Result Actions
-      this.dom.result.playAgainBtn.addEventListener('click', () => this.startArena(this.currentMode));
-      this.dom.result.homeBtn.addEventListener('click', () => this.switchView('landing'));
-      this.dom.result.viewLeaderboardBtn.addEventListener('click', () => this.openLeaderboard());
-      this.dom.result.submitBtn.addEventListener('click', () => this.submitScoreToLeaderboard());
+      this.dom.result.playAgainBtn?.addEventListener('click', () => this.startArena(this.currentMode));
+      this.dom.result.homeBtn?.addEventListener('click', () => this.switchTab('landing'));
+      this.dom.result.viewLeaderboardBtn?.addEventListener('click', () => this.openLeaderboard());
+      this.dom.result.submitBtn?.addEventListener('click', () => this.submitScoreToLeaderboard());
 
       // Authentication Triggers
-      const btnLoginNav = document.getElementById('btn-login-nav');
-      if (btnLoginNav) {
-        btnLoginNav.addEventListener('click', () => this.openAuthModal());
-      }
-
-      const btnLogoutNav = document.getElementById('btn-nav-logout');
-      if (btnLogoutNav) {
-        btnLogoutNav.addEventListener('click', () => {
-          AuthManager.logout();
-          this.showToast('Anda telah keluar dari sesi.', 'info');
-        });
-      }
-
-      const btnCloseAuth = document.getElementById('btn-close-auth');
-      if (btnCloseAuth) {
-        btnCloseAuth.addEventListener('click', () => this.closeModals());
-      }
+      document.getElementById('btn-login-nav')?.addEventListener('click', () => this.openAuthModal());
+      document.getElementById('btn-nav-logout')?.addEventListener('click', () => {
+        AuthManager.logout();
+        this.showToast('Anda telah keluar dari sesi.', 'info');
+      });
+      document.getElementById('btn-close-auth')?.addEventListener('click', () => this.closeModals());
 
       // Demo login shortcuts
       document.getElementById('btn-demo-admin')?.addEventListener('click', () => {
@@ -2989,7 +3629,6 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         this.fillAuthForm('siswa1@english.com', 'siswa123');
       });
 
-      // Login form submission
       this.dom.auth.form?.addEventListener('submit', (e) => this.handleLoginSubmit(e));
     }
 
@@ -3030,6 +3669,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       if (res.success) {
         this.closeModals();
+        this.updateDashboard();
         this.showToast(`Selamat datang, ${res.user.name}! Skor Anda siap diakumulasikan.`, 'success');
         if (this.pendingMode) {
           const modeToPlay = this.pendingMode;
@@ -3045,18 +3685,31 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     startArena(mode) {
-      if (!AuthManager.isLoggedIn()) {
-        this.pendingMode = mode;
-        this.openAuthModal('Silakan masuk dengan email & password terdaftar untuk memainkan arena ini.');
+      // Lives Check
+      if (this.hearts <= 0) {
+        this.openHeartsModal();
+        this.showToast('Hati Anda habis! Silakan pulihkan hati untuk mulai bermain.', 'info');
         return;
       }
+
       this.currentMode = mode;
       const bank = QUESTION_BANK[mode] || QUESTION_BANK.shadowing;
-      this.questions = [...bank].sort(() => Math.random() - 0.5);
+
+      // Filter questions by user level preference
+      let filteredBank = bank;
+      if (mode !== 'ielts' && mode !== 'toefl' && this.levelPreference && this.levelPreference !== 'all') {
+        const matched = bank.filter(q => (q.level || '').toLowerCase() === this.levelPreference.toLowerCase());
+        if (matched.length > 0) {
+          filteredBank = matched;
+        }
+      }
+
+      this.questions = [...filteredBank].sort(() => Math.random() - 0.5);
       this.currentIndex = 0;
       this.score = 0;
       this.streak = 0;
       this.maxStreak = 0;
+      this.combo = 0;
       this.history = [];
 
       const modeTitles = {
@@ -3064,10 +3717,13 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         listening: 'Listening Dictation Arena',
         vocabulary: 'Vocabulary Collocation Arena',
         grammar: 'Murphy Grammar Quest',
+        sentence_builder: 'Sentence Builder Quest',
         ielts: 'IELTS Academic Simulation (Band 0-9)',
         toefl: 'TOEFL iBT Simulation (Scale 0-30)'
       };
-      this.dom.hud.modePill.textContent = modeTitles[mode] || 'Arena';
+      if (this.dom.hud.modePill) {
+        this.dom.hud.modePill.textContent = modeTitles[mode] || 'Arena';
+      }
       if (this.dom.hud.dirPill) {
         this.dom.hud.dirPill.textContent = this.languageDirection === 'id-to-en' ? '🇮🇩 ➔ 🇬🇧' : '🇬🇧 ➔ 🇮🇩';
       }
@@ -3084,104 +3740,258 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
 
       // Update HUD
-      this.dom.hud.score.textContent = this.score;
-      this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
-      this.dom.hud.progress.textContent = `${this.currentIndex + 1}/${this.questions.length}`;
+      if (this.dom.hud.score) this.dom.hud.score.textContent = this.score;
+      if (this.dom.hud.streak) this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
+      if (this.dom.hud.progress) this.dom.hud.progress.textContent = `${this.currentIndex + 1}/${this.questions.length}`;
+      if (this.dom.hud.hearts) this.dom.hud.hearts.textContent = `${this.hearts}/5`;
+      if (this.dom.hud.combo) this.dom.hud.combo.textContent = this.getComboMultiplierLabel();
 
       // Update Meta
-      this.dom.challenge.category.textContent = q.category;
-      this.dom.challenge.difficulty.textContent = `Level: ${q.level}`;
+      if (this.dom.challenge.category) this.dom.challenge.category.textContent = q.category || 'General Practice';
+      if (this.dom.challenge.difficulty) this.dom.challenge.difficulty.textContent = `Level: ${q.level || 'Beginner'}`;
 
-      // Reset Inputs & Evaluation panel
+      // Reset Inputs & Evaluation Panel
       this.dom.evaluation.panel.classList.add('hidden');
+      if (this.dom.evaluation.translationCard) this.dom.evaluation.translationCard.classList.add('hidden');
+      if (this.dom.evaluation.exampleCard) this.dom.evaluation.exampleCard.classList.add('hidden');
+      if (this.dom.evaluation.grammarCard) this.dom.evaluation.grammarCard.classList.add('hidden');
+      if (this.dom.evaluation.phoneticBox) this.dom.evaluation.phoneticBox.classList.add('hidden');
+
       this.dom.mic.transcript.textContent = 'Menunggu input suara dari mikrofon...';
       this.dom.mic.manualInput.value = '';
       this.dom.mic.toggleBtn.classList.remove('recording');
       this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
 
-      // Sembunyikan cara baca saat menjawab (baru dimunculkan setelah menjawab)
+      // CRITICAL: Hide Indonesian translations and phonetic before user answers!
       this.dom.challenge.targetPhonetic.classList.add('hidden');
       this.dom.challenge.targetPhonetic.textContent = '';
-      const phoneticBox = document.getElementById('phonetic-reveal-box');
-      if (phoneticBox) phoneticBox.classList.add('hidden');
+      this.dom.challenge.targetTranslation.classList.add('hidden');
+      this.dom.challenge.targetTranslation.textContent = '';
+
+      // Reset specific containers
+      if (this.dom.challenge.vocabVisualBadge) this.dom.challenge.vocabVisualBadge.classList.add('hidden');
+      if (this.dom.builder.container) this.dom.builder.container.classList.add('hidden');
+      if (this.dom.challenge.optionsContainer) this.dom.challenge.optionsContainer.classList.add('hidden');
 
       const isIdToEn = (this.languageDirection === 'id-to-en');
 
-      if (this.currentMode === 'listening') {
-        if (isIdToEn) {
-          this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris, lalu ucapkan kembali dalam Bahasa Inggris:';
-          this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
-          this.dom.challenge.targetTranslation.textContent = `Arti: "${q.translation || q.id_translation}"`;
-        } else {
-          this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris, lalu ucapkan artinya dalam Bahasa Indonesia:';
-          this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
-          this.dom.challenge.targetTranslation.textContent = 'Klik tombol "Listen Native Audio" di atas';
+      if (this.currentMode === 'sentence_builder') {
+        // Sentence Builder
+        this.dom.challenge.instruction.textContent = '🧩 Susun kata-kata acak berikut menjadi kalimat Bahasa Inggris yang utuh & benar:';
+        this.dom.challenge.targetPhrase.textContent = `"${cleanText(q.id_translation || q.translation)}"`;
+        this.dom.mic.section.classList.add('hidden');
+        this.renderSentenceBuilder(q);
+
+      } else if (this.currentMode === 'vocabulary') {
+        // Game Vocabulary
+        this.dom.challenge.instruction.textContent = isIdToEn
+          ? 'Pilih padanan Bahasa Inggris yang paling tepat untuk kata berikut:'
+          : 'Pilih arti kosakata Bahasa Indonesia yang paling tepat untuk kata berikut:';
+
+        const promptText = cleanText(q.missingWord || q.en || q.target);
+        this.dom.challenge.targetPhrase.textContent = `"${promptText}"`;
+
+        // Vocab icon badge
+        if (this.dom.challenge.vocabVisualBadge) {
+          const emojis = ['📚', '💡', '🚀', '🌟', '🎯', '🍎', '🏆', '💎'];
+          const randEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+          if (this.dom.challenge.vocabEmojiIcon) this.dom.challenge.vocabEmojiIcon.textContent = randEmoji;
+          this.dom.challenge.vocabVisualBadge.classList.remove('hidden');
         }
-        this.dom.challenge.optionsContainer.classList.add('hidden');
+
+        this.renderMultipleChoiceOptions(q, isIdToEn);
         this.dom.mic.section.classList.remove('hidden');
 
-        setTimeout(() => {
-          this.speech.speak(q.en || q.target, this.dom.challenge.accentSelect.value);
-        }, 500);
+      } else if (this.currentMode === 'grammar') {
+        // Game Grammar
+        this.dom.challenge.instruction.textContent = '✍️ Pilih kata yang paling tepat untuk melengkapi kalimat berikut:';
+        const grammarPrompt = cleanText(q.prompt_en || q.prompt_id || q.en || q.target);
+        this.dom.challenge.targetPhrase.textContent = `"${grammarPrompt}"`;
 
-      } else if (this.currentMode === 'vocabulary' || this.currentMode === 'grammar' || this.currentMode === 'ielts' || this.currentMode === 'toefl') {
-        const promptText = isIdToEn ? (q.prompt_id || q.translation) : (q.prompt_en || q.en || q.target);
+        this.renderMultipleChoiceOptions(q, isIdToEn);
+        this.dom.mic.section.classList.remove('hidden');
+
+      } else if (this.currentMode === 'listening') {
+        // Game Listening
+        this.dom.challenge.instruction.textContent = '🎧 Dengarkan audio Bahasa Inggris berikut dengan cermat, lalu pilih kalimat yang tepat:';
+        this.dom.challenge.targetPhrase.textContent = '•••••••••••••••••••••••••••••';
+
+        this.renderMultipleChoiceOptions(q, isIdToEn);
+        this.dom.mic.section.classList.remove('hidden');
+
+        // Auto-play audio after 400ms
+        setTimeout(() => {
+          const currentSpeed = this.dom.challenge.speedSelect ? parseFloat(this.dom.challenge.speedSelect.value) : this.speech.speechRate;
+          this.speech.speak(cleanText(q.en || q.target), this.dom.challenge.accentSelect.value, currentSpeed);
+        }, 400);
+
+      } else if (this.currentMode === 'ielts' || this.currentMode === 'toefl') {
+        // Academic Modes
         if (this.currentMode === 'ielts') {
           this.dom.challenge.instruction.textContent = `🎯 IELTS Academic Test (${q.level || 'Band 7.5 - 9.0'}): Selesaikan soal leksikal atau jawab via Mic:`;
-        } else if (this.currentMode === 'toefl') {
+        } else {
           this.dom.challenge.instruction.textContent = `🏛️ TOEFL iBT Test Simulation (${q.level || 'Scale 0-30'}): Lengkapi passage ilmiah atau jawab via Mic:`;
-        } else {
-          this.dom.challenge.instruction.textContent = isIdToEn 
-            ? '🇮🇩 Lengkapi kalimat berikut dengan berbicara dalam Bahasa Inggris:'
-            : '🇬🇧 Complete the sentence or speak your answer:';
         }
-
+        const promptText = cleanText(q.prompt_en || q.en || q.target);
         this.dom.challenge.targetPhrase.textContent = `"${promptText}"`;
-        this.dom.challenge.targetTranslation.textContent = isIdToEn ? `Jawaban English: ${q.en || q.target}` : `Arti: ${q.translation || q.id_translation}`;
-
-        if (q.options && q.options.length > 0) {
-          this.dom.challenge.optionsContainer.innerHTML = '';
-          this.dom.challenge.optionsContainer.classList.remove('hidden');
-
-          // Dynamically shuffle options for display so answers are never always A
-          const displayList = q.options.map((opt, origIdx) => ({
-            text: opt,
-            isCorrect: (origIdx === q.correctIndex)
-          }));
-          
-          for (let i = displayList.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [displayList[i], displayList[j]] = [displayList[j], displayList[i]];
-          }
-
-          displayList.forEach((item, displayIdx) => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-option';
-            btn.textContent = `${String.fromCharCode(65 + displayIdx)}. ${item.text}`;
-            btn.addEventListener('click', () => {
-              this.evaluateMultipleChoiceRandomized(displayIdx, btn, displayList);
-            });
-            this.dom.challenge.optionsContainer.appendChild(btn);
-          });
-        } else {
-          this.dom.challenge.optionsContainer.classList.add('hidden');
-        }
+        this.renderMultipleChoiceOptions(q, isIdToEn);
         this.dom.mic.section.classList.remove('hidden');
 
       } else {
-        // Shadowing Arena
+        // Speaking & Shadowing Practice
         if (isIdToEn) {
           this.dom.challenge.instruction.textContent = '🇮🇩 Lihat kalimat Bahasa Indonesia di bawah, lalu klik Mic dan ucapkan dalam Bahasa Inggris:';
-          this.dom.challenge.targetPhrase.textContent = `"${q.translation || q.id_translation}"`;
-          this.dom.challenge.targetTranslation.textContent = 'Klik "Listen Native Audio" jika ingin mendengar contoh pengucapan native speaker lebih dulu.';
+          this.dom.challenge.targetPhrase.textContent = `"${cleanText(q.translation || q.id_translation)}"`;
         } else {
-          this.dom.challenge.instruction.textContent = '🇬🇧 Dengarkan/baca kalimat Bahasa Inggris, lalu ucapkan artinya dalam Bahasa Indonesia ke Mic:';
-          this.dom.challenge.targetPhrase.textContent = `"${q.en || q.target}"`;
-          this.dom.challenge.targetTranslation.textContent = `Target Indonesia: "${q.translation || q.id_translation}"`;
+          this.dom.challenge.instruction.textContent = '🇬🇧 Dengarkan kalimat Bahasa Inggris, lalu ucapkan kembali dengan intonasi natural:';
+          this.dom.challenge.targetPhrase.textContent = `"${cleanText(q.en || q.target)}"`;
         }
-        this.dom.challenge.optionsContainer.classList.add('hidden');
         this.dom.mic.section.classList.remove('hidden');
       }
+    }
+
+    renderMultipleChoiceOptions(q, isIdToEn) {
+      let opts = [];
+      if (this.currentMode === 'vocabulary') {
+        opts = (q.options_id && q.options_id.length > 0) ? q.options_id : (q.options || []);
+      } else {
+        opts = (q.options_en && q.options_en.length > 0) ? q.options_en : (q.options || []);
+      }
+
+      if (opts && opts.length > 0) {
+        this.dom.challenge.optionsContainer.innerHTML = '';
+        this.dom.challenge.optionsContainer.classList.remove('hidden');
+
+        // Dynamically shuffle options
+        const displayList = opts.map((opt, origIdx) => ({
+          text: cleanText(opt),
+          isCorrect: (origIdx === (q.correctIndex !== undefined ? q.correctIndex : 0))
+        }));
+
+        for (let i = displayList.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [displayList[i], displayList[j]] = [displayList[j], displayList[i]];
+        }
+
+        displayList.forEach((item, displayIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'btn-option';
+          btn.textContent = `${String.fromCharCode(65 + displayIdx)}. ${item.text}`;
+          btn.addEventListener('click', (evt) => {
+            this.evaluateMultipleChoiceRandomized(displayIdx, btn, displayList, evt);
+          });
+          this.dom.challenge.optionsContainer.appendChild(btn);
+        });
+      }
+    }
+
+    renderSentenceBuilder(q) {
+      this.dom.builder.container.classList.remove('hidden');
+      const rawTarget = cleanText(q.en || q.target);
+      this.builderTarget = rawTarget;
+      this.selectedWords = [];
+
+      let words = [];
+      if (Array.isArray(q.words) && q.words.length > 0) {
+        words = q.words.map(w => cleanText(w));
+      } else {
+        words = rawTarget.split(/\s+/).filter(Boolean);
+      }
+
+      // Scramble words
+      const scrambled = [...words].sort(() => Math.random() - 0.5);
+      if (scrambled.join(' ') === words.join(' ') && scrambled.length > 1) {
+        scrambled.reverse();
+      }
+
+      this.wordBank = scrambled.map((text, idx) => ({ id: idx, text, used: false }));
+      this.renderBuilderUI();
+    }
+
+    renderBuilderUI() {
+      // Answer Zone
+      this.dom.builder.answerZone.innerHTML = '';
+      if (this.selectedWords.length === 0) {
+        this.dom.builder.placeholder.classList.remove('hidden');
+        this.dom.builder.answerZone.appendChild(this.dom.builder.placeholder);
+      } else {
+        this.dom.builder.placeholder.classList.add('hidden');
+        this.selectedWords.forEach((item, selIdx) => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'builder-word-chip in-answer';
+          chip.textContent = item.text;
+          chip.title = 'Klik untuk mengembalikan kata ke bank';
+          chip.addEventListener('click', () => {
+            this.sound.playClick();
+            this.selectedWords.splice(selIdx, 1);
+            const bankItem = this.wordBank.find(b => b.id === item.id);
+            if (bankItem) bankItem.used = false;
+            this.renderBuilderUI();
+          });
+          this.dom.builder.answerZone.appendChild(chip);
+        });
+      }
+
+      // Word Bank
+      this.dom.builder.wordBank.innerHTML = '';
+      this.wordBank.forEach(item => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `builder-word-chip ${item.used ? 'used' : ''}`;
+        chip.textContent = item.text;
+        chip.disabled = item.used;
+        chip.addEventListener('click', () => {
+          if (item.used) return;
+          this.sound.playClick();
+          item.used = true;
+          this.selectedWords.push({ id: item.id, text: item.text });
+          this.renderBuilderUI();
+        });
+        this.dom.builder.wordBank.appendChild(chip);
+      });
+    }
+
+    undoBuilderWord() {
+      if (this.selectedWords.length === 0) return;
+      this.sound.playClick();
+      const last = this.selectedWords.pop();
+      const bankItem = this.wordBank.find(b => b.id === last.id);
+      if (bankItem) bankItem.used = false;
+      this.renderBuilderUI();
+    }
+
+    clearBuilderWords() {
+      this.sound.playClick();
+      this.selectedWords = [];
+      this.wordBank.forEach(b => b.used = false);
+      this.renderBuilderUI();
+    }
+
+    checkBuilderSentence() {
+      if (this.selectedWords.length === 0) {
+        this.showToast('Ketuk kata-kata pada bank kata terlebih dahulu untuk menyusun kalimat!', 'info');
+        return;
+      }
+      const userSentence = this.selectedWords.map(w => w.text).join(' ');
+      const clean = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/gi, '').trim();
+      const isMatch = (clean(userSentence) === clean(this.builderTarget));
+      this.evaluateAnswer(userSentence, isMatch, this.dom.builder.checkBtn);
+    }
+
+    evaluateMultipleChoiceRandomized(selectedIdx, btnElement, displayList, evt = null) {
+      const allButtons = this.dom.challenge.optionsContainer.querySelectorAll('.btn-option');
+      allButtons.forEach((b, idx) => {
+        b.disabled = true;
+        if (displayList[idx] && displayList[idx].isCorrect) {
+          b.classList.add('correct');
+        } else if (idx === selectedIdx && !displayList[idx].isCorrect) {
+          b.classList.add('wrong');
+        }
+      });
+
+      const chosenItem = displayList[selectedIdx];
+      this.evaluateAnswer(chosenItem.text, chosenItem.isCorrect, btnElement);
     }
 
     toggleMicrophone() {
@@ -3193,8 +4003,6 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
       } else {
         this.dom.mic.toggleBtn.classList.add('recording');
-        
-        // Bahasa pengenalan suara disesuaikan dengan target bahasa yang harus diucapkan!
         const isIdToEn = (this.languageDirection === 'id-to-en');
         const lang = isIdToEn ? (this.dom.challenge.accentSelect.value || 'en-US') : 'id-ID';
 
@@ -3203,18 +4011,15 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
         this.speech.startListening(
           lang,
-          // Interim
           (interim) => {
             this.dom.mic.transcript.textContent = `"${interim}..."`;
           },
-          // Final result
           (final) => {
             this.dom.mic.toggleBtn.classList.remove('recording');
             this.dom.mic.status.textContent = 'Mengevaluasi suara...';
             this.dom.mic.transcript.textContent = `"${final}"`;
-            this.evaluateAnswer(final);
+            this.evaluateAnswer(final, null, this.dom.mic.toggleBtn);
           },
-          // Error
           (err) => {
             this.dom.mic.toggleBtn.classList.remove('recording');
             this.dom.mic.status.textContent = 'Tekan mikrofon untuk berbicara';
@@ -3224,47 +4029,60 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       }
     }
 
-    evaluateMultipleChoice(selectedIdx, btnElement) {
-      const q = this.questions[this.currentIndex];
-      const isCorrect = (selectedIdx === q.correctIndex);
-      const chosenWord = q.options[selectedIdx];
-
-      const allButtons = this.dom.challenge.optionsContainer.querySelectorAll('.btn-option');
-      allButtons.forEach((b, idx) => {
-        b.disabled = true;
-        if (idx === q.correctIndex) b.classList.add('correct');
-        else if (idx === selectedIdx && !isCorrect) b.classList.add('wrong');
-      });
-
-      this.evaluateAnswer(chosenWord, isCorrect);
-    }
-
-    async evaluateAnswer(userAnswer, predeterminedCorrect = null) {
+    async evaluateAnswer(userAnswer, predeterminedCorrect = null, sourceElement = null) {
       this.speech.stopListening();
       const q = this.questions[this.currentIndex];
+      if (!q) return;
+
       const isIdToEn = (this.languageDirection === 'id-to-en');
-      
-      // Target text to match against:
       let targetExpected = isIdToEn ? (q.missingWord || q.en || q.target) : (q.translation || q.id_translation);
 
       this.dom.evaluation.panel.classList.remove('hidden');
       this.dom.evaluation.aiFeedback.textContent = 'AI Teacher sedang menganalisis jawaban dan intonasi Anda...';
 
-      const apiKey = safeStorage.getItem('cfg_gemini_key') || '';
-      const dirText = isIdToEn ? 'Indonesia ke English' : 'English ke Indonesia';
-      const evalResult = await GeminiService.evaluateAnswer(apiKey, targetExpected, userAnswer, this.currentMode, dirText);
+      let accuracy = 100;
+      let verdict = 'Bagus Sekali! 🎉';
+      let feedback = 'Pengucapan dan pilihan kata Anda sangat tepat.';
 
-      let accuracy = evalResult.accuracy;
       if (predeterminedCorrect !== null) {
-        accuracy = predeterminedCorrect ? 100 : 20;
+        accuracy = predeterminedCorrect ? 100 : 25;
+        verdict = predeterminedCorrect ? 'Bagus Sekali! Jawaban Tepat 🎉' : 'Jawaban Kurang Tepat 💪';
+        feedback = predeterminedCorrect
+          ? 'Pemahaman kosakata dan struktur kalimat Anda sudah sesuai!'
+          : 'Perhatikan arti dan struktur kalimat yang benar pada kartu evaluasi di bawah.';
+      } else {
+        const apiKey = safeStorage.getItem('cfg_gemini_key') || '';
+        const dirText = isIdToEn ? 'Indonesia ke English' : 'English ke Indonesia';
+        const evalResult = await GeminiService.evaluateAnswer(apiKey, targetExpected, userAnswer, this.currentMode, dirText);
+        accuracy = evalResult.accuracy;
+        verdict = evalResult.verdict;
+        feedback = evalResult.feedback;
       }
 
-      const isSuccess = accuracy >= 70;
+      const isSuccess = (accuracy >= 70);
+
       if (isSuccess) {
         this.streak += 1;
         if (this.streak > this.maxStreak) this.maxStreak = this.streak;
+        this.combo += 1;
+
+        const multiplier = this.getComboMultiplier();
         const streakBonus = (this.streak > 1) ? (this.streak * 10) : 0;
-        this.score += (accuracy + streakBonus);
+        const earnedXP = Math.round((accuracy + streakBonus) * multiplier);
+
+        this.score += earnedXP;
+        this.totalXP += earnedXP;
+        safeStorage.setItem('ae_total_xp', this.totalXP);
+
+        // Track stats
+        this.stats.totalCorrect = (this.stats.totalCorrect || 0) + 1;
+        if (this.currentMode === 'vocabulary') this.stats.vocabLearned = (this.stats.vocabLearned || 0) + 1;
+        if (this.currentMode === 'grammar') this.stats.grammarMastered = (this.stats.grammarMastered || 0) + 1;
+        if (this.currentMode === 'listening') this.stats.listeningScore = (this.stats.listeningScore || 0) + earnedXP;
+        if (this.currentMode === 'shadowing') this.stats.speakingScore = (this.stats.speakingScore || 0) + earnedXP;
+
+        // Floating XP Animation
+        this.showFloatingXP(earnedXP, sourceElement);
 
         if (this.streak > 1) {
           this.sound.playStreak();
@@ -3273,55 +4091,77 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         }
       } else {
         this.streak = 0;
+        this.combo = 0;
+        this.deductHeart();
         this.sound.playWrong();
       }
 
-      // Record to history
+      this.stats.totalAnswered = (this.stats.totalAnswered || 0) + 1;
+      safeStorage.setItem('ae_stats', JSON.stringify(this.stats));
+
+      // Check for unlocked Badges
+      this.checkBadges(accuracy);
+
+      // Record to session history
       this.history.push({
         questionNumber: this.currentIndex + 1,
-        direction: dirText,
+        direction: isIdToEn ? 'ID -> EN' : 'EN -> ID',
         target: targetExpected,
         heard: userAnswer,
         accuracy: accuracy,
-        feedback: evalResult.feedback
+        feedback: feedback
       });
 
-      // Update HUD & Evaluation Panel
-      this.dom.hud.score.textContent = this.score;
-      this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
+      // Update HUD
+      if (this.dom.hud.score) this.dom.hud.score.textContent = this.score;
+      if (this.dom.hud.streak) this.dom.hud.streak.textContent = this.streak > 0 ? `${this.streak}🔥` : '0';
+      if (this.dom.hud.combo) this.dom.hud.combo.textContent = this.getComboMultiplierLabel();
 
+      // Update Evaluation Panel UI
       this.dom.evaluation.scoreBadge.textContent = `Akurasi: ${accuracy}%`;
       this.dom.evaluation.scoreBadge.className = 'score-badge ' + (accuracy >= 80 ? '' : (accuracy >= 50 ? 'medium' : 'low'));
-      this.dom.evaluation.verdict.textContent = evalResult.verdict || (isSuccess ? 'Bagus Sekali! 🎉' : 'Terus Berlatih! 💪');
-
+      this.dom.evaluation.verdict.textContent = verdict;
       this.dom.evaluation.compTarget.textContent = targetExpected;
-      this.dom.evaluation.compHeard.textContent = userAnswer || '(tidak terdengar suara)';
-      this.dom.evaluation.aiFeedback.textContent = evalResult.feedback;
+      this.dom.evaluation.compHeard.textContent = userAnswer || '(tidak terdengar suara / tidak memilih)';
+      this.dom.evaluation.aiFeedback.textContent = feedback;
 
-      // Munculkan Cara Baca / Fonetik setelah menjawab
+      // REVEAL CARDS (Definitions, Example, Grammar, Phonetic) strictly AFTER answering:
+      if (this.dom.evaluation.translationCard && this.dom.evaluation.translationText) {
+        const trans = cleanText(q.id_translation || q.translation);
+        if (trans) {
+          this.dom.evaluation.translationText.textContent = trans;
+          this.dom.evaluation.translationCard.classList.remove('hidden');
+        }
+      }
+
+      if (this.dom.evaluation.exampleCard && this.dom.evaluation.exampleText) {
+        const eg = cleanText(q.en || q.target);
+        if (eg && this.currentMode !== 'shadowing') {
+          this.dom.evaluation.exampleText.textContent = `"${eg}"`;
+          this.dom.evaluation.exampleCard.classList.remove('hidden');
+        }
+      }
+
+      if (this.dom.evaluation.grammarCard && this.dom.evaluation.grammarText) {
+        const gr = cleanText(q.notes);
+        if (gr) {
+          this.dom.evaluation.grammarText.textContent = gr;
+          this.dom.evaluation.grammarCard.classList.remove('hidden');
+        }
+      }
+
       const phoneticText = q.phonetic || '';
-      if (phoneticText) {
-        this.dom.challenge.targetPhonetic.classList.remove('hidden');
-        this.dom.challenge.targetPhonetic.textContent = `Cara Baca: ${phoneticText}`;
-      }
-      const phoneticBox = document.getElementById('phonetic-reveal-box');
-      const evalPhonetic = document.getElementById('eval-phonetic-text');
-      if (phoneticBox && evalPhonetic) {
-        evalPhonetic.textContent = phoneticText || '(Audio native tersedia)';
-        phoneticBox.classList.remove('hidden');
+      if (this.dom.evaluation.phoneticBox && this.dom.evaluation.phoneticText && phoneticText) {
+        this.dom.evaluation.phoneticText.textContent = phoneticText;
+        this.dom.evaluation.phoneticBox.classList.remove('hidden');
       }
 
-      // Play correct audio for listening & speaking correction
-      if (isIdToEn) {
-        setTimeout(() => {
-          this.speech.speak(q.en || q.target, this.dom.challenge.accentSelect.value);
-        }, 300);
-      }
-
+      // If in listening mode, reveal target text now
       if (this.currentMode === 'listening') {
-        this.dom.challenge.targetPhrase.textContent = `"${q.en || q.target}"`;
-        this.dom.challenge.targetTranslation.textContent = `Arti: "${q.translation || q.id_translation}"`;
+        this.dom.challenge.targetPhrase.textContent = `"${cleanText(q.en || q.target)}"`;
       }
+
+      this.updateDashboard();
     }
 
     nextQuestion() {
@@ -3333,6 +4173,9 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       this.switchView('result');
       this.sound.playSuccess();
 
+      this.stats.gamesPlayed = (this.stats.gamesPlayed || 0) + 1;
+      safeStorage.setItem('ae_stats', JSON.stringify(this.stats));
+
       const totalQuestions = this.history.length || 1;
       const sumAccuracy = this.history.reduce((acc, h) => acc + h.accuracy, 0);
       const avgAcc = Math.round(sumAccuracy / totalQuestions);
@@ -3343,29 +4186,29 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       else if (avgAcc >= 60) levelName = 'Intermediate';
 
       const dirLabel = this.languageDirection === 'id-to-en' ? 'ID ➔ EN' : 'EN ➔ ID';
-      this.dom.result.modeName.textContent = `${this.dom.hud.modePill.textContent} (${dirLabel})`;
-      this.dom.result.totalScore.textContent = `+${this.score} PTS`;
-      this.dom.result.avgAccuracy.textContent = `${avgAcc}%`;
-      this.dom.result.maxStreak.textContent = `${this.maxStreak}🔥`;
-      this.dom.result.level.textContent = levelName;
-      this.dom.result.statusMsg.textContent = '';
+      if (this.dom.result.modeName) this.dom.result.modeName.textContent = `${this.dom.hud.modePill ? this.dom.hud.modePill.textContent : 'Arena'} (${dirLabel})`;
+      if (this.dom.result.totalScore) this.dom.result.totalScore.textContent = `+${this.score} PTS`;
+      if (this.dom.result.avgAccuracy) this.dom.result.avgAccuracy.textContent = `${avgAcc}%`;
+      if (this.dom.result.maxStreak) this.dom.result.maxStreak.textContent = `${this.maxStreak}🔥`;
+      if (this.dom.result.level) this.dom.result.level.textContent = levelName;
+      if (this.dom.result.statusMsg) this.dom.result.statusMsg.textContent = '';
 
-      // Score Retention: Display cumulative score across days & devices
-      const currentTotal = AuthManager.isLoggedIn() ? (AuthManager.currentUser.totalScore || 0) : 0;
-      const newTotal = currentTotal + this.score;
       if (this.dom.result.cumulativeScore) {
-        this.dom.result.cumulativeScore.textContent = `${newTotal.toLocaleString()} PTS`;
+        this.dom.result.cumulativeScore.textContent = `${this.totalXP.toLocaleString()} PTS`;
       }
 
       if (AuthManager.isLoggedIn()) {
-        this.dom.result.playerNameInput.value = AuthManager.currentUser.name;
-        // Auto-sync score to Google Sheets
+        if (this.dom.result.playerNameInput) {
+          this.dom.result.playerNameInput.value = AuthManager.currentUser.name;
+        }
         this.submitScoreToLeaderboard();
       }
+
+      this.updateDashboard();
     }
 
     async submitScoreToLeaderboard() {
-      const name = this.dom.result.playerNameInput.value.trim() || (AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Jefri');
+      const name = (this.dom.result.playerNameInput && this.dom.result.playerNameInput.value.trim()) || (AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Player 1');
       const sumAccuracy = this.history.reduce((acc, h) => acc + h.accuracy, 0);
       const avgAcc = Math.round(sumAccuracy / (this.history.length || 1));
       const dirLabel = this.languageDirection === 'id-to-en' ? 'ID -> EN' : 'EN -> ID';
@@ -3376,7 +4219,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       const entry = {
         userEmail: AuthManager.isLoggedIn() ? AuthManager.currentUser.email : '',
         playerName: name,
-        gameMode: `${this.dom.hud.modePill.textContent} (${dirLabel})`,
+        gameMode: `${this.dom.hud.modePill ? this.dom.hud.modePill.textContent : 'Arena'} (${dirLabel})`,
         direction: dirLabel,
         score: this.score,
         accuracy: avgAcc,
@@ -3387,48 +4230,45 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       const result = await LeaderboardService.submitScore(entry);
 
-      // Accumulate score to local session so if continuing tomorrow, score is preserved
       if (AuthManager.isLoggedIn()) {
         AuthManager.addScore(this.score);
-        if (this.dom.result.cumulativeScore) {
-          this.dom.result.cumulativeScore.textContent = `${(AuthManager.currentUser.totalScore || 0).toLocaleString()} PTS`;
-        }
       }
 
       this.dom.result.submitBtn.disabled = false;
       this.dom.result.submitBtn.textContent = '✓ Tersimpan di Database!';
-      this.dom.result.statusMsg.textContent = `${result.message} Skor Anda aman dan akan berlanjut besok.`;
-      this.dom.result.statusMsg.className = 'status-message success';
+      if (this.dom.result.statusMsg) {
+        this.dom.result.statusMsg.textContent = `${result.message} Skor Anda aman dan akan berlanjut besok.`;
+        this.dom.result.statusMsg.className = 'status-message success';
+      }
 
       this.showToast('✓ Progres berhasil disinkronkan ke Cloud Database!', 'success');
     }
 
-    /* ==========================================================================
-       MODALS & MEMORY LOGIC
-       ========================================================================== */
     openLeaderboard() {
-      this.dom.modals.leaderboard.classList.remove('hidden');
-      this.switchModalTab('leaderboard');
+      if (this.dom.modals.leaderboard) {
+        this.dom.modals.leaderboard.classList.remove('hidden');
+        this.switchModalTab('leaderboard');
+      }
     }
 
     switchModalTab(tabName) {
       if (tabName === 'leaderboard') {
-        this.dom.modals.tabLeaderboardBtn.classList.add('active');
-        this.dom.modals.tabMemoryBtn.classList.remove('active');
-        this.dom.modals.containerLeaderboard.classList.remove('hidden');
-        this.dom.modals.containerMemory.classList.add('hidden');
+        this.dom.modals.tabLeaderboardBtn?.classList.add('active');
+        this.dom.modals.tabMemoryBtn?.classList.remove('active');
+        this.dom.modals.containerLeaderboard?.classList.remove('hidden');
+        this.dom.modals.containerMemory?.classList.add('hidden');
         this.loadLeaderboardData();
       } else {
-        this.dom.modals.tabMemoryBtn.classList.add('active');
-        this.dom.modals.tabLeaderboardBtn.classList.remove('active');
-        this.dom.modals.containerMemory.classList.remove('hidden');
-        this.dom.modals.containerLeaderboard.classList.add('hidden');
+        this.dom.modals.tabMemoryBtn?.classList.add('active');
+        this.dom.modals.tabLeaderboardBtn?.classList.remove('active');
+        this.dom.modals.containerMemory?.classList.remove('hidden');
+        this.dom.modals.containerLeaderboard?.classList.add('hidden');
         this.loadMemoryData();
       }
     }
 
     refreshCurrentModalData() {
-      if (this.dom.modals.tabMemoryBtn.classList.contains('active')) {
+      if (this.dom.modals.tabMemoryBtn?.classList.contains('active')) {
         this.loadMemoryData();
       } else {
         this.loadLeaderboardData();
@@ -3436,10 +4276,11 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     async loadLeaderboardData() {
+      if (!this.dom.modals.tbody) return;
       this.dom.modals.tbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil ranking dari Cloud Database...</td></tr>';
 
       const res = await LeaderboardService.fetchLeaderboard();
-      this.dom.modals.syncStatus.textContent = res.source;
+      if (this.dom.modals.syncStatus) this.dom.modals.syncStatus.textContent = res.source;
 
       if (!res.data || res.data.length === 0) {
         this.dom.modals.tbody.innerHTML = '<tr><td colspan="6" class="loading-row">Belum ada skor. Jadilah yang pertama bermain!</td></tr>';
@@ -3466,10 +4307,11 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     }
 
     async loadMemoryData() {
+      if (!this.dom.modals.memoryTbody) return;
       this.dom.modals.memoryTbody.innerHTML = '<tr><td colspan="6" class="loading-row">Mengambil riwayat memori belajar...</td></tr>';
 
       const res = await LeaderboardService.fetchMemory();
-      this.dom.modals.syncStatus.textContent = res.source;
+      if (this.dom.modals.syncStatus) this.dom.modals.syncStatus.textContent = res.source;
 
       if (!res.data || res.data.length === 0) {
         this.dom.modals.memoryTbody.innerHTML = '<tr><td colspan="6" class="loading-row">Belum ada riwayat memori belajar. Selesaikan permainan untuk mencatat memori!</td></tr>';
@@ -3491,15 +4333,36 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       });
     }
 
+    setLevelPreference(lvl) {
+      this.levelPreference = lvl || 'all';
+      safeStorage.setItem('cfg_level_preference', this.levelPreference);
+
+      document.querySelectorAll('.btn-level-pill').forEach(btn => {
+        if (btn.dataset.level === this.levelPreference) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const cfgLevel = document.getElementById('cfg-level-preference');
+      if (cfgLevel) cfgLevel.value = this.levelPreference;
+    }
+
     openSettings() {
-      this.dom.modals.settings.classList.remove('hidden');
+      if (this.dom.modals.settings) this.dom.modals.settings.classList.remove('hidden');
       document.getElementById('cfg-appscript-url').value = safeStorage.getItem('cfg_appscript_url') || 'https://script.google.com/macros/s/AKfycbxy8pG0P3G95SATXLLqC0V3ZzH7MmU7oEF40PPLJRgBUE6i8NnBmKZlupiYfObPKtZ5/exec';
       document.getElementById('cfg-gemini-key').value = safeStorage.getItem('cfg_gemini_key') || '';
       document.getElementById('cfg-accent').value = safeStorage.getItem('cfg_accent') || 'en-US';
 
+      const savedLevel = safeStorage.getItem('cfg_level_preference') || 'all';
+      const cfgLevel = document.getElementById('cfg-level-preference');
+      if (cfgLevel) cfgLevel.value = savedLevel;
+
       const voiceSelect = document.getElementById('cfg-voice');
       const savedVoice = safeStorage.getItem('cfg_voice_name') || 'auto';
-      const savedRate = safeStorage.getItem('cfg_voice_rate') || '0.88';
+      const rawRate = safeStorage.getItem('cfg_voice_rate') || '0.8';
+      const savedRate = normalizeRate(rawRate);
 
       const rateSelect = document.getElementById('cfg-voice-rate');
       if (rateSelect) rateSelect.value = savedRate;
@@ -3539,7 +4402,9 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       const key = document.getElementById('cfg-gemini-key').value.trim();
       const accent = document.getElementById('cfg-accent').value;
       const voice = document.getElementById('cfg-voice')?.value || 'auto';
-      const rate = document.getElementById('cfg-voice-rate')?.value || '0.88';
+      const rawRate = document.getElementById('cfg-voice-rate')?.value || '0.8';
+      const rate = normalizeRate(rawRate);
+      const lvl = document.getElementById('cfg-level-preference')?.value || 'all';
 
       safeStorage.setItem('cfg_appscript_url', url);
       safeStorage.setItem('cfg_gemini_key', key);
@@ -3547,12 +4412,15 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       safeStorage.setItem('cfg_voice_name', voice);
       safeStorage.setItem('cfg_voice_rate', rate);
 
+      this.setLevelPreference(lvl);
+
       this.speech.selectedVoiceName = voice;
       this.speech.speechRate = parseFloat(rate);
       if (this.dom.challenge.accentSelect) this.dom.challenge.accentSelect.value = accent;
+      if (this.dom.challenge.speedSelect) this.dom.challenge.speedSelect.value = rate;
 
       this.closeModals();
-      this.showToast('Pengaturan suara berhasil disimpan!', 'success');
+      this.showToast('Pengaturan suara & tingkat kesulitan berhasil disimpan!', 'success');
     }
 
     resetSettings() {
@@ -3561,44 +4429,148 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         safeStorage.removeItem('cfg_gemini_key');
         safeStorage.setItem('cfg_accent', 'en-US');
         safeStorage.setItem('cfg_voice_name', 'auto');
-        safeStorage.setItem('cfg_voice_rate', '0.88');
+        safeStorage.setItem('cfg_voice_rate', '0.8');
+        safeStorage.setItem('cfg_level_preference', 'all');
 
         document.getElementById('cfg-appscript-url').value = '';
         document.getElementById('cfg-gemini-key').value = '';
         document.getElementById('cfg-accent').value = 'en-US';
         if (document.getElementById('cfg-voice')) document.getElementById('cfg-voice').value = 'auto';
-        if (document.getElementById('cfg-voice-rate')) document.getElementById('cfg-voice-rate').value = '0.88';
+        if (document.getElementById('cfg-voice-rate')) document.getElementById('cfg-voice-rate').value = '0.8';
+        if (document.getElementById('cfg-level-preference')) document.getElementById('cfg-level-preference').value = 'all';
 
+        this.setLevelPreference('all');
         this.speech.selectedVoiceName = 'auto';
-        this.speech.speechRate = 0.88;
-        this.showToast('Pengaturan direset.', 'info');
+        this.speech.speechRate = 0.8;
+        if (this.dom.challenge.speedSelect) this.dom.challenge.speedSelect.value = '0.8';
+        this.showToast('Pengaturan direset ke default.', 'info');
       }
     }
 
     loadSettings() {
       const accent = safeStorage.getItem('cfg_accent') || 'en-US';
       const voice = safeStorage.getItem('cfg_voice_name') || 'auto';
-      const rate = parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.88');
+      const rawRate = safeStorage.getItem('cfg_voice_rate') || '0.8';
+      const normalizedRate = normalizeRate(rawRate);
+      const lvl = safeStorage.getItem('cfg_level_preference') || 'all';
 
       if (this.dom.challenge.accentSelect) {
         this.dom.challenge.accentSelect.value = accent;
       }
+      if (this.dom.challenge.speedSelect) {
+        this.dom.challenge.speedSelect.value = normalizedRate;
+      }
       this.speech.selectedVoiceName = voice;
-      this.speech.speechRate = rate;
+      this.speech.speechRate = parseFloat(normalizedRate);
 
-      // Event listener for Test Voice button in settings
+      this.setLevelPreference(lvl);
+
       const btnTestVoice = document.getElementById('btn-test-voice');
       if (btnTestVoice && !btnTestVoice.dataset.bound) {
         btnTestVoice.dataset.bound = 'true';
         btnTestVoice.addEventListener('click', () => {
           const v = document.getElementById('cfg-voice')?.value || 'auto';
-          const r = parseFloat(document.getElementById('cfg-voice-rate')?.value || '0.88');
+          const r = parseFloat(document.getElementById('cfg-voice-rate')?.value || '0.8');
           const acc = document.getElementById('cfg-accent')?.value || 'en-US';
           this.speech.selectedVoiceName = v;
           this.speech.speechRate = r;
-          this.speech.speak('Hello! Welcome to Awesome English Arena. Practice makes permanent!', acc);
+          this.speech.speak('Hello! Welcome to Awesome English Arena. Practice makes permanent!', acc, r);
         });
       }
+    }
+
+    updateProgressView() {
+      const tier = this.getPlayerTier(this.totalXP);
+      if (this.dom.progress.vocabCount) {
+        this.dom.progress.vocabCount.textContent = `${this.stats.vocabLearned || 0} Kata`;
+      }
+      if (this.dom.progress.vocabFill) {
+        const pct = Math.min(100, Math.round(((this.stats.vocabLearned || 0) / 50) * 100));
+        this.dom.progress.vocabFill.style.width = `${pct}%`;
+      }
+      if (this.dom.progress.grammarCount) {
+        this.dom.progress.grammarCount.textContent = `${this.stats.grammarMastered || 0} Materi`;
+      }
+      if (this.dom.progress.grammarFill) {
+        const pct = Math.min(100, Math.round(((this.stats.grammarMastered || 0) / 30) * 100));
+        this.dom.progress.grammarFill.style.width = `${pct}%`;
+      }
+      if (this.dom.progress.listeningScore) {
+        this.dom.progress.listeningScore.textContent = `${(this.stats.listeningScore || 0).toLocaleString()} PTS`;
+      }
+      if (this.dom.progress.listeningAcc) {
+        this.dom.progress.listeningAcc.textContent = `Akurasi Audio: ${this.stats.listeningScore > 0 ? '90%' : '0%'}`;
+      }
+      if (this.dom.progress.speakingScore) {
+        this.dom.progress.speakingScore.textContent = `${(this.stats.speakingScore || 0).toLocaleString()} PTS`;
+      }
+      if (this.dom.progress.speakingAcc) {
+        this.dom.progress.speakingAcc.textContent = `Akurasi Pengucapan: ${this.stats.speakingScore > 0 ? '88%' : '0%'}`;
+      }
+      if (this.dom.progress.totalXp) {
+        this.dom.progress.totalXp.textContent = `${this.totalXP.toLocaleString()} XP`;
+      }
+      if (this.dom.progress.xpTier) {
+        this.dom.progress.xpTier.textContent = `Tingkat: ${tier.tier}`;
+      }
+      if (this.dom.progress.gamesPlayed) {
+        this.dom.progress.gamesPlayed.textContent = `${this.stats.gamesPlayed || 0} Game`;
+      }
+      if (this.dom.progress.totalSoal) {
+        this.dom.progress.totalSoal.textContent = `${this.stats.totalAnswered || 0} Total Soal Dijawab`;
+      }
+      const totalAns = this.stats.totalAnswered || 0;
+      const totalCor = this.stats.totalCorrect || 0;
+      const acc = totalAns > 0 ? Math.round((totalCor / totalAns) * 100) : 100;
+      if (this.dom.progress.accuracyRate) {
+        this.dom.progress.accuracyRate.textContent = `${acc}%`;
+      }
+      if (this.dom.progress.accuracyFill) {
+        this.dom.progress.accuracyFill.style.width = `${acc}%`;
+      }
+      if (this.dom.progress.streakDays) {
+        this.dom.progress.streakDays.textContent = `${this.streakDays} Hari`;
+      }
+    }
+
+    updateProfileView() {
+      const tier = this.getPlayerTier(this.totalXP);
+      const userName = AuthManager.isLoggedIn() ? AuthManager.currentUser.name : 'Player 1';
+      if (this.dom.profile.displayName) this.dom.profile.displayName.textContent = userName;
+      if (this.dom.profile.tierBadge) this.dom.profile.tierBadge.textContent = tier.tier;
+      if (this.dom.profile.lvlBadge) this.dom.profile.lvlBadge.textContent = `Level ${tier.level}`;
+      if (this.dom.profile.xpBadge) this.dom.profile.xpBadge.textContent = `⭐ ${this.totalXP.toLocaleString()} XP`;
+      if (this.dom.profile.streakBadge) this.dom.profile.streakBadge.textContent = `🔥 ${this.streakDays} Hari`;
+      if (this.dom.profile.heartsIcons) {
+        this.dom.profile.heartsIcons.textContent = '❤️'.repeat(this.hearts) + '🖤'.repeat(5 - this.hearts);
+      }
+      this.renderBadges();
+    }
+
+    renderBadges() {
+      const catalog = this.getBadgeCatalog();
+      if (this.dom.profile.badgesCount) {
+        this.dom.profile.badgesCount.textContent = `${this.badges.length} / ${catalog.length} Terbuka`;
+      }
+      if (!this.dom.profile.badgesContainer) return;
+      this.dom.profile.badgesContainer.innerHTML = '';
+
+      catalog.forEach(badge => {
+        const isUnlocked = this.badges.includes(badge.id);
+        const card = document.createElement('div');
+        card.className = `badge-item-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+        card.innerHTML = `
+          <div class="badge-icon-wrap">${badge.icon}</div>
+          <div class="badge-info">
+            <h4 class="badge-name">${this.escapeHtml(badge.name)}</h4>
+            <p class="badge-desc">${this.escapeHtml(badge.desc)}</p>
+            <span class="badge-status-tag ${isUnlocked ? 'unlocked' : ''}">
+              ${isUnlocked ? '✓ Terbuka' : '🔒 Terkunci'}
+            </span>
+          </div>
+        `;
+        this.dom.profile.badgesContainer.appendChild(card);
+      });
     }
 
     openDrawer() {
@@ -3617,6 +4589,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
     closeModals() {
       this.closeDrawer();
+      this.closeHeartsModal();
       if (this.dom.modals.auth) this.dom.modals.auth.classList.add('hidden');
       if (this.dom.modals.leaderboard) this.dom.modals.leaderboard.classList.add('hidden');
       if (this.dom.modals.settings) this.dom.modals.settings.classList.add('hidden');

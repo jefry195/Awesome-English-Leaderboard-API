@@ -30,15 +30,46 @@
         <span class="logo-title">English Arena</span>
       </div>
 
-      <!-- Desktop Nav Actions (Desktop & Tablet Wide) -->
+      <!-- Desktop Navigation Tabs (Home, Play, Progress, Profile) -->
+      <nav class="desktop-nav-tabs" id="desktop-nav-tabs" aria-label="Main Navigation">
+        <button type="button" class="nav-tab-btn active" data-nav="landing" id="tab-nav-home">
+          <span class="tab-icon">🏠</span> <span>Home</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-nav="play" id="tab-nav-play">
+          <span class="tab-icon">🎮</span> <span>Play</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-nav="progress" id="tab-nav-progress">
+          <span class="tab-icon">📊</span> <span>Progress</span>
+        </button>
+        <button type="button" class="nav-tab-btn" data-nav="profile" id="tab-nav-profile">
+          <span class="tab-icon">👤</span> <span>Profile</span>
+        </button>
+      </nav>
+
+      <!-- Desktop Nav Actions (Gamification Pills & Tools) -->
       <div class="nav-actions desktop-nav-actions">
+        <!-- Live Gamification Stats: Hearts, Streak, XP -->
+        <div class="nav-gamify-bar" id="nav-gamify-bar">
+          <div class="nav-stat-chip nav-hearts-chip" id="nav-hearts-chip" title="Kesempatan / Lives (5 Hearts)">
+            <span class="chip-icon">❤️</span>
+            <span class="chip-val" id="nav-hearts-text">5/5</span>
+          </div>
+          <div class="nav-stat-chip nav-streak-chip" id="nav-streak-chip" title="Streak Hari Belajar">
+            <span class="chip-icon">🔥</span>
+            <span class="chip-val" id="nav-streak-text">1 Hari</span>
+          </div>
+          <div class="nav-stat-chip nav-xp-chip" id="nav-xp-chip" title="Total XP Terkumpul">
+            <span class="chip-icon">⭐</span>
+            <span class="chip-val" id="nav-xp-text">0 XP</span>
+          </div>
+        </div>
+
         <!-- Logged-in User Profile Badge -->
-        <div id="nav-user-profile" class="user-pill hidden">
+        <div id="nav-user-profile" class="user-pill">
           <span class="user-avatar" id="nav-user-avatar">👤</span>
           <span class="user-name" id="nav-user-name">Player</span>
-          <span class="user-score-badge" id="nav-user-score">⭐ 0 PTS</span>
           <span class="user-lvl-badge" id="nav-user-level">Lvl 1</span>
-          <button id="btn-logout-nav" class="btn-nav-logout" title="Keluar dari akun">Keluar</button>
+          <button id="btn-logout-nav" class="btn-nav-logout hidden" title="Keluar dari akun">Keluar</button>
         </div>
         <!-- Member Login Button (shown when not logged in) -->
         <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-credit-jefri" title="Kunjungi Portofolio Developer Jefri">
@@ -55,11 +86,15 @@
         </button>
       </div>
 
-      <!-- Mobile Right Controls (Hamburger & Quick Score Badge) -->
+      <!-- Mobile Right Controls (Hearts, Hamburger & Quick Score Badge) -->
       <div class="mobile-nav-controls">
-        <div id="mobile-quick-score" class="mobile-user-chip hidden">
-          <span class="mobile-user-avatar">👤</span>
-          <span id="mobile-user-pts">0 PTS</span>
+        <div class="mobile-hearts-chip" id="mobile-hearts-chip" title="Lives / Hearts">
+          <span class="mobile-heart-icon">❤️</span>
+          <span id="mobile-hearts-text">5</span>
+        </div>
+        <div id="mobile-quick-score" class="mobile-user-chip">
+          <span class="mobile-user-avatar">⭐</span>
+          <span id="mobile-user-pts">0 XP</span>
         </div>
         <button class="btn-hamburger" id="btn-hamburger" aria-label="Buka Menu Navigasi" title="Menu">
           <span class="hamburger-line"></span>
@@ -104,6 +139,30 @@
 
       <!-- Navigation Menu List -->
       <nav class="drawer-nav-menu">
+        <button class="drawer-menu-btn" id="btn-drawer-home" data-nav="landing">
+          <span class="drawer-menu-icon">🏠</span>
+          <span class="drawer-menu-text">Beranda (Home)</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-play" data-nav="play">
+          <span class="drawer-menu-icon">🎮</span>
+          <span class="drawer-menu-text">Mulai Bermain (Play)</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-progress" data-nav="progress">
+          <span class="drawer-menu-icon">📊</span>
+          <span class="drawer-menu-text">Progress Belajar</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-profile" data-nav="profile">
+          <span class="drawer-menu-icon">👤</span>
+          <span class="drawer-menu-text">Profil & Pencapaian</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
         <button class="drawer-menu-btn" id="btn-drawer-leaderboard">
           <span class="drawer-menu-icon">🏆</span>
           <span class="drawer-menu-text">Leaderboard & Memory</span>
@@ -144,121 +203,186 @@
     <!-- VIEW 1: HERO / LANDING SCREEN -->
     <section id="landing-view" class="view-section active">
       <div class="hero-content">
-        <div class="pill-badge">
-          <span class="pill-dot"></span> Powered by Awesome English Curated Resources & Smart AI
-        </div>
-        <h1 class="hero-headline">
-          Master Spoken English with <span class="gradient-text">Voice Mic & AI Teacher</span>
-        </h1>
-        <p class="hero-subline">
-          Train your accent through real-time <strong>Speech Shadowing</strong>, conquer <strong>Listening Dictation</strong>, and test your vocabulary with live feedback from <strong>Smart AI Examiner</strong>. Compete on the global <strong>Live Cloud Leaderboard</strong>!
-        </p>
+        <!-- Interactive Player Dashboard Card -->
+        <div class="player-dashboard-card" id="player-dashboard-card">
+          <div class="dashboard-top-row">
+            <div class="dash-user-profile">
+              <div class="dash-avatar" id="dash-player-avatar">👤</div>
+              <div class="dash-user-meta">
+                <div class="dash-user-name" id="dash-player-name">Player 1</div>
+                <div class="dash-user-tier-badges">
+                  <span class="tier-pill" id="dash-tier-badge">🟢 Beginner</span>
+                  <span class="level-pill" id="dash-level-badge">Level 1</span>
+                </div>
+              </div>
+            </div>
+            <div class="dash-streak-box" title="Streak Hari Belajar Berturut-turut">
+              <span class="dash-streak-icon">🔥</span>
+              <div class="dash-streak-meta">
+                <span class="dash-streak-num" id="dash-streak-count">1</span>
+                <span class="dash-streak-label">Hari Streak</span>
+              </div>
+            </div>
+          </div>
 
-        <!-- Quick Stats Banner -->
-        <div class="stats-row">
-          <div class="stat-card">
-            <span class="stat-number">4+</span>
-            <span class="stat-label">Learning Modes</span>
+          <!-- XP Progress Bar -->
+          <div class="dash-xp-section">
+            <div class="dash-xp-header">
+              <span class="dash-xp-label">Progress Menuju Level Berikutnya:</span>
+              <span class="dash-xp-fraction" id="dash-xp-fraction">0 / 300 XP</span>
+            </div>
+            <div class="dash-xp-progress-track">
+              <div class="dash-xp-progress-fill" id="dash-xp-progress-fill" style="width: 5%"></div>
+            </div>
           </div>
-          <div class="stat-card">
-            <span class="stat-number">🎙️ Mic</span>
-            <span class="stat-label">Speech Recognition</span>
+
+          <!-- Dashboard Quick Indicators: Lives, Total XP, Accuracy -->
+          <div class="dash-indicators-row">
+            <div class="dash-indicator-chip" id="dash-chip-hearts" title="Kesempatan bermain">
+              <span class="dash-ind-icon">❤️</span>
+              <span class="dash-ind-label">Lives:</span>
+              <strong class="dash-ind-val" id="dash-hearts-count">5/5</strong>
+            </div>
+            <div class="dash-indicator-chip" id="dash-chip-xp" title="Total XP yang terkumpul">
+              <span class="dash-ind-icon">⭐</span>
+              <span class="dash-ind-label">Total XP:</span>
+              <strong class="dash-ind-val" id="dash-total-xp">0 XP</strong>
+            </div>
+            <div class="dash-indicator-chip" id="dash-chip-acc" title="Tingkat akurasi jawaban">
+              <span class="dash-ind-icon">🎯</span>
+              <span class="dash-ind-label">Akurasi:</span>
+              <strong class="dash-ind-val" id="dash-accuracy-val">100%</strong>
+            </div>
           </div>
-          <div class="stat-card">
-            <span class="stat-number">✨ AI</span>
-            <span class="stat-label">Teacher & Examiner</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">🏆 Rank</span>
-            <span class="stat-label">Live Cloud Leaderboard</span>
+
+          <!-- Big Primary CTA: Mulai Bermain -->
+          <div class="dash-cta-row">
+            <button type="button" id="btn-dashboard-start" class="btn btn-primary btn-lg btn-glow-pulse">
+              <span class="btn-icon">🚀</span> <strong>Mulai Bermain Sekarang</strong>
+            </button>
+            <button type="button" id="btn-dashboard-progress" class="btn btn-secondary btn-lg">
+              <span class="btn-icon">📊</span> Lihat Progress
+            </button>
           </div>
         </div>
 
-        <!-- Mode Selection Cards -->
-        <h2 class="section-title">Select Challenge Arena</h2>
+        <div class="hero-subline-intro">
+          Belajar Bahasa Inggris melalui game interaktif yang seru: Audio native, speech mic recognition, kuis kosakata gambar, tantangan grammar, dan susun kalimat!
+        </div>
+
+        <!-- Level / Difficulty Filter Bar (Beginner, Elementary, Intermediate, Advanced) -->
+        <div class="level-filter-container">
+          <div class="level-filter-title">
+            <span>🎯 Pilih Tingkat Kesulitan:</span>
+          </div>
+          <div class="level-filter-pills" id="level-pills-container">
+            <button type="button" class="btn-level-pill active" data-level="all">🌐 Semua Level</button>
+            <button type="button" class="btn-level-pill" data-level="Beginner">🟢 Beginner</button>
+            <button type="button" class="btn-level-pill" data-level="Elementary">🟡 Elementary</button>
+            <button type="button" class="btn-level-pill" data-level="Intermediate">🟠 Intermediate</button>
+            <button type="button" class="btn-level-pill" data-level="Advanced">🔴 Advanced</button>
+          </div>
+        </div>
+
+        <!-- Mode Selection Cards: 5 Core Games + 2 Advanced Arenas -->
+        <h2 class="section-title" id="arenas-heading">Pilih Mode Permainan</h2>
         <div class="modes-grid" id="modes-selection-container">
           
-          <!-- Mode 1: Shadowing & Speaking -->
-          <div class="mode-card" data-mode="shadowing" id="mode-shadowing-card">
-            <div class="mode-header">
-              <span class="mode-icon">🎙️</span>
-              <span class="mode-tag tag-popular">Recommended</span>
-            </div>
-            <h3 class="mode-title">Speaking & Shadowing</h3>
-            <p class="mode-desc">Listen to native pronunciations, speak into your mic, and receive instant phonetic match scoring + AI accent feedback.</p>
-            <div class="mode-footer">
-              <span class="mode-source">From: Shadowing & Refold Method</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="shadowing">Play Arena →</button>
-            </div>
-          </div>
-
-          <!-- Mode 2: Listening & Dictation -->
-          <div class="mode-card" data-mode="listening" id="mode-listening-card">
-            <div class="mode-header">
-              <span class="mode-icon">🎧</span>
-              <span class="mode-tag">Audio Only</span>
-            </div>
-            <h3 class="mode-title">Listening Dictation</h3>
-            <p class="mode-desc">Audio-first training inspired by Numblr & BBC 6-Minute English. Hear numbers, dates, and dialogues, then speak your answer!</p>
-            <div class="mode-footer">
-              <span class="mode-source">From: Numblr & BBC English</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="listening">Play Arena →</button>
-            </div>
-          </div>
-
-          <!-- Mode 3: Vocabulary Sentence Mining -->
+          <!-- Mode 1: Game Vocabulary -->
           <div class="mode-card" data-mode="vocabulary" id="mode-vocabulary-card">
             <div class="mode-header">
               <span class="mode-icon">🧠</span>
-              <span class="mode-tag">High-Yield</span>
+              <span class="mode-tag tag-popular">Game 1 • Kosakata</span>
             </div>
-            <h3 class="mode-title">Vocabulary & Collocations</h3>
-            <p class="mode-desc">Anki-style sentence mining and high-frequency idioms. Guess missing words or say them out loud through your mic.</p>
+            <h3 class="mode-title">Tebak Vocabulary</h3>
+            <p class="mode-desc">Tebak arti kosakata & idiom dari kata atau gambar Bahasa Inggris. Dapatkan XP, penjelasan arti, dan contoh kalimat!</p>
             <div class="mode-footer">
-              <span class="mode-source">From: Anki & Sentence Mining</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="vocabulary">Play Arena →</button>
+              <span class="mode-source">4 Pilihan • Arti & Contoh Kalimat</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="vocabulary">Mainkan →</button>
             </div>
           </div>
 
-          <!-- Mode 4: Murphy Grammar Challenge -->
+          <!-- Mode 2: Game Grammar -->
           <div class="mode-card" data-mode="grammar" id="mode-grammar-card">
             <div class="mode-header">
               <span class="mode-icon">✍️</span>
-              <span class="mode-tag">Essentials</span>
+              <span class="mode-tag">Game 2 • Tata Bahasa</span>
             </div>
-            <h3 class="mode-title">Murphy Grammar Quest</h3>
-            <p class="mode-desc">Master everyday conditionals, tenses, and prepositions based on Raymond Murphy's English Grammar in Use.</p>
+            <h3 class="mode-title">Grammar Quest</h3>
+            <p class="mode-desc">Pilih kalimat dan kata kerja yang benar. Menampilkan penjelasan ringkas aturan tata bahasa setelah menjawab!</p>
             <div class="mode-footer">
-              <span class="mode-source">From: English Grammar in Use</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="grammar">Play Arena →</button>
+              <span class="mode-source">Murphy Grammar • Tenses & Rules</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="grammar">Mainkan →</button>
             </div>
           </div>
 
-          <!-- Mode 5: IELTS Academic Simulation -->
+          <!-- Mode 3: Game Listening -->
+          <div class="mode-card" data-mode="listening" id="mode-listening-card">
+            <div class="mode-header">
+              <span class="mode-icon">🎧</span>
+              <span class="mode-tag">Game 3 • Audio Only</span>
+            </div>
+            <h3 class="mode-title">Listening Challenge</h3>
+            <p class="mode-desc">Dengarkan audio penutur asli untuk percakapan pendek & kalimat sehari-hari. Sedia tombol putar ulang audio!</p>
+            <div class="mode-footer">
+              <span class="mode-source">Native Speech • Tombol Replay</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="listening">Mainkan →</button>
+            </div>
+          </div>
+
+          <!-- Mode 4: Game Sentence Builder -->
+          <div class="mode-card" data-mode="sentence_builder" id="mode-sentence-builder-card">
+            <div class="mode-header">
+              <span class="mode-icon">🧩</span>
+              <span class="mode-tag tag-new">Game 4 • Susun Kalimat</span>
+            </div>
+            <h3 class="mode-title">Sentence Builder</h3>
+            <p class="mode-desc">Susun kata-kata yang diacak menjadi kalimat Bahasa Inggris yang benar secara interaktif. Latih struktur kalimat alami!</p>
+            <div class="mode-footer">
+              <span class="mode-source">Word Bank Chips • Interaktif</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="sentence_builder">Mainkan →</button>
+            </div>
+          </div>
+
+          <!-- Mode 5: Speaking Practice -->
+          <div class="mode-card" data-mode="shadowing" id="mode-shadowing-card">
+            <div class="mode-header">
+              <span class="mode-icon">🎙️</span>
+              <span class="mode-tag tag-popular">Game 5 • Latihan Suara</span>
+            </div>
+            <h3 class="mode-title">Speaking Practice</h3>
+            <p class="mode-desc">Ucapkan kalimat langsung ke mikrofon. Dapatkan skor akurasi kemiripan pengucapan dan koreksi AI secara instan!</p>
+            <div class="mode-footer">
+              <span class="mode-source">Speech Recognition • Voice Match</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="shadowing">Mainkan →</button>
+            </div>
+          </div>
+
+          <!-- Mode 6: IELTS Academic Simulation -->
           <div class="mode-card" data-mode="ielts" id="mode-ielts-card">
             <div class="mode-header">
               <span class="mode-icon">🎯</span>
-              <span class="mode-tag tag-popular">Band 7.5 - 9.0</span>
+              <span class="mode-tag">Simulasi IELTS</span>
             </div>
             <h3 class="mode-title">IELTS Academic Simulation</h3>
-            <p class="mode-desc">Speaking Part 1 & Part 2 Cue Cards with official Band 0-9 lexical evaluation. Train academic vocabulary and high-band fluency!</p>
+            <p class="mode-desc">Latihan kosakata akademik dan Speaking Part 1 & 2 dengan standar evaluasi leksikal resmi Cambridge Band 7.5 - 9.0.</p>
             <div class="mode-footer">
-              <span class="mode-source">From: Cambridge IELTS Official</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="ielts">Play Arena →</button>
+              <span class="mode-source">Cambridge IELTS Official</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="ielts">Mainkan →</button>
             </div>
           </div>
 
-          <!-- Mode 6: TOEFL iBT Simulation -->
+          <!-- Mode 7: TOEFL iBT Simulation -->
           <div class="mode-card" data-mode="toefl" id="mode-toefl-card">
             <div class="mode-header">
               <span class="mode-icon">🏛️</span>
-              <span class="mode-tag">Score 26 - 30</span>
+              <span class="mode-tag">Simulasi TOEFL</span>
             </div>
             <h3 class="mode-title">TOEFL iBT Test Quest</h3>
-            <p class="mode-desc">Integrated Academic Speaking & Listening passages inspired by university lectures across Science, Arts, and Economics.</p>
+            <p class="mode-desc">Passage saintifik dan kuliah universitas internasional lintas sains, seni, dan ekonomi dengan evaluasi skor 26-30.</p>
             <div class="mode-footer">
-              <span class="mode-source">From: ETS TOEFL Official Guide</span>
-              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="toefl">Play Arena →</button>
+              <span class="mode-source">ETS TOEFL Official Guide</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="toefl">Mainkan →</button>
             </div>
           </div>
 
@@ -278,14 +402,27 @@
             <div class="dir-pill" id="current-dir-pill" title="Arah Bahasa Aktif">🇬🇧 ➔ 🇮🇩</div>
           </div>
           <div class="hud-stats">
+            <!-- 5 Hearts Life Indicator -->
+            <div class="hud-item hud-hearts-item" id="hud-hearts-item" title="Kesempatan / Lives">
+              <span class="hud-icon">❤️</span>
+              <span class="hud-val" id="hud-hearts">5/5</span>
+            </div>
+            <!-- Combo Multiplier -->
+            <div class="hud-item hud-combo-item" id="hud-combo-item" title="Combo Beruntun">
+              <span class="hud-icon">⚡</span>
+              <span class="hud-val" id="hud-combo">1x</span>
+            </div>
+            <!-- Score -->
             <div class="hud-item" title="Current Score">
               <span class="hud-icon">⭐</span>
               <span class="hud-val" id="hud-score">0</span>
             </div>
+            <!-- Streak -->
             <div class="hud-item" title="Streak Multiplier">
               <span class="hud-icon">🔥</span>
               <span class="hud-val" id="hud-streak">0</span>
             </div>
+            <!-- Progress -->
             <div class="hud-item" title="Question Progress">
               <span class="hud-icon">🎯</span>
               <span class="hud-val" id="hud-progress">1/5</span>
@@ -304,40 +441,58 @@
 
           <!-- Prompt Question / Instruction -->
           <h3 class="challenge-instruction" id="challenge-instruction">
-            Listen to the native audio, then click the Mic button and repeat clearly:
+            Dengarkan audio native, lalu ucapkan kembali kalimat berikut dengan jelas:
           </h3>
 
           <!-- Main Challenge Display Text -->
           <div class="prompt-box" id="prompt-box">
+            <!-- Vocab Emoji / Image Visual Icon -->
+            <div class="vocab-visual-badge hidden" id="vocab-visual-badge">
+              <span id="vocab-emoji-icon">🍎</span>
+            </div>
             <div class="prompt-text" id="target-phrase">
               "Could you please elaborate on that perspective?"
             </div>
-            <div class="prompt-phonetic" id="target-phonetic">
-              /kʊd juː pliːz ɪˈlæb.ə.reɪt ɒn ðæt pəˈspek.tɪv/
-            </div>
-            <div class="prompt-translation" id="target-translation">
-              "Bisakah Anda menjelaskan lebih rinci mengenai sudut pandang tersebut?"
-            </div>
+            <!-- Hidden by default before answering -->
+            <div class="prompt-phonetic hidden" id="target-phonetic"></div>
+            <!-- Translation strictly HIDDEN until after user answers -->
+            <div class="prompt-translation hidden" id="target-translation"></div>
           </div>
 
           <!-- Audio Listening Controls -->
           <div class="audio-controls">
-            <button id="btn-listen-audio" class="btn btn-audio" title="Listen to Native English">
+            <button id="btn-listen-audio" class="btn btn-audio" title="Dengarkan Audio Penutur Asli">
               <span class="speaker-icon">🔊</span> Listen Native Audio
             </button>
-            <div class="accent-selector">
-              <label for="accent-select">Voice:</label>
-              <select id="accent-select" class="form-select-sm">
-                <option value="en-US">🇺🇸 US English</option>
-                <option value="en-GB">🇬🇧 UK English</option>
-              </select>
+            <button id="btn-replay-audio" class="btn btn-audio btn-replay-audio" title="Putar Ulang Audio">
+              <span class="speaker-icon">🔁</span> Putar Ulang
+            </button>
+            <div class="audio-settings-grid">
+              <div class="audio-control-card">
+                <label for="accent-select" class="audio-control-label">🎙️ Accent</label>
+                <select id="accent-select" class="form-select-sm">
+                  <option value="en-US">US (American)</option>
+                  <option value="en-GB">UK (British)</option>
+                </select>
+              </div>
+              <div class="audio-control-card">
+                <label for="arena-speed-select" class="audio-control-label">⚡ Speed</label>
+                <select id="arena-speed-select" class="form-select-sm">
+                  <option value="0.5">🐢 0.50x (Ekstra Lambat)</option>
+                  <option value="0.6">🐢 0.60x (Sangat Lambat)</option>
+                  <option value="0.7">🐢 0.70x (Lambat)</option>
+                  <option value="0.8" selected>🎯 0.80x (Normal)</option>
+                  <option value="0.9">⚡ 0.90x (Lancar)</option>
+                  <option value="1.0">⚡ 1.00x (Cepat / Native)</option>
+                </select>
+              </div>
             </div>
           </div>
 
           <!-- MICROPHONE & SPEECH INPUT AREA -->
           <div class="mic-input-section" id="mic-section">
             <div class="mic-wrapper">
-              <button id="btn-mic-toggle" class="btn-mic" aria-label="Toggle Microphone" title="Click to Speak">
+              <button id="btn-mic-toggle" class="btn-mic" aria-label="Toggle Microphone" title="Klik untuk berbicara">
                 <div class="mic-ripple mic-ripple-1"></div>
                 <div class="mic-ripple mic-ripple-2"></div>
                 <div class="mic-icon-svg">
@@ -348,44 +503,87 @@
                   </svg>
                 </div>
               </button>
-              <div class="mic-status-label" id="mic-status">Tap microphone to speak</div>
+              <div class="mic-status-label" id="mic-status">Ketuk mikrofon untuk mulai berbicara</div>
             </div>
 
             <!-- Live Speech Transcript Box -->
             <div class="transcript-box" id="transcript-box">
-              <span class="transcript-prefix">Your Voice:</span>
-              <span class="transcript-content" id="transcript-text">Waiting for microphone input...</span>
+              <span class="transcript-prefix">Suara Anda:</span>
+              <span class="transcript-content" id="transcript-text">Menunggu input suara dari mikrofon...</span>
             </div>
 
-            <!-- Alternative Text Input (Fallback / Typing) -->
+            <!-- Alternative Text Input (Fallback / Latihan Membaca) -->
             <div class="alternative-input-row" id="text-input-row">
-              <input type="text" id="manual-text-input" class="form-control" placeholder="Or type your English answer here...">
-              <button id="btn-submit-manual" class="btn btn-secondary">Submit</button>
+              <input type="text" id="manual-text-input" class="form-control" placeholder="Atau ketik jawaban bahasa Inggris Anda di sini...">
+              <button id="btn-submit-manual" class="btn btn-secondary">Kirim Jawaban</button>
             </div>
           </div>
 
-          <!-- Multiple Choice Container (Used for Vocab/Grammar) -->
+          <!-- Multiple Choice Container (Vocabulary, Grammar, Listening) -->
           <div class="options-grid hidden" id="options-container">
             <!-- Dynamic option buttons injected here -->
+          </div>
+
+          <!-- Sentence Builder Interactive Container (Word Bank) -->
+          <div class="sentence-builder-container hidden" id="sentence-builder-container">
+            <div class="builder-instruction">Ketuk kata-kata di bawah ini untuk menyusun kalimat yang tepat:</div>
+            <div class="builder-answer-zone" id="builder-answer-zone">
+              <span class="builder-placeholder" id="builder-placeholder">Ketuk kata pada bank kata di bawah untuk menyusun kalimat...</span>
+            </div>
+            <div class="builder-word-bank" id="builder-word-bank">
+              <!-- Clickable word chip buttons injected dynamically -->
+            </div>
+            <div class="builder-action-row">
+              <button type="button" id="btn-builder-undo" class="btn btn-secondary btn-sm" title="Hapus kata terakhir yang dipilih">⌫ Hapus Kata</button>
+              <button type="button" id="btn-builder-clear" class="btn btn-ghost btn-sm" title="Kembalikan semua kata ke bank">🗑️ Reset</button>
+              <button type="button" id="btn-builder-check" class="btn btn-primary btn-sm" title="Periksa kebenaran susunan kalimat">✓ Periksa Jawaban</button>
+            </div>
           </div>
 
           <!-- Evaluation & AI Feedback Box -->
           <div class="evaluation-panel hidden" id="evaluation-panel">
             <div class="evaluation-header">
-              <div class="score-badge" id="eval-score-badge">Accuracy: 95%</div>
-              <div class="eval-verdict" id="eval-verdict">Excellent Pronunciation! 🎉</div>
+              <div class="score-badge" id="eval-score-badge">Akurasi: 95%</div>
+              <div class="eval-verdict" id="eval-verdict">Jawaban Benar! 🎉</div>
             </div>
 
             <!-- Comparison Difference Highlight -->
-            <div class="comparison-row">
+            <div class="comparison-row" id="comparison-row">
               <div class="comp-item">
                 <span class="comp-label">Target:</span>
                 <span class="comp-val" id="comp-target">...</span>
               </div>
               <div class="comp-item">
-                <span class="comp-label">You Said:</span>
+                <span class="comp-label">Jawaban Anda:</span>
                 <span class="comp-val" id="comp-heard">...</span>
               </div>
+            </div>
+
+            <!-- Kartu 1: Arti & Terjemahan Bahasa Indonesia (Muncul SETELAH menjawab) -->
+            <div class="eval-info-card" id="eval-translation-card">
+              <div class="eval-card-header">
+                <span class="eval-card-icon">🇮🇩</span>
+                <span class="eval-card-label">Arti & Terjemahan:</span>
+              </div>
+              <div class="eval-card-text" id="eval-translation-text">...</div>
+            </div>
+
+            <!-- Kartu 2: Contoh Kalimat (Muncul SETELAH menjawab) -->
+            <div class="eval-info-card hidden" id="eval-example-card">
+              <div class="eval-card-header">
+                <span class="eval-card-icon">📝</span>
+                <span class="eval-card-label">Contoh Kalimat:</span>
+              </div>
+              <div class="eval-card-text" id="eval-example-text">...</div>
+            </div>
+
+            <!-- Kartu 3: Penjelasan Tata Bahasa (Grammar Rule) -->
+            <div class="eval-info-card hidden" id="eval-grammar-card">
+              <div class="eval-card-header">
+                <span class="eval-card-icon">✍️</span>
+                <span class="eval-card-label">Penjelasan Grammar:</span>
+              </div>
+              <div class="eval-card-text" id="eval-grammar-text">...</div>
             </div>
 
             <!-- Cara Baca / Phonetic Pronunciation (Muncul setelah menjawab) -->
@@ -400,17 +598,17 @@
             <!-- AI Teacher & Examiner Comments -->
             <div class="ai-comment-card" id="ai-comment-card">
               <div class="ai-card-title">
-                <span class="ai-sparkle">✨</span> Smart AI Teacher Feedback:
+                <span class="ai-sparkle">✨</span> Catatan Guru AI:
               </div>
               <div class="ai-card-body" id="ai-feedback-text">
-                Analyzing your response...
+                Menganalisis respon Anda...
               </div>
             </div>
 
             <!-- Next Question Action -->
             <div class="eval-actions">
               <button id="btn-next-question" class="btn btn-primary btn-block">
-                Next Challenge →
+                Lanjut ke Soal Berikutnya →
               </button>
             </div>
           </div>
@@ -455,7 +653,7 @@
           <span class="notice-icon">💾</span>
           <div class="notice-text">
             <strong>Skor Anda Tersimpan Permanen!</strong>
-            <span>Progres dan total poin langsung terakumulasi ke akun Google Sheets. Saat Anda kembali besok atau ganti perangkat, skor tetap berlanjut!</span>
+            <span>Progres dan total poin langsung terakumulasi ke akun Anda. Saat Anda kembali besok atau ganti perangkat, skor tetap berlanjut!</span>
           </div>
         </div>
 
@@ -478,6 +676,200 @@
           <button id="btn-view-leaderboard-from-result" class="btn btn-secondary">🏆 View Leaderboard</button>
           <button id="btn-back-home" class="btn btn-ghost">Home Menu</button>
         </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: PROGRESS BELAJAR / HALAMAN STATISTIK -->
+    <section id="progress-view" class="view-section">
+      <div class="progress-page-container">
+        <div class="page-title-banner">
+          <div class="pill-badge">📊 Statistik Pembelajaran</div>
+          <h2 class="page-headline">Progress & Statistik Belajar</h2>
+          <p class="page-subline">Pantau penguasaan kosakata, tata bahasa, skor listening, dan speaking Anda secara real-time.</p>
+        </div>
+
+        <!-- 7 Metrik Utama Sesuai Persyaratan -->
+        <div class="progress-metrics-grid">
+          
+          <!-- Metrik 1: Vocabulary yang sudah dipelajari -->
+          <div class="progress-metric-card highlight-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🧠</span>
+              <span class="prog-card-tag">Vocabulary</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-vocab-count">0 Kata</span>
+              <span class="prog-card-label">Vocabulary Dipelajari</span>
+            </div>
+            <div class="prog-card-track">
+              <div class="prog-card-fill" id="stat-vocab-fill" style="width: 0%"></div>
+            </div>
+            <div class="prog-card-sub" id="stat-vocab-sub">Target: 50 Kata Dasar</div>
+          </div>
+
+          <!-- Metrik 2: Grammar yang sudah dikuasai -->
+          <div class="progress-metric-card highlight-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">✍️</span>
+              <span class="prog-card-tag">Grammar</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-grammar-count">0 Materi</span>
+              <span class="prog-card-label">Grammar Dikuasai</span>
+            </div>
+            <div class="prog-card-track">
+              <div class="prog-card-fill" id="stat-grammar-fill" style="width: 0%"></div>
+            </div>
+            <div class="prog-card-sub" id="stat-grammar-sub">Target: 30 Topik Tata Bahasa</div>
+          </div>
+
+          <!-- Metrik 3: Listening Score -->
+          <div class="progress-metric-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🎧</span>
+              <span class="prog-card-tag">Listening</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-listening-score">0 PTS</span>
+              <span class="prog-card-label">Listening Score</span>
+            </div>
+            <div class="prog-card-sub" id="stat-listening-acc">Akurasi Audio: 0%</div>
+          </div>
+
+          <!-- Metrik 4: Speaking Score -->
+          <div class="progress-metric-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🎙️</span>
+              <span class="prog-card-tag">Speaking</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-speaking-score">0 PTS</span>
+              <span class="prog-card-label">Speaking Score</span>
+            </div>
+            <div class="prog-card-sub" id="stat-speaking-acc">Akurasi Pengucapan: 0%</div>
+          </div>
+
+          <!-- Metrik 5: Total XP -->
+          <div class="progress-metric-card highlight-gold">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">⭐</span>
+              <span class="prog-card-tag">Gamifikasi</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-total-xp">0 XP</span>
+              <span class="prog-card-label">Total XP Terkumpul</span>
+            </div>
+            <div class="prog-card-sub" id="stat-xp-tier">Tingkat: Beginner Explorer</div>
+          </div>
+
+          <!-- Metrik 6: Jumlah game yang sudah dimainkan -->
+          <div class="progress-metric-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🎮</span>
+              <span class="prog-card-tag">Aktivitas</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-games-played">0 Game</span>
+              <span class="prog-card-label">Game Dimainkan</span>
+            </div>
+            <div class="prog-card-sub" id="stat-total-soal">0 Total Soal Dijawab</div>
+          </div>
+
+          <!-- Metrik 7: Tingkat akurasi jawaban -->
+          <div class="progress-metric-card highlight-emerald">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🎯</span>
+              <span class="prog-card-tag">Presisi</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-accuracy-rate">0%</span>
+              <span class="prog-card-label">Tingkat Akurasi Jawaban</span>
+            </div>
+            <div class="prog-card-track">
+              <div class="prog-card-fill fill-emerald" id="stat-accuracy-fill" style="width: 0%"></div>
+            </div>
+            <div class="prog-card-sub" id="stat-accuracy-feedback">Rasio Jawaban Benar</div>
+          </div>
+
+          <!-- Metrik Tambahan: Streak Harian -->
+          <div class="progress-metric-card">
+            <div class="prog-card-top">
+              <span class="prog-card-icon">🔥</span>
+              <span class="prog-card-tag">Konsistensi</span>
+            </div>
+            <div class="prog-card-body">
+              <span class="prog-card-val" id="stat-streak-days">1 Hari</span>
+              <span class="prog-card-label">Streak Belajar</span>
+            </div>
+            <div class="prog-card-sub">Lanjutkan belajar esok hari!</div>
+          </div>
+
+        </div>
+
+        <!-- Tombol Aksi Langsung Bermain -->
+        <div class="progress-cta-box">
+          <button type="button" id="btn-play-from-stats" class="btn btn-primary btn-lg">
+            🚀 Mainkan Game Baru & Naikkan XP
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: PROFILE & PENCAPAIAN BADGE -->
+    <section id="profile-view" class="view-section">
+      <div class="profile-page-container">
+        
+        <!-- Header Profil Pemain -->
+        <div class="profile-summary-card">
+          <div class="profile-avatar-box">
+            <span class="profile-avatar-emoji" id="profile-avatar-emoji">👤</span>
+          </div>
+          <div class="profile-summary-meta">
+            <h2 class="profile-display-name" id="profile-display-name">Player 1</h2>
+            <div class="profile-tags-row">
+              <span class="profile-tier-badge" id="profile-tier-badge">🟢 Beginner</span>
+              <span class="profile-lvl-badge" id="profile-lvl-badge">Level 1</span>
+              <span class="profile-xp-badge" id="profile-xp-badge">⭐ 0 XP</span>
+              <span class="profile-streak-badge" id="profile-streak-badge">🔥 1 Hari</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Hati (Lives) & Pemulihan -->
+        <div class="profile-hearts-panel">
+          <div class="hearts-panel-left">
+            <span class="hearts-panel-title">❤️ Status Kesempatan (Hearts):</span>
+            <div class="hearts-visual-icons" id="profile-hearts-icons">❤️❤️❤️❤️❤️</div>
+            <small class="hearts-panel-hint">Jawaban yang salah mengurangi 1 heart. Pulihkan kapan saja!</small>
+          </div>
+          <div class="hearts-panel-right">
+            <button type="button" id="btn-profile-refill-hearts" class="btn btn-primary btn-sm">
+              💖 Pulihkan 5 Hati Penuh
+            </button>
+          </div>
+        </div>
+
+        <!-- Grid Badge Pencapaian (8 Badges) -->
+        <div class="achievements-section">
+          <div class="achievements-header">
+            <h3 class="achievements-title">🏆 Lencana Pencapaian (Badges)</h3>
+            <span class="achievements-count" id="badges-unlocked-count">0 / 8 Terbuka</span>
+          </div>
+          <div class="badges-grid" id="badges-grid-container">
+            <!-- 8 Badges injected by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Navigasi Cepat Profil -->
+        <div class="profile-action-links">
+          <button type="button" id="btn-profile-to-leaderboard" class="btn btn-secondary">
+            🏆 Buka Live Cloud Leaderboard
+          </button>
+          <button type="button" id="btn-profile-to-settings" class="btn btn-ghost">
+            ⚙️ Pengaturan Suara & AI
+          </button>
+        </div>
+
       </div>
     </section>
 
@@ -567,7 +959,7 @@
           <button id="btn-refresh-leaderboard" class="btn btn-secondary btn-sm">
             🔄 Refresh Data
           </button>
-          <span class="sync-indicator" id="leaderboard-sync-status">Connected to Cloud Database</span>
+          <span class="sync-indicator hidden" id="leaderboard-sync-status" style="display: none;"></span>
         </div>
         
         <!-- Table 1: Leaderboard Rankings -->
@@ -685,11 +1077,26 @@
           <div class="form-group">
             <label for="cfg-voice-rate" class="form-label">Kecepatan Pengucapan (Speech Speed):</label>
             <select id="cfg-voice-rate" class="form-control">
-              <option value="0.75">🐢 0.75x - Lambat (Sangat Ramah Pemula)</option>
-              <option value="0.88">🎯 0.88x - Sedang / Learner Friendly (Rekomendasi)</option>
-              <option value="1.0" selected>⚡ 1.0x - Normal Native Speed</option>
-              <option value="1.15">🚀 1.15x - Cepat (Advanced Challenge)</option>
+              <option value="0.5">🐢 0.50x - Ekstra Lambat (Kata per Kata)</option>
+              <option value="0.6">🐢 0.60x - Sangat Lambat (Artikulasi Ekstra Jelas)</option>
+              <option value="0.7">🐢 0.70x - Lambat (Sangat Ramah Pemula)</option>
+              <option value="0.8" selected>🎯 0.80x - Sedang / Learner Friendly (Rekomendasi)</option>
+              <option value="0.9">⚡ 0.90x - Lancar (Natural)</option>
+              <option value="1.0">⚡ 1.00x - Normal Native Speed (Cepat)</option>
             </select>
+          </div>
+
+          <!-- Question Difficulty / Level Preference -->
+          <div class="form-group">
+            <label for="cfg-level-preference" class="form-label">Tingkat Kesulitan Latihan (Level):</label>
+            <select id="cfg-level-preference" class="form-control">
+              <option value="all">🌐 Semua Tingkatan (All Levels / Campuran)</option>
+              <option value="Beginner">🟢 Beginner (Tingkat Dasar / Pemula)</option>
+              <option value="Intermediate">🟡 Intermediate (Tingkat Menengah)</option>
+              <option value="Upper-Intermediate">🟠 Upper-Intermediate (Menengah Lanjut)</option>
+              <option value="Advanced">🔴 Advanced (Tingkat Mahir)</option>
+            </select>
+            <small class="form-hint">Pilih tingkatan soal yang ingin Anda latih secara default.</small>
           </div>
 
           <div class="modal-footer">
@@ -700,6 +1107,59 @@
       </div>
     </div>
   </div>
+
+  <!-- MOBILE BOTTOM NAVIGATION (Home, Play, Progress, Profile) -->
+  <nav class="bottom-nav-bar" id="bottom-nav-bar" aria-label="Navigasi Bawah Mobile">
+    <button type="button" class="bottom-nav-btn active" data-nav="landing" id="bnav-home">
+      <span class="bnav-icon">🏠</span>
+      <span class="bnav-label">Home</span>
+    </button>
+    <button type="button" class="bottom-nav-btn" data-nav="play" id="bnav-play">
+      <span class="bnav-icon">🎮</span>
+      <span class="bnav-label">Play</span>
+    </button>
+    <button type="button" class="bottom-nav-btn" data-nav="progress" id="bnav-progress">
+      <span class="bnav-icon">📊</span>
+      <span class="bnav-label">Progress</span>
+    </button>
+    <button type="button" class="bottom-nav-btn" data-nav="profile" id="bnav-profile">
+      <span class="bnav-icon">👤</span>
+      <span class="bnav-label">Profile</span>
+    </button>
+  </nav>
+
+  <!-- MODAL: KEHABISAN HATI (OUT OF HEARTS) -->
+  <div class="modal-overlay hidden" id="modal-hearts">
+    <div class="modal-card modal-hearts-card">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <span class="modal-icon">💔</span>
+          <div>
+            <h3 class="modal-title">Kesempatan Bermain Habis!</h3>
+            <p class="modal-subtitle">Hati (lives) Anda tersisa 0/5.</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-hearts" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="hearts-refill-icon-large">💖</div>
+        <h4 class="hearts-refill-title">Isi Ulang 5 Hati Anda Sekarang!</h4>
+        <p class="hearts-refill-desc">Jangan khawatir, Anda dapat langsung memulihkan 5 hati penuh untuk lanjut belajar tanpa batas.</p>
+        <div class="hearts-timer-pill" id="hearts-timer-pill">⏳ Pemulihan otomatis: +1 hati tiap 5 menit</div>
+        <div class="hearts-modal-actions">
+          <button type="button" id="btn-refill-hearts" class="btn btn-primary btn-block btn-lg">
+            ⚡ Pulihkan 5 Hati Sekarang (Gratis)
+          </button>
+          <button type="button" id="btn-hearts-home" class="btn btn-ghost btn-block">
+            🏠 Kembali ke Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Floating XP Animation Container -->
+  <div id="floating-xp-container" class="floating-xp-container"></div>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
