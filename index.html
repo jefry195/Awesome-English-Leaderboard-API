@@ -339,22 +339,25 @@
             <button id="btn-listen-audio" class="btn btn-audio" title="Listen to Native English">
               <span class="speaker-icon">🔊</span> Listen Native Audio
             </button>
-            <div class="accent-selector">
-              <label for="accent-select">Voice:</label>
-              <select id="accent-select" class="form-select-sm">
-                <option value="en-US">🇺🇸 US</option>
-                <option value="en-GB">🇬🇧 UK</option>
-              </select>
-            </div>
-            <div class="speed-selector">
-              <label for="arena-speed-select">Speed:</label>
-              <select id="arena-speed-select" class="form-select-sm">
-                <option value="0.6">🐢 0.60x (Slow)</option>
-                <option value="0.7">🐢 0.70x</option>
-                <option value="0.8" selected>🎯 0.80x</option>
-                <option value="0.9">⚡ 0.90x</option>
-                <option value="1.0">⚡ 1.00x</option>
-              </select>
+            <div class="audio-settings-grid">
+              <div class="audio-control-card">
+                <label for="accent-select" class="audio-control-label">🎙️ Accent</label>
+                <select id="accent-select" class="form-select-sm">
+                  <option value="en-US">US (American)</option>
+                  <option value="en-GB">UK (British)</option>
+                </select>
+              </div>
+              <div class="audio-control-card">
+                <label for="arena-speed-select" class="audio-control-label">⚡ Speed</label>
+                <select id="arena-speed-select" class="form-select-sm">
+                  <option value="0.5">🐢 0.50x (Ekstra Lambat)</option>
+                  <option value="0.6">🐢 0.60x (Sangat Lambat)</option>
+                  <option value="0.7">🐢 0.70x (Lambat)</option>
+                  <option value="0.8" selected>🎯 0.80x (Normal)</option>
+                  <option value="0.9">⚡ 0.90x (Lancar)</option>
+                  <option value="1.0">⚡ 1.00x (Cepat / Native)</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -709,12 +712,12 @@
           <div class="form-group">
             <label for="cfg-voice-rate" class="form-label">Kecepatan Pengucapan (Speech Speed):</label>
             <select id="cfg-voice-rate" class="form-control">
+              <option value="0.5">🐢 0.50x - Ekstra Lambat (Kata per Kata)</option>
               <option value="0.6">🐢 0.60x - Sangat Lambat (Artikulasi Ekstra Jelas)</option>
               <option value="0.7">🐢 0.70x - Lambat (Sangat Ramah Pemula)</option>
               <option value="0.8" selected>🎯 0.80x - Sedang / Learner Friendly (Rekomendasi)</option>
-              <option value="0.9">⚡ 0.90x - Lancar</option>
-              <option value="1.0">⚡ 1.00x - Normal Native Speed</option>
-              <option value="1.15">🚀 1.15x - Cepat (Advanced Challenge)</option>
+              <option value="0.9">⚡ 0.90x - Lancar (Natural)</option>
+              <option value="1.0">⚡ 1.00x - Normal Native Speed (Cepat)</option>
             </select>
           </div>
 

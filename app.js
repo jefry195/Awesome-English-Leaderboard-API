@@ -62,6 +62,18 @@
       .trim();
   }
 
+  // Helper to normalize speed rate values to exact select option keys ('0.5', '0.6', '0.7', '0.8', '0.9', '1.0')
+  function normalizeRate(rate) {
+    const r = parseFloat(rate);
+    if (isNaN(r) || r <= 0) return '0.8';
+    if (r <= 0.55) return '0.5';
+    if (r <= 0.65) return '0.6';
+    if (r <= 0.75) return '0.7';
+    if (r <= 0.85) return '0.8';
+    if (r <= 0.95) return '0.9';
+    return '1.0';
+  }
+
   /* ==========================================================================
      1. CURATED CONTENT REPOSITORY (Bilingual English & Indonesian)
      ========================================================================== */
@@ -2070,7 +2082,7 @@
       this.isRecording = false;
 
       this.selectedVoiceName = safeStorage.getItem('cfg_voice_name') || 'auto';
-      this.speechRate = parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.80');
+      this.speechRate = parseFloat(normalizeRate(safeStorage.getItem('cfg_voice_rate') || '0.8'));
       this.cachedVoices = [];
 
       if ('speechSynthesis' in window) {
@@ -2163,15 +2175,21 @@
 
     speak(text, lang = 'en-US', customRate = null) {
       if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
+
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
 
       const cleanedText = cleanText(text);
+      if (!cleanedText) return;
+
       const utterance = new SpeechSynthesisUtterance(cleanedText);
-      utterance.lang = lang;
+      utterance.lang = lang || 'en-US';
       
-      const activeRate = customRate || this.speechRate || parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.80');
-      utterance.rate = activeRate;
-      utterance.pitch = 1.0;
+      const rawRate = customRate !== null && customRate !== undefined 
+        ? customRate 
+        : (this.speechRate || safeStorage.getItem('cfg_voice_rate') || 0.8);
+      const activeRate = Math.max(0.4, Math.min(2.0, parseFloat(rawRate) || 0.8));
 
       const voices = (this.cachedVoices && this.cachedVoices.length > 0) ? this.cachedVoices : window.speechSynthesis.getVoices();
       let chosenVoice = null;
@@ -2180,13 +2198,13 @@
       const pref = this.selectedVoiceName || 'auto';
       if (pref !== 'auto' && voices.length > 0) {
         if (pref === 'female_us') {
-          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female') || v.name.includes('Natural') || v.name.includes('Google US')));
+          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female')));
         } else if (pref === 'male_us') {
-          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Male') || v.name.includes('Guy')));
+          chosenVoice = voices.find(v => (v.lang.includes('US') || v.lang.includes('en-US')) && (v.name.includes('David') || v.name.includes('Alex') || v.name.includes('Male')));
         } else if (pref === 'female_uk') {
-          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('Susan') || v.name.includes('Victoria') || v.name.includes('Female') || v.name.includes('Google UK English Female')));
+          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('Susan') || v.name.includes('Victoria') || v.name.includes('Female')));
         } else if (pref === 'male_uk') {
-          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Male') || v.name.includes('Google UK English Male')));
+          chosenVoice = voices.find(v => (v.lang.includes('GB') || v.lang.includes('en-GB')) && (v.name.includes('George') || v.name.includes('Daniel') || v.name.includes('Male')));
         } else if (pref === 'female_au') {
           chosenVoice = voices.find(v => (v.lang.includes('AU') || v.lang.includes('en-AU')));
         } else if (pref === 'male_in') {
@@ -2196,12 +2214,17 @@
         }
       }
 
-      // 2. Fallback matching accent if no persona matched
+      // 2. Fallback matching accent
+      // Prioritize localService voices (like Microsoft David / Microsoft Zira on Windows)
+      // because local voices faithfully respect and smoothly scale utterance.rate (0.5x - 1.0x)!
       if (!chosenVoice && voices.length > 0) {
-        const langCode = lang.toLowerCase();
-        chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
+        const langCode = (lang || 'en-US').toLowerCase();
+        chosenVoice = voices.find(v => v.localService && v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
         if (!chosenVoice) {
-          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(langCode.substring(0, 2)) && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Online')));
+          chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === langCode);
+        }
+        if (!chosenVoice) {
+          chosenVoice = voices.find(v => v.localService && v.lang && v.lang.toLowerCase().startsWith(langCode.substring(0, 2)));
         }
         if (!chosenVoice) {
           chosenVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
@@ -2212,7 +2235,18 @@
         utterance.voice = chosenVoice;
       }
 
-      window.speechSynthesis.speak(utterance);
+      // CRITICAL: Set utterance.rate AFTER setting utterance.voice
+      utterance.rate = activeRate;
+      utterance.pitch = 1.0;
+
+      // Small 30ms timeout avoids Chromium async cancel() race condition
+      setTimeout(() => {
+        try {
+          window.speechSynthesis.speak(utterance);
+        } catch (err) {
+          console.warn('SpeechSynthesis error:', err);
+        }
+      }, 30);
     }
   }
 
@@ -2964,12 +2998,21 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       // In-game Speed Select
       if (this.dom.challenge.speedSelect) {
         this.dom.challenge.speedSelect.addEventListener('change', (e) => {
-          const val = parseFloat(e.target.value) || 0.80;
-          this.speech.speechRate = val;
-          safeStorage.setItem('cfg_voice_rate', String(val));
+          const norm = normalizeRate(e.target.value);
+          const numVal = parseFloat(norm);
+          this.speech.speechRate = numVal;
+          safeStorage.setItem('cfg_voice_rate', norm);
           const cfgRate = document.getElementById('cfg-voice-rate');
-          if (cfgRate) cfgRate.value = String(val);
-          this.showToast(`Kecepatan baca audio diatur: ${val}x`, 'info');
+          if (cfgRate) cfgRate.value = norm;
+          this.showToast(`Kecepatan baca audio diatur: ${numVal}x`, 'info');
+
+          // Immediately preview the new speed
+          const q = this.questions[this.currentIndex];
+          if (q) {
+            const accent = this.dom.challenge.accentSelect ? this.dom.challenge.accentSelect.value : 'en-US';
+            const textToSpeak = cleanText(q.en || q.target);
+            this.speech.speak(textToSpeak, accent, numVal);
+          }
         });
       }
 
@@ -3383,7 +3426,8 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       // Play correct audio for listening & speaking correction
       if (isIdToEn) {
         setTimeout(() => {
-          this.speech.speak(q.en || q.target, this.dom.challenge.accentSelect.value);
+          const currentSpeed = this.dom.challenge.speedSelect ? parseFloat(this.dom.challenge.speedSelect.value) : this.speech.speechRate;
+          this.speech.speak(cleanText(q.en || q.target), this.dom.challenge.accentSelect.value, currentSpeed);
         }, 300);
       }
 
@@ -3590,7 +3634,8 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
 
       const voiceSelect = document.getElementById('cfg-voice');
       const savedVoice = safeStorage.getItem('cfg_voice_name') || 'auto';
-      const savedRate = safeStorage.getItem('cfg_voice_rate') || '0.80';
+      const rawRate = safeStorage.getItem('cfg_voice_rate') || '0.8';
+      const savedRate = normalizeRate(rawRate);
 
       const rateSelect = document.getElementById('cfg-voice-rate');
       if (rateSelect) rateSelect.value = savedRate;
@@ -3630,7 +3675,8 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
       const key = document.getElementById('cfg-gemini-key').value.trim();
       const accent = document.getElementById('cfg-accent').value;
       const voice = document.getElementById('cfg-voice')?.value || 'auto';
-      const rate = document.getElementById('cfg-voice-rate')?.value || '0.80';
+      const rawRate = document.getElementById('cfg-voice-rate')?.value || '0.8';
+      const rate = normalizeRate(rawRate);
       const lvl = document.getElementById('cfg-level-preference')?.value || 'all';
 
       safeStorage.setItem('cfg_appscript_url', url);
@@ -3656,20 +3702,20 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         safeStorage.removeItem('cfg_gemini_key');
         safeStorage.setItem('cfg_accent', 'en-US');
         safeStorage.setItem('cfg_voice_name', 'auto');
-        safeStorage.setItem('cfg_voice_rate', '0.80');
+        safeStorage.setItem('cfg_voice_rate', '0.8');
         safeStorage.setItem('cfg_level_preference', 'all');
 
         document.getElementById('cfg-appscript-url').value = '';
         document.getElementById('cfg-gemini-key').value = '';
         document.getElementById('cfg-accent').value = 'en-US';
         if (document.getElementById('cfg-voice')) document.getElementById('cfg-voice').value = 'auto';
-        if (document.getElementById('cfg-voice-rate')) document.getElementById('cfg-voice-rate').value = '0.80';
+        if (document.getElementById('cfg-voice-rate')) document.getElementById('cfg-voice-rate').value = '0.8';
         if (document.getElementById('cfg-level-preference')) document.getElementById('cfg-level-preference').value = 'all';
 
         this.setLevelPreference('all');
         this.speech.selectedVoiceName = 'auto';
-        this.speech.speechRate = 0.80;
-        if (this.dom.challenge.speedSelect) this.dom.challenge.speedSelect.value = '0.80';
+        this.speech.speechRate = 0.8;
+        if (this.dom.challenge.speedSelect) this.dom.challenge.speedSelect.value = '0.8';
         this.showToast('Pengaturan direset ke default.', 'info');
       }
     }
@@ -3677,17 +3723,18 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     loadSettings() {
       const accent = safeStorage.getItem('cfg_accent') || 'en-US';
       const voice = safeStorage.getItem('cfg_voice_name') || 'auto';
-      const rate = parseFloat(safeStorage.getItem('cfg_voice_rate') || '0.80');
+      const rawRate = safeStorage.getItem('cfg_voice_rate') || '0.8';
+      const normalizedRate = normalizeRate(rawRate);
       const lvl = safeStorage.getItem('cfg_level_preference') || 'all';
 
       if (this.dom.challenge.accentSelect) {
         this.dom.challenge.accentSelect.value = accent;
       }
       if (this.dom.challenge.speedSelect) {
-        this.dom.challenge.speedSelect.value = String(rate);
+        this.dom.challenge.speedSelect.value = normalizedRate;
       }
       this.speech.selectedVoiceName = voice;
-      this.speech.speechRate = rate;
+      this.speech.speechRate = parseFloat(normalizedRate);
 
       this.setLevelPreference(lvl);
 
@@ -3697,11 +3744,11 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         btnTestVoice.dataset.bound = 'true';
         btnTestVoice.addEventListener('click', () => {
           const v = document.getElementById('cfg-voice')?.value || 'auto';
-          const r = parseFloat(document.getElementById('cfg-voice-rate')?.value || '0.80');
+          const r = parseFloat(document.getElementById('cfg-voice-rate')?.value || '0.8');
           const acc = document.getElementById('cfg-accent')?.value || 'en-US';
           this.speech.selectedVoiceName = v;
           this.speech.speechRate = r;
-          this.speech.speak('Hello! Welcome to Awesome English Arena. Practice makes permanent!', acc);
+          this.speech.speak('Hello! Welcome to Awesome English Arena. Practice makes permanent!', acc, r);
         });
       }
     }
