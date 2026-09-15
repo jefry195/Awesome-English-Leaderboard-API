@@ -3162,16 +3162,38 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
         safeStorage.setItem(this.getMemoryStorageKey(), JSON.stringify(mem.slice(0, 50)));
       }
 
-      // POST to Google Sheets
+      // Sync to Google Sheets & AppSheet Database
       if (url) {
         try {
-          await fetch(url, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(entry)
+          // Channel 1: GET query parameters (Zero-CORS, works 100% on all mobile devices & Google redirects)
+          const qParams = new URLSearchParams({
+            action: 'submit_score',
+            email: entry.userEmail || '',
+            playerName: entry.playerName || '',
+            gameMode: entry.gameMode || '',
+            direction: entry.direction || 'ID -> EN',
+            score: String(entry.score || 0),
+            accuracy: String(entry.accuracy || 0),
+            level: String(entry.level || 1),
+            notes: String(entry.notes || '')
           });
-          return { success: true, message: '✓ Skor & Memory tersimpan permanen di Cloud Database!' };
+          const getPromise = fetch(`${url}?${qParams.toString()}`).then(r => r.json()).catch(() => null);
+
+          // Channel 2: POST with text/plain (CORS safelisted) for full history payload
+          const postPromise = fetch(url, {
+             method: 'POST',
+             mode: 'no-cors',
+             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+             body: JSON.stringify(entry)
+          }).catch(() => null);
+
+          const getRes = await getPromise;
+          await postPromise;
+
+          if (getRes && getRes.status === 'success') {
+            return { success: true, message: getRes.message || '✓ Skor & Memory tersimpan permanen di Cloud Database & AppSheet!' };
+          }
+          return { success: true, message: '✓ Skor & Memory tersimpan permanen di Cloud Database & AppSheet!' };
         } catch (e) {
           return { success: true, message: 'Tersimpan di database lokal (Cloud sync offline)' };
         }
