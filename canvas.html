@@ -1,3 +1,3475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Awesome English Arena - Interactive English Learning Game featuring Voice Shadowing with Mic, Listening Dictation, Grammar Quest, Smart AI Teacher & Examiner, and Live Global Leaderboard.">
+  <meta name="keywords" content="English learning game, shadowing speaking, speech recognition mic, AI English teacher, cloud leaderboard, awesome english">
+  <meta name="author" content="Build With Jefri - Awesome English">
+  <title>Awesome English Arena | Voice Shadowing & AI English Challenge</title>
+  
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <style>
+/* ==========================================================================
+   AWESOME ENGLISH ARENA - MODERN PREMIUM DESIGN SYSTEM
+   Dark Glassmorphism, Neon Accents, Fluid Typography, Micro-animations
+   ========================================================================== */
+
+:root {
+  /* Color Tokens */
+  --bg-main: #0a0d16;
+  --bg-card: rgba(18, 24, 40, 0.75);
+  --bg-card-hover: rgba(28, 38, 64, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(99, 102, 241, 0.5);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #090d16;
+
+  /* Accent & Gradients */
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-glow: rgba(99, 102, 241, 0.4);
+  
+  --secondary: #06b6d4;
+  --secondary-glow: rgba(6, 182, 212, 0.35);
+
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --accent-violet: #8b5cf6;
+
+  --grad-hero: linear-gradient(135deg, #a855f7 0%, #6366f1 50%, #06b6d4 100%);
+  --grad-card: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.8) 100%);
+  --grad-button: linear-gradient(135deg, #6366f1, #8b5cf6);
+
+  /* Elevation & Shadows */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 35px var(--primary-glow);
+  --shadow-mic: 0 0 30px rgba(244, 63, 94, 0.5);
+
+  /* Fonts */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --trans-fast: 0.18s ease;
+  --trans-normal: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   RESET & BASE STYLES
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fast Tap Response for All Touch Devices (Eliminates 300ms mobile touch delay) */
+button, a, input, select, textarea, .btn, .mode-card, .btn-option, .btn-mic, .user-pill {
+  touch-action: manipulation;
+}
+
+/* Content Visibility on inactive sections - Skips browser layout engine cost for hidden views */
+.view-section:not(.active) {
+  content-visibility: hidden;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient Background Lights - Hardware Accelerated */
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.bg-glow-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #6366f1, transparent 70%);
+  top: -100px;
+  left: -150px;
+}
+
+.bg-glow-2 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #06b6d4, transparent 70%);
+  bottom: 5%;
+  right: -150px;
+}
+
+.bg-glow-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #8b5cf6, transparent 70%);
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.2;
+}
+
+/* --------------------------------------------------------------------------
+   NAVBAR
+   -------------------------------------------------------------------------- */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  background: rgba(10, 13, 22, 0.8);
+  border-bottom: 1px solid var(--border-glass);
+  padding: 0.9rem 1.5rem;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.logo-badge {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  background: var(--grad-button);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.logo-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mobile-nav-controls {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE SLIDE-OUT DRAWER & HAMBURGER
+   -------------------------------------------------------------------------- */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  transition: opacity var(--trans-normal);
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 86vw;
+  background: rgba(12, 16, 28, 0.98);
+  border-left: 1px solid var(--border-glass);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.drawer-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.btn-close-drawer {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+  line-height: 1;
+}
+
+.btn-close-drawer:hover, .btn-close-drawer:active {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fff;
+  border-color: var(--accent-rose);
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1.2rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Profile Box in Drawer */
+.drawer-profile-box {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.drawer-profile-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.drawer-profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px solid var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.drawer-profile-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.drawer-profile-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drawer-profile-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.drawer-score-pill {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.drawer-lvl-pill {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.btn-drawer-action {
+  font-size: 0.88rem;
+  padding: 0.65rem;
+}
+
+.btn-danger-outline {
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #fecdd3;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--trans-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-danger-outline:hover {
+  background: rgba(244, 63, 94, 0.3);
+  color: #fff;
+  border-color: #f43f5e;
+}
+
+/* Nav items inside Drawer */
+.drawer-nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.drawer-menu-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 1rem;
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--trans-fast);
+  touch-action: manipulation;
+}
+
+.drawer-menu-btn:hover, .drawer-menu-btn:active {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--primary);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.drawer-menu-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.drawer-menu-text {
+  flex: 1;
+  text-align: left;
+}
+
+.drawer-menu-arrow {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.drawer-credit-btn {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.2));
+  border-color: rgba(139, 92, 246, 0.35);
+}
+
+/* Drawer WhatsApp Card */
+.drawer-wa-card {
+  background: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.25);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+.drawer-wa-heading {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #34d399;
+  margin-bottom: 0.3rem;
+}
+
+.drawer-wa-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.btn-wa-drawer {
+  width: 100%;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  transition: all var(--trans-fast);
+  touch-action: manipulation;
+}
+
+.btn-wa-drawer:hover {
+  background: linear-gradient(135deg, #2bf075, #15a594);
+  transform: translateY(-1px);
+}
+
+.drawer-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border-glass);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Hamburger Button */
+.btn-hamburger {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+  padding: 0;
+  touch-action: manipulation;
+}
+
+.btn-hamburger:hover, .btn-hamburger:active {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+
+.hamburger-line {
+  width: 20px;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all var(--trans-fast);
+}
+
+.mobile-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-full);
+  max-width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --------------------------------------------------------------------------
+   LEVEL DIFFICULTY FILTER BAR
+   -------------------------------------------------------------------------- */
+.level-filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0 1.2rem 0;
+  padding: 0.8rem 1.2rem;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(16px);
+}
+
+.level-filter-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.level-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-level-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  padding: 0.45rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+  touch-action: manipulation;
+}
+
+.btn-level-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+.btn-level-pill.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #a5b4fc;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   BUTTONS
+   -------------------------------------------------------------------------- */
+.btn {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all var(--trans-normal);
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--grad-button);
+  color: #fff;
+  box-shadow: 0 4px 18px var(--primary-glow);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--border-active);
+}
+
+.btn-outline:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: #fff;
+}
+
+.btn-sm {
+  font-size: 0.85rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-icon-only {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all var(--trans-fast);
+}
+
+.btn-icon-only:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: rotate(30deg);
+}
+
+/* --------------------------------------------------------------------------
+   LAYOUT & VIEWS
+   -------------------------------------------------------------------------- */
+.main-layout {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem 1.5rem;
+}
+
+.view-section {
+  display: none;
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.view-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   HERO / LANDING VIEW
+   -------------------------------------------------------------------------- */
+.hero-content {
+  text-align: center;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #c7d2fe;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1.5rem;
+}
+
+.pill-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-emerald);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-emerald);
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+.hero-headline {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.3rem;
+}
+
+.gradient-text {
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.hero-subline {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 780px;
+  margin: 0 auto 2.5rem auto;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3.5rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(12px);
+  padding: 1.2rem 1rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform var(--trans-normal);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-active);
+}
+
+.stat-number {
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   LANGUAGE DIRECTION SWITCHER (Dua Arah: ID -> EN & EN -> ID)
+   -------------------------------------------------------------------------- */
+.lang-direction-wrapper {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 2.2rem;
+  text-align: left;
+}
+
+.lang-direction-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #c7d2fe;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lang-direction-group {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.btn-lang-dir {
+  flex: 1;
+  min-width: 260px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-glass);
+  color: var(--text-secondary);
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all var(--trans-normal);
+}
+
+.btn-lang-dir:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+.btn-lang-dir.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(6, 182, 212, 0.25));
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 20px var(--primary-glow);
+}
+
+/* Direction Pill in HUD */
+.dir-pill {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #67e8f9;
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+/* Modal Tabs */
+.modal-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-glass);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.modal-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--trans-fast);
+}
+
+.modal-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.modal-tab-btn.active {
+  color: #fff;
+  background: rgba(99, 102, 241, 0.2);
+  border-bottom: 2px solid var(--primary);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   MODE CARDS GRID
+   -------------------------------------------------------------------------- */
+.modes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.mode-card {
+  background: var(--grad-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(16px);
+  transition: all var(--trans-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--grad-hero);
+  opacity: 0;
+  transition: opacity var(--trans-fast);
+}
+
+.mode-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-active);
+  box-shadow: var(--shadow-glow);
+}
+
+.mode-card:hover::before {
+  opacity: 1;
+}
+
+.mode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.mode-icon {
+  font-size: 2.2rem;
+}
+
+.mode-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+}
+
+.tag-popular {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.4);
+}
+
+.mode-title {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  color: var(--text-primary);
+}
+
+.mode-desc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.mode-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border-glass);
+}
+
+.mode-source {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   GAME HUD & ARENA
+   -------------------------------------------------------------------------- */
+.game-container {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.game-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(14px);
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+}
+
+.hud-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mode-pill {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+}
+
+.hud-stats {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hud-val {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+/* --------------------------------------------------------------------------
+   CHALLENGE CARD
+   -------------------------------------------------------------------------- */
+.challenge-card {
+  background: var(--grad-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(16px);
+  position: relative;
+}
+
+.challenge-meta {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.meta-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-secondary);
+}
+
+.meta-level {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.challenge-instruction {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.prompt-box {
+  background: rgba(10, 14, 26, 0.7);
+  border: 1px solid var(--border-glass);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-bottom: 1.8rem;
+}
+
+.prompt-text {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.prompt-phonetic {
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: #a5b4fc;
+  margin-bottom: 0.6rem;
+}
+
+.prompt-translation {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Audio Controls */
+.audio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-audio {
+  background: rgba(99, 102, 241, 0.15);
+  color: #c7d2fe;
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--trans-fast);
+}
+
+.btn-audio:hover {
+  background: rgba(99, 102, 241, 0.3);
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.accent-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.form-select-sm {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-sm);
+  outline: none;
+  font-size: 0.85rem;
+}
+
+/* --------------------------------------------------------------------------
+   MICROPHONE INTERACTION & PULSE ANIMATIONS
+   -------------------------------------------------------------------------- */
+.mic-input-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.mic-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-mic {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--grad-button);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 30px var(--primary-glow);
+  transition: all var(--trans-normal);
+  z-index: 2;
+}
+
+.btn-mic:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 36px rgba(99, 102, 241, 0.7);
+}
+
+/* Active Recording State */
+.btn-mic.recording {
+  background: linear-gradient(135deg, #ef4444, #f43f5e);
+  box-shadow: var(--shadow-mic);
+  animation: micBeat 1.2s infinite ease-in-out;
+}
+
+@keyframes micBeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.mic-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: rgba(244, 63, 94, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1;
+}
+
+.btn-mic.recording ~ .mic-ripple-1 {
+  animation: ripple 1.6s infinite cubic-bezier(0, 0.2, 0.8, 1);
+}
+
+.btn-mic.recording ~ .mic-ripple-2 {
+  animation: ripple 1.6s infinite cubic-bezier(0, 0.2, 0.8, 1) 0.8s;
+}
+
+@keyframes ripple {
+  0% {
+    width: 88px;
+    height: 88px;
+    opacity: 0.8;
+  }
+  100% {
+    width: 170px;
+    height: 170px;
+    opacity: 0;
+  }
+}
+
+.mic-status-label {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 0.8rem;
+  transition: color var(--trans-fast);
+}
+
+.btn-mic.recording + .mic-status-label,
+.mic-wrapper:has(.btn-mic.recording) .mic-status-label {
+  color: var(--accent-rose);
+  font-weight: 600;
+}
+
+/* Transcript Box */
+.transcript-box {
+  width: 100%;
+  background: rgba(10, 14, 26, 0.6);
+  border: 1px dashed var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.2rem;
+  display: flex;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  min-height: 52px;
+  align-items: center;
+}
+
+.transcript-prefix {
+  color: var(--primary);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.transcript-content {
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+/* Fallback Text Input */
+.alternative-input-row {
+  width: 100%;
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+/* Multiple Choice Grid */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin: 1.5rem 0;
+}
+
+.btn-option {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+}
+
+.btn-option:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--border-active);
+  transform: translateY(-2px);
+}
+
+.btn-option.correct {
+  background: rgba(16, 185, 129, 0.2) !important;
+  border-color: var(--accent-emerald) !important;
+  color: #6ee7b7;
+}
+
+.btn-option.wrong {
+  background: rgba(244, 63, 94, 0.2) !important;
+  border-color: var(--accent-rose) !important;
+  color: #fca5a5;
+}
+
+/* --------------------------------------------------------------------------
+   EVALUATION PANEL & AI TEACHER
+   -------------------------------------------------------------------------- */
+.evaluation-panel {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 1.6rem;
+  margin-top: 1.8rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.evaluation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.score-badge {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-sm);
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.score-badge.low {
+  background: rgba(244, 63, 94, 0.2);
+  color: var(--accent-rose);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.score-badge.medium {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--accent-amber);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.eval-verdict {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.comparison-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.2rem;
+}
+
+.comp-item {
+  display: flex;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.comp-label {
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 75px;
+}
+
+.comp-val {
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.phonetic-reveal-box {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px dashed rgba(99, 102, 241, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.phonetic-reveal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.phonetic-reveal-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a5b4fc;
+}
+
+.phonetic-reveal-val {
+  font-family: 'SF Mono', 'Courier New', monospace;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #38bdf8;
+  letter-spacing: 0.03em;
+}
+
+.ai-comment-card {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.08));
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.ai-card-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #c7d2fe;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ai-sparkle {
+  color: #fbbf24;
+}
+
+.ai-card-body {
+  font-size: 0.92rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   RESULT & GAME OVER VIEW
+   -------------------------------------------------------------------------- */
+.result-card {
+  background: var(--grad-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-md);
+}
+
+.result-confetti-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.8rem;
+  animation: bounce 1s ease infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}
+
+.result-title {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.result-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.result-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.2rem;
+}
+
+.metric-card {
+  background: rgba(10, 14, 26, 0.6);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 0.8rem;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.metric-value {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.leaderboard-submit-box {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: left;
+  margin-bottom: 1.8rem;
+}
+
+.submit-box-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.submit-box-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.submit-input-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.status-message {
+  margin-top: 0.8rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.status-message.success {
+  color: var(--accent-emerald);
+}
+
+.status-message.error {
+  color: var(--accent-rose);
+}
+
+/* Canvas Gemini Box */
+.canvas-gemini-box {
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.6), rgba(15, 23, 42, 0.8));
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.canvas-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #c084fc;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.canvas-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.copy-alert {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+  color: var(--accent-emerald);
+  font-weight: 500;
+}
+
+.result-action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   MODALS
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-card {
+  background: #0f172a;
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.modal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.modal-icon {
+  font-size: 1.5rem;
+}
+
+.modal-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.modal-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: color var(--trans-fast);
+}
+
+.btn-close-modal:hover {
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Table Leaderboard */
+.leaderboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.sync-indicator {
+  font-size: 0.82rem;
+  color: var(--accent-emerald);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.leaderboard-table th {
+  padding: 0.75rem 0.9rem;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.leaderboard-table td {
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.leaderboard-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rank-cell {
+  font-weight: 800;
+  width: 50px;
+}
+
+.rank-1 { color: #fbbf24; }
+.rank-2 { color: #94a3b8; }
+.rank-3 { color: #d97706; }
+
+.loading-row {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem !important;
+}
+
+/* --------------------------------------------------------------------------
+   FORMS & CONTROLS
+   -------------------------------------------------------------------------- */
+.form-group {
+  margin-bottom: 1.3rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--text-primary);
+}
+
+.form-control {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all var(--trans-fast);
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.form-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.4rem;
+  line-height: 1.4;
+}
+
+.form-hint a {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-glass);
+}
+
+/* --------------------------------------------------------------------------
+   TOAST NOTIFICATIONS
+   -------------------------------------------------------------------------- */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  pointer-events: none;
+}
+
+.toast {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(14px);
+  color: var(--text-primary);
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  animation: slideIn 0.25s ease;
+  pointer-events: auto;
+}
+
+.toast.success { border-left: 4px solid var(--accent-emerald); }
+.toast.error { border-left: 4px solid var(--accent-rose); }
+.toast.info { border-left: 4px solid var(--primary); }
+
+@keyframes slideIn {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Utility */
+.hidden { display: none !important; }
+
+/* Button Canvas Pill */
+.btn-canvas-pill {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(99, 102, 241, 0.25));
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  color: #e9d5ff;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.25);
+  transition: all var(--trans-normal);
+}
+
+.btn-canvas-pill:hover {
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  color: #fff;
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   COMPREHENSIVE RESPONSIVE DESIGN (MOBILE, TABLET, DESKTOP, LANDSCAPE)
+   -------------------------------------------------------------------------- */
+
+/* TABLET (Portrait & Landscape: 769px - 1024px) */
+@media (max-width: 1024px) {
+  .main-layout {
+    padding: 1.8rem 1.2rem 4rem 1.2rem;
+  }
+
+  .modes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.9rem;
+  }
+
+  .challenge-card {
+    padding: 2rem;
+  }
+
+  .prompt-text {
+    font-size: clamp(1.25rem, 3.2vw, 1.55rem);
+  }
+}
+
+/* MOBILE / HP (Max 768px) - ULTRA LIGHTWEIGHT & FAST */
+@media (max-width: 768px) {
+  /* Performance: Disable expensive GPU Gaussian blur on mobile */
+  .bg-glow {
+    filter: none !important;
+    opacity: 0.22 !important;
+    will-change: auto;
+    border-radius: 0;
+  }
+
+  .bg-glow-1 {
+    width: 100vw;
+    height: 320px;
+    top: 0;
+    left: 0;
+    background: radial-gradient(ellipse at 0% 0%, rgba(99, 102, 241, 0.45) 0%, transparent 70%);
+  }
+
+  .bg-glow-2 {
+    width: 100vw;
+    height: 320px;
+    bottom: 0;
+    right: 0;
+    background: radial-gradient(ellipse at 100% 100%, rgba(6, 182, 212, 0.35) 0%, transparent 70%);
+  }
+
+  .bg-glow-3 {
+    display: none;
+  }
+
+  .navbar {
+    padding: 0.65rem 0.9rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(10, 13, 22, 0.92);
+  }
+
+  .nav-container {
+    gap: 0.4rem;
+  }
+
+  .logo-title {
+    font-size: 1rem;
+  }
+
+  .logo-badge {
+    font-size: 0.65rem;
+    padding: 0.18rem 0.45rem;
+  }
+
+  .desktop-nav-actions {
+    display: none !important;
+  }
+
+  .mobile-nav-controls {
+    display: flex !important;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .main-layout {
+    padding: 1.2rem 0.85rem 3.5rem 0.85rem;
+  }
+
+  .hero-headline {
+    font-size: clamp(1.5rem, 5vw + 0.3rem, 2.2rem);
+    margin-bottom: 0.85rem;
+    line-height: 1.25;
+  }
+
+  .hero-subline {
+    font-size: 0.92rem;
+    margin-bottom: 1.6rem;
+    line-height: 1.5;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    padding: 0.85rem 0.6rem;
+  }
+
+  .stat-number {
+    font-size: 1.3rem;
+  }
+
+  .modes-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mode-card {
+    padding: 1.3rem;
+  }
+
+  .mode-title {
+    font-size: 1.2rem;
+  }
+
+  .mode-desc {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  /* HUD on Mobile */
+  .game-hud {
+    padding: 0.65rem 0.85rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .hud-left {
+    justify-content: space-between;
+  }
+
+  .hud-stats {
+    justify-content: space-around;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--border-glass);
+    gap: 0.6rem;
+  }
+
+  .hud-stat-item {
+    font-size: 0.82rem;
+  }
+
+  .challenge-card {
+    padding: 1.2rem 0.9rem;
+    border-radius: var(--radius-md);
+  }
+
+  .prompt-box {
+    padding: 0.95rem 0.85rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .prompt-text {
+    font-size: clamp(1.15rem, 3.8vw, 1.4rem);
+    line-height: 1.35;
+  }
+
+  .prompt-phonetic {
+    font-size: 0.84rem;
+    margin-top: 0.4rem;
+    word-break: break-word;
+  }
+
+  .prompt-translation {
+    font-size: 0.86rem;
+    margin-top: 0.45rem;
+  }
+
+  .audio-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .btn-audio {
+    width: 100%;
+    justify-content: center;
+    min-height: 42px;
+  }
+
+  .accent-selector {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .accent-selector select {
+    flex-grow: 1;
+    max-width: 180px;
+    min-height: 38px;
+  }
+
+  /* Mic Button Touch Friendly for HP */
+  .btn-mic {
+    width: 74px;
+    height: 74px;
+    touch-action: manipulation;
+  }
+
+  .mic-ripple {
+    width: 74px;
+    height: 74px;
+  }
+
+  @keyframes ripple {
+    0% { width: 74px; height: 74px; opacity: 0.8; }
+    100% { width: 130px; height: 130px; opacity: 0; }
+  }
+
+  .transcript-box {
+    padding: 0.8rem;
+    font-size: 0.88rem;
+  }
+
+  .alternative-input-row {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .alternative-input-row .form-control {
+    min-height: 42px;
+  }
+
+  .alternative-input-row .btn {
+    width: 100%;
+    min-height: 42px;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .btn-option {
+    padding: 0.85rem 1rem;
+    font-size: 0.92rem;
+    min-height: 48px;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  /* Evaluation on Mobile */
+  .evaluation-panel {
+    padding: 1.1rem 0.9rem;
+    margin-top: 1.3rem;
+  }
+
+  .evaluation-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .comparison-row {
+    padding: 0.85rem;
+    gap: 0.6rem;
+  }
+
+  .comp-item {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .comp-label {
+    min-width: unset;
+    font-size: 0.8rem;
+  }
+
+  .comp-val {
+    font-size: 0.9rem;
+  }
+
+  .ai-comment-card {
+    padding: 0.9rem;
+  }
+
+  /* Result screen on Mobile */
+  .result-card {
+    padding: 1.4rem 0.9rem;
+  }
+
+  .result-title {
+    font-size: 1.6rem;
+  }
+
+  .result-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+  }
+
+  .metric-card {
+    padding: 0.9rem 0.6rem;
+  }
+
+  .metric-value {
+    font-size: 1.35rem;
+  }
+
+  .submit-input-row {
+    flex-direction: column;
+  }
+
+  .canvas-actions {
+    flex-direction: column;
+  }
+
+  .canvas-actions .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 42px;
+  }
+
+  .result-action-buttons {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .result-action-buttons .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Modals on Mobile */
+  .modal-card {
+    max-width: 95vw;
+    max-height: 88vh;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-header {
+    padding: 0.9rem 1rem;
+  }
+
+  .modal-body {
+    padding: 0.9rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .leaderboard-table {
+    font-size: 0.82rem;
+  }
+
+  .leaderboard-table th, 
+  .leaderboard-table td {
+    padding: 0.55rem 0.4rem;
+  }
+}
+
+/* SMALL PHONE TWEAKS */
+
+/* EXTRA SMALL PHONE (<= 380px, e.g. iPhone SE, Fold outer) */
+@media (max-width: 380px) {
+  .navbar {
+    padding: 0.5rem 0.65rem;
+  }
+
+  .logo-badge {
+    display: none;
+  }
+
+  .hero-headline {
+    font-size: 1.45rem;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .btn-mic {
+    width: 66px;
+    height: 66px;
+  }
+
+  .result-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* MOBILE LANDSCAPE ORIENTATION (Short Height Screens) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .navbar {
+    padding: 0.4rem 1rem;
+  }
+
+  .main-layout {
+    padding: 0.9rem 0.8rem 2rem 0.8rem;
+  }
+
+  .hero-headline {
+    font-size: 1.35rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-subline {
+    font-size: 0.84rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .stats-row {
+    margin-bottom: 0.9rem;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stat-card {
+    padding: 0.5rem;
+  }
+
+  .stat-number {
+    font-size: 1.1rem;
+  }
+
+  .prompt-box {
+    padding: 0.65rem 0.85rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .prompt-text {
+    font-size: 1.1rem;
+  }
+
+  .btn-mic {
+    width: 60px;
+    height: 60px;
+  }
+
+  .mic-wrapper {
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-card {
+    max-height: 94vh;
+  }
+
+  .modal-body {
+    padding: 0.8rem;
+  }
+}
+
+/* ==========================================================================
+   AUTHENTICATION, USER PROFILE & SCORE RETENTION STYLES
+   ========================================================================== */
+
+/* Navbar User Pill */
+.user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  font-size: 0.88rem;
+  transition: all var(--trans-fast);
+}
+
+.user-pill:hover {
+  border-color: var(--primary);
+}
+
+.user-avatar {
+  font-size: 1rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-score-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.user-lvl-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.btn-nav-logout {
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #fda4af;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+  margin-left: 0.2rem;
+}
+
+.btn-nav-logout:hover {
+  background: rgba(244, 63, 94, 0.3);
+  color: #fff;
+  border-color: #f43f5e;
+}
+
+/* Auth Modal Card */
+.modal-auth-card {
+  max-width: 480px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.auth-info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  font-size: 0.86rem;
+  color: #a7f3d0;
+  margin-bottom: 1.25rem;
+  line-height: 1.45;
+}
+
+.auth-info-banner .info-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-remember-row {
+  display: flex;
+  align-items: center;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+
+.remember-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.auth-error-box {
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #fecdd3;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  animation: shake 0.3s ease;
+}
+
+.auth-action-row {
+  margin-top: 0.5rem;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Auth WhatsApp Registration Section */
+.auth-register-box {
+  margin-top: 1.3rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed var(--border-glass);
+  text-align: center;
+}
+
+.register-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.6rem;
+}
+
+.register-divider span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.register-note {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+  line-height: 1.45;
+}
+
+.btn-wa-register {
+  width: 100%;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #ffffff !important;
+  border: 1px solid rgba(37, 211, 102, 0.5);
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all var(--trans-normal);
+  cursor: pointer;
+}
+
+.btn-wa-register:hover {
+  background: linear-gradient(135deg, #2bf075, #15a594);
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.55);
+  transform: translateY(-2px);
+  color: #ffffff !important;
+}
+
+/* Auth Demo Badges */
+.auth-hints {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-glass);
+}
+
+.auth-hint-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.6rem;
+}
+
+.auth-hint-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.btn-demo-badge {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed var(--border-glass);
+  color: var(--text-primary);
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--trans-fast);
+}
+
+.btn-demo-badge:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.auth-hint-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Highlight Accumulated Score Card */
+.metric-card.highlight-accumulated {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.metric-card.highlight-accumulated .metric-value {
+  color: #fbbf24;
+  text-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
+}
+
+/* Score Retention Notice in Result */
+.score-retention-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.score-retention-notice .notice-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.score-retention-notice .notice-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  color: #d1fae5;
+  line-height: 1.4;
+}
+
+.score-retention-notice .notice-text strong {
+  color: #34d399;
+  font-size: 0.92rem;
+}
+
+/* Responsive tweaks for Auth */
+@media (max-width: 768px) {
+  .user-pill {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    gap: 0.35rem;
+  }
+
+  .user-name {
+    max-width: 75px;
+  }
+
+  .user-lvl-badge {
+    display: none;
+  }
+
+  .btn-nav-logout {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.7rem;
+  }
+}
+
+
+/* Credit by Jefri Button Badge */
+.btn-credit-jefri {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.25));
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: #e2e8f0;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all var(--trans-fast);
+  white-space: nowrap;
+}
+.btn-credit-jefri:hover {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+  transform: translateY(-1px);
+}
+
+.credit-short {
+  display: none;
+}
+.credit-full {
+  display: inline;
+}
+
+</style>
+</head>
+<body>
+  <!-- Ambient Background Glows -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="bg-glow bg-glow-3"></div>
+
+  <!-- Main Navigation -->
+  <header class="navbar" id="main-nav">
+    <div class="nav-container">
+      <div class="nav-logo" id="nav-logo-btn">
+        <span class="logo-badge">⚡ AWESOME</span>
+        <span class="logo-title">English Arena</span>
+      </div>
+
+      <!-- Desktop Nav Actions (Desktop & Tablet Wide) -->
+      <div class="nav-actions desktop-nav-actions">
+        <!-- Logged-in User Profile Badge -->
+        <div id="nav-user-profile" class="user-pill hidden">
+          <span class="user-avatar" id="nav-user-avatar">👤</span>
+          <span class="user-name" id="nav-user-name">Player</span>
+          <span class="user-score-badge" id="nav-user-score">⭐ 0 PTS</span>
+          <span class="user-lvl-badge" id="nav-user-level">Lvl 1</span>
+          <button id="btn-logout-nav" class="btn-nav-logout" title="Keluar dari akun">Keluar</button>
+        </div>
+        <!-- Member Login Button (shown when not logged in) -->
+        <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-credit-jefri" title="Kunjungi Portofolio Developer Jefri">
+          👨‍💻 Credit by Jefri ↗
+        </a>
+        <button id="btn-login-nav" class="btn btn-primary btn-sm" title="Masuk dengan Email & Password">
+          <span class="btn-icon">🔐</span> <span class="nav-btn-text">Masuk</span>
+        </button>
+        <button id="btn-leaderboard-nav" class="btn btn-secondary btn-sm" title="View Leaderboard & Memory">
+          <span class="btn-icon">🏆</span> <span class="nav-btn-text">Leaderboard</span>
+        </button>
+        <button id="btn-settings-nav" class="btn btn-icon-only" title="Settings & Integrations" aria-label="Settings">
+          ⚙️
+        </button>
+      </div>
+
+      <!-- Mobile Right Controls (Hamburger & Quick Score Badge) -->
+      <div class="mobile-nav-controls">
+        <div id="mobile-quick-score" class="mobile-user-chip hidden">
+          <span class="mobile-user-avatar">👤</span>
+          <span id="mobile-user-pts">0 PTS</span>
+        </div>
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Buka Menu Navigasi" title="Menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE SLIDE-OUT DRAWER & OVERLAY -->
+  <div class="drawer-overlay hidden" id="drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Mobile Navigation Drawer">
+    <div class="drawer-header">
+      <div class="drawer-brand">
+        <span class="logo-badge">⚡ AWESOME</span>
+        <span class="drawer-title">English Arena</span>
+      </div>
+      <button class="btn-close-drawer" id="btn-close-drawer" aria-label="Tutup Menu">&times;</button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- User Profile Card in Drawer -->
+      <div class="drawer-profile-box">
+        <div class="drawer-profile-top">
+          <div class="drawer-profile-avatar">👤</div>
+          <div class="drawer-profile-meta">
+            <div class="drawer-profile-name" id="drawer-user-name">Tamu (Belum Masuk)</div>
+            <div class="drawer-profile-badges" id="drawer-badges-row">
+              <span class="drawer-score-pill" id="drawer-user-score">⭐ 0 PTS</span>
+              <span class="drawer-lvl-pill" id="drawer-user-level">Lvl 1</span>
+            </div>
+          </div>
+        </div>
+        <button id="btn-drawer-login" class="btn btn-primary btn-block btn-drawer-action">
+          <span class="btn-icon">🔐</span> Masuk Akun Member
+        </button>
+        <button id="btn-drawer-logout" class="btn btn-danger-outline btn-block btn-drawer-action hidden">
+          🚪 Keluar dari Akun
+        </button>
+      </div>
+
+      <!-- Navigation Menu List -->
+      <nav class="drawer-nav-menu">
+        <button class="drawer-menu-btn" id="btn-drawer-leaderboard">
+          <span class="drawer-menu-icon">🏆</span>
+          <span class="drawer-menu-text">Leaderboard & Memory</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <button class="drawer-menu-btn" id="btn-drawer-settings">
+          <span class="drawer-menu-icon">⚙️</span>
+          <span class="drawer-menu-text">Pengaturan & Audio</span>
+          <span class="drawer-menu-arrow">→</span>
+        </button>
+
+        <a href="https://jefri-orcin.vercel.app/" target="_blank" rel="noopener noreferrer" class="drawer-menu-btn drawer-credit-btn">
+          <span class="drawer-menu-icon">👨‍💻</span>
+          <span class="drawer-menu-text">Portofolio Jefri (Developer)</span>
+          <span class="drawer-menu-arrow">↗</span>
+        </a>
+      </nav>
+
+      <!-- WhatsApp Registration Banner -->
+      <div class="drawer-wa-card">
+        <div class="drawer-wa-heading">💬 Hubungi Admin / Pendaftaran</div>
+        <p class="drawer-wa-sub">Mau daftar akun member baru atau tanya materi bahasa Inggris?</p>
+        <a href="https://wa.me/6282354506569?text=Halo%20Jefri,%20saya%20ingin%20mendaftar%20akun%20member%20Awesome%20English%20Arena" target="_blank" rel="noopener noreferrer" class="btn btn-wa-drawer">
+          <span class="btn-icon">💬</span> WhatsApp Jefri (082354506569)
+        </a>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <span>Awesome English Arena • Mobile Responsive</span>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-layout">
+
+    <!-- VIEW 1: HERO / LANDING SCREEN -->
+    <section id="landing-view" class="view-section active">
+      <div class="hero-content">
+        <div class="pill-badge">
+          <span class="pill-dot"></span> Powered by Awesome English Curated Resources & Smart AI
+        </div>
+        <h1 class="hero-headline">
+          Master Spoken English with <span class="gradient-text">Voice Mic & AI Teacher</span>
+        </h1>
+        <p class="hero-subline">
+          Train your accent through real-time <strong>Speech Shadowing</strong>, conquer <strong>Listening Dictation</strong>, and test your vocabulary with live feedback from <strong>Smart AI Examiner</strong>. Compete on the global <strong>Live Cloud Leaderboard</strong>!
+        </p>
+
+        <!-- Quick Stats Banner -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-number">4+</span>
+            <span class="stat-label">Learning Modes</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">🎙️ Mic</span>
+            <span class="stat-label">Speech Recognition</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">✨ AI</span>
+            <span class="stat-label">Teacher & Examiner</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number">🏆 Rank</span>
+            <span class="stat-label">Live Cloud Leaderboard</span>
+          </div>
+        </div>
+
+        <!-- Level / Difficulty Filter Bar -->
+        <div class="level-filter-container">
+          <div class="level-filter-title">
+            <span>🎯 Pilih Tingkat Kesulitan:</span>
+          </div>
+          <div class="level-filter-pills" id="level-pills-container">
+            <button type="button" class="btn-level-pill active" data-level="all">🌐 Semua Level</button>
+            <button type="button" class="btn-level-pill" data-level="Beginner">🟢 Beginner</button>
+            <button type="button" class="btn-level-pill" data-level="Intermediate">🟡 Intermediate</button>
+            <button type="button" class="btn-level-pill" data-level="Upper-Intermediate">🟠 Upper-Int</button>
+            <button type="button" class="btn-level-pill" data-level="Advanced">🔴 Advanced</button>
+          </div>
+        </div>
+
+        <!-- Mode Selection Cards -->
+        <h2 class="section-title">Select Challenge Arena</h2>
+        <div class="modes-grid" id="modes-selection-container">
+          
+          <!-- Mode 1: Shadowing & Speaking -->
+          <div class="mode-card" data-mode="shadowing" id="mode-shadowing-card">
+            <div class="mode-header">
+              <span class="mode-icon">🎙️</span>
+              <span class="mode-tag tag-popular">Recommended</span>
+            </div>
+            <h3 class="mode-title">Speaking & Shadowing</h3>
+            <p class="mode-desc">Listen to native pronunciations, speak into your mic, and receive instant phonetic match scoring + AI accent feedback.</p>
+            <div class="mode-footer">
+              <span class="mode-source">From: Shadowing & Refold Method</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="shadowing">Play Arena →</button>
+            </div>
+          </div>
+
+          <!-- Mode 2: Listening & Dictation -->
+          <div class="mode-card" data-mode="listening" id="mode-listening-card">
+            <div class="mode-header">
+              <span class="mode-icon">🎧</span>
+              <span class="mode-tag">Audio Only</span>
+            </div>
+            <h3 class="mode-title">Listening Dictation</h3>
+            <p class="mode-desc">Audio-first training inspired by Numblr & BBC 6-Minute English. Hear numbers, dates, and dialogues, then speak your answer!</p>
+            <div class="mode-footer">
+              <span class="mode-source">From: Numblr & BBC English</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="listening">Play Arena →</button>
+            </div>
+          </div>
+
+          <!-- Mode 3: Vocabulary Sentence Mining -->
+          <div class="mode-card" data-mode="vocabulary" id="mode-vocabulary-card">
+            <div class="mode-header">
+              <span class="mode-icon">🧠</span>
+              <span class="mode-tag">High-Yield</span>
+            </div>
+            <h3 class="mode-title">Vocabulary & Collocations</h3>
+            <p class="mode-desc">Anki-style sentence mining and high-frequency idioms. Guess missing words or say them out loud through your mic.</p>
+            <div class="mode-footer">
+              <span class="mode-source">From: Anki & Sentence Mining</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="vocabulary">Play Arena →</button>
+            </div>
+          </div>
+
+          <!-- Mode 4: Murphy Grammar Challenge -->
+          <div class="mode-card" data-mode="grammar" id="mode-grammar-card">
+            <div class="mode-header">
+              <span class="mode-icon">✍️</span>
+              <span class="mode-tag">Essentials</span>
+            </div>
+            <h3 class="mode-title">Murphy Grammar Quest</h3>
+            <p class="mode-desc">Master everyday conditionals, tenses, and prepositions based on Raymond Murphy's English Grammar in Use.</p>
+            <div class="mode-footer">
+              <span class="mode-source">From: English Grammar in Use</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="grammar">Play Arena →</button>
+            </div>
+          </div>
+
+          <!-- Mode 5: IELTS Academic Simulation -->
+          <div class="mode-card" data-mode="ielts" id="mode-ielts-card">
+            <div class="mode-header">
+              <span class="mode-icon">🎯</span>
+              <span class="mode-tag tag-popular">Band 7.5 - 9.0</span>
+            </div>
+            <h3 class="mode-title">IELTS Academic Simulation</h3>
+            <p class="mode-desc">Speaking Part 1 & Part 2 Cue Cards with official Band 0-9 lexical evaluation. Train academic vocabulary and high-band fluency!</p>
+            <div class="mode-footer">
+              <span class="mode-source">From: Cambridge IELTS Official</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="ielts">Play Arena →</button>
+            </div>
+          </div>
+
+          <!-- Mode 6: TOEFL iBT Simulation -->
+          <div class="mode-card" data-mode="toefl" id="mode-toefl-card">
+            <div class="mode-header">
+              <span class="mode-icon">🏛️</span>
+              <span class="mode-tag">Score 26 - 30</span>
+            </div>
+            <h3 class="mode-title">TOEFL iBT Test Quest</h3>
+            <p class="mode-desc">Integrated Academic Speaking & Listening passages inspired by university lectures across Science, Arts, and Economics.</p>
+            <div class="mode-footer">
+              <span class="mode-source">From: ETS TOEFL Official Guide</span>
+              <button class="btn btn-primary btn-sm btn-play-mode" data-mode="toefl">Play Arena →</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: GAME ARENA SCREEN -->
+    <section id="game-view" class="view-section">
+      <div class="game-container">
+        
+        <!-- Game HUD (Top Bar) -->
+        <div class="game-hud">
+          <div class="hud-left">
+            <button id="btn-quit-game" class="btn btn-ghost btn-sm" title="Exit to Menu">← Exit</button>
+            <div class="mode-pill" id="current-mode-pill">Speaking & Shadowing</div>
+            <div class="dir-pill" id="current-dir-pill" title="Arah Bahasa Aktif">🇬🇧 ➔ 🇮🇩</div>
+          </div>
+          <div class="hud-stats">
+            <div class="hud-item" title="Current Score">
+              <span class="hud-icon">⭐</span>
+              <span class="hud-val" id="hud-score">0</span>
+            </div>
+            <div class="hud-item" title="Streak Multiplier">
+              <span class="hud-icon">🔥</span>
+              <span class="hud-val" id="hud-streak">0</span>
+            </div>
+            <div class="hud-item" title="Question Progress">
+              <span class="hud-icon">🎯</span>
+              <span class="hud-val" id="hud-progress">1/5</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="challenge-card" id="challenge-card">
+          
+          <!-- Category & Difficulty Pill -->
+          <div class="challenge-meta">
+            <span class="meta-badge" id="meta-category">Shadowing Practice</span>
+            <span class="meta-badge meta-level" id="meta-difficulty">Level: Beginner</span>
+          </div>
+
+          <!-- Prompt Question / Instruction -->
+          <h3 class="challenge-instruction" id="challenge-instruction">
+            Listen to the native audio, then click the Mic button and repeat clearly:
+          </h3>
+
+          <!-- Main Challenge Display Text -->
+          <div class="prompt-box" id="prompt-box">
+            <div class="prompt-text" id="target-phrase">
+              "Could you please elaborate on that perspective?"
+            </div>
+            <div class="prompt-phonetic" id="target-phonetic">
+              /kʊd juː pliːz ɪˈlæb.ə.reɪt ɒn ðæt pəˈspek.tɪv/
+            </div>
+            <div class="prompt-translation" id="target-translation">
+              "Bisakah Anda menjelaskan lebih rinci mengenai sudut pandang tersebut?"
+            </div>
+          </div>
+
+          <!-- Audio Listening Controls -->
+          <div class="audio-controls">
+            <button id="btn-listen-audio" class="btn btn-audio" title="Listen to Native English">
+              <span class="speaker-icon">🔊</span> Listen Native Audio
+            </button>
+            <div class="accent-selector">
+              <label for="accent-select">Voice:</label>
+              <select id="accent-select" class="form-select-sm">
+                <option value="en-US">🇺🇸 US</option>
+                <option value="en-GB">🇬🇧 UK</option>
+              </select>
+            </div>
+            <div class="speed-selector">
+              <label for="arena-speed-select">Speed:</label>
+              <select id="arena-speed-select" class="form-select-sm">
+                <option value="0.6">🐢 0.60x (Slow)</option>
+                <option value="0.7">🐢 0.70x</option>
+                <option value="0.8" selected>🎯 0.80x</option>
+                <option value="0.9">⚡ 0.90x</option>
+                <option value="1.0">⚡ 1.00x</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- MICROPHONE & SPEECH INPUT AREA -->
+          <div class="mic-input-section" id="mic-section">
+            <div class="mic-wrapper">
+              <button id="btn-mic-toggle" class="btn-mic" aria-label="Toggle Microphone" title="Click to Speak">
+                <div class="mic-ripple mic-ripple-1"></div>
+                <div class="mic-ripple mic-ripple-2"></div>
+                <div class="mic-icon-svg">
+                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="22"></line>
+                  </svg>
+                </div>
+              </button>
+              <div class="mic-status-label" id="mic-status">Tap microphone to speak</div>
+            </div>
+
+            <!-- Live Speech Transcript Box -->
+            <div class="transcript-box" id="transcript-box">
+              <span class="transcript-prefix">Your Voice:</span>
+              <span class="transcript-content" id="transcript-text">Waiting for microphone input...</span>
+            </div>
+
+            <!-- Alternative Text Input (Fallback / Typing) -->
+            <div class="alternative-input-row" id="text-input-row">
+              <input type="text" id="manual-text-input" class="form-control" placeholder="Or type your English answer here...">
+              <button id="btn-submit-manual" class="btn btn-secondary">Submit</button>
+            </div>
+          </div>
+
+          <!-- Multiple Choice Container (Used for Vocab/Grammar) -->
+          <div class="options-grid hidden" id="options-container">
+            <!-- Dynamic option buttons injected here -->
+          </div>
+
+          <!-- Evaluation & AI Feedback Box -->
+          <div class="evaluation-panel hidden" id="evaluation-panel">
+            <div class="evaluation-header">
+              <div class="score-badge" id="eval-score-badge">Accuracy: 95%</div>
+              <div class="eval-verdict" id="eval-verdict">Excellent Pronunciation! 🎉</div>
+            </div>
+
+            <!-- Comparison Difference Highlight -->
+            <div class="comparison-row">
+              <div class="comp-item">
+                <span class="comp-label">Target:</span>
+                <span class="comp-val" id="comp-target">...</span>
+              </div>
+              <div class="comp-item">
+                <span class="comp-label">You Said:</span>
+                <span class="comp-val" id="comp-heard">...</span>
+              </div>
+            </div>
+
+            <!-- Cara Baca / Phonetic Pronunciation (Muncul setelah menjawab) -->
+            <div class="phonetic-reveal-box" id="phonetic-reveal-box">
+              <div class="phonetic-reveal-header">
+                <span class="phonetic-reveal-icon">🗣️</span>
+                <span class="phonetic-reveal-label">Cara Baca / Pronunciation:</span>
+              </div>
+              <div class="phonetic-reveal-val" id="eval-phonetic-text">...</div>
+            </div>
+
+            <!-- AI Teacher & Examiner Comments -->
+            <div class="ai-comment-card" id="ai-comment-card">
+              <div class="ai-card-title">
+                <span class="ai-sparkle">✨</span> Smart AI Teacher Feedback:
+              </div>
+              <div class="ai-card-body" id="ai-feedback-text">
+                Analyzing your response...
+              </div>
+            </div>
+
+            <!-- Next Question Action -->
+            <div class="eval-actions">
+              <button id="btn-next-question" class="btn btn-primary btn-block">
+                Next Challenge →
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: GAME OVER / RESULT SCREEN -->
+    <section id="result-view" class="view-section">
+      <div class="result-card">
+        <div class="result-confetti-icon">🏆</div>
+        <h2 class="result-title">Challenge Completed!</h2>
+        <p class="result-subtitle">You have successfully finished the session in <span id="res-mode-name">Speaking Arena</span>.</p>
+
+        <!-- Score Breakdown Grid -->
+        <div class="result-metrics-grid">
+          <div class="metric-card highlight">
+            <span class="metric-label">Skor Sesi Ini</span>
+            <span class="metric-value" id="res-total-score">0</span>
+          </div>
+          <div class="metric-card highlight-accumulated">
+            <span class="metric-label">Total Akumulasi Skor</span>
+            <span class="metric-value" id="res-cumulative-score">0</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Average Accuracy</span>
+            <span class="metric-value" id="res-avg-accuracy">0%</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Best Streak</span>
+            <span class="metric-value" id="res-max-streak">0🔥</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Level Member</span>
+            <span class="metric-value" id="res-level">Level 1</span>
+          </div>
+        </div>
+
+        <!-- Score Retention Notice -->
+        <div class="score-retention-notice">
+          <span class="notice-icon">💾</span>
+          <div class="notice-text">
+            <strong>Skor Anda Tersimpan Permanen!</strong>
+            <span>Progres dan total poin langsung terakumulasi ke akun Anda. Saat Anda kembali besok atau ganti perangkat, skor tetap berlanjut!</span>
+          </div>
+        </div>
+
+        <!-- Submit to Leaderboard Form -->
+        <div class="leaderboard-submit-box">
+          <h3 class="submit-box-title">Sinkronisasi ke Cloud Leaderboard</h3>
+          <p class="submit-box-desc">Skor tersimpan ke profil akumulasi, <strong>Leaderboard</strong> peringkat sesi, dan <strong>Memory Belajar</strong>.</p>
+          <div class="submit-input-row">
+            <input type="text" id="player-name-input" class="form-control" placeholder="Nama / Nickname Anda" maxlength="30" required>
+            <button id="btn-submit-leaderboard" class="btn btn-primary">
+              🚀 Simpan & Sinkronkan
+            </button>
+          </div>
+          <div id="submit-status-msg" class="status-message"></div>
+        </div>
+
+        <!-- Result Action Buttons -->
+        <div class="result-action-buttons">
+          <button id="btn-play-again" class="btn btn-primary">🔄 Play Again</button>
+          <button id="btn-view-leaderboard-from-result" class="btn btn-secondary">🏆 View Leaderboard</button>
+          <button id="btn-back-home" class="btn btn-ghost">Home Menu</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: MEMBER LOGIN & AUTHENTICATION -->
+  <div class="modal-overlay hidden" id="modal-auth">
+    <div class="modal-card modal-auth-card">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <span class="modal-icon">🔐</span>
+          <div>
+            <h3 class="modal-title">Akses Khusus Member</h3>
+            <p class="modal-subtitle">Login dengan email & password yang telah didaftarkan oleh Jefri (Admin)</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-auth" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="auth-info-banner">
+          <span class="info-icon">💡</span>
+          <span>Hanya akun member terdaftar yang dapat bermain. Skor Anda otomatis tersimpan & diakumulasikan sehingga tidak akan hilang saat lanjut besok!</span>
+        </div>
+
+        <form id="auth-form" class="auth-form">
+          <div class="form-group">
+            <label for="auth-email" class="form-label">Email Terdaftar:</label>
+            <input type="email" id="auth-email" class="form-control" placeholder="nama@email.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <label for="auth-password" class="form-label">Password:</label>
+            <input type="password" id="auth-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+
+          <div class="auth-remember-row">
+            <label class="remember-label">
+              <input type="checkbox" id="auth-remember" checked> Ingat saya (Sesi tetap tersimpan saat tutup browser)
+            </label>
+          </div>
+
+          <div id="auth-error-box" class="auth-error-box hidden"></div>
+
+          <div class="auth-action-row">
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-login">
+              <span class="btn-icon">🚀</span> Masuk & Mulai Belajar
+            </button>
+          </div>
+        </form>
+
+        <!-- Registrasi / Kontak WhatsApp Jefri -->
+        <div class="auth-register-box">
+          <div class="register-divider">
+            <span>Belum Punya Akun?</span>
+          </div>
+          <p class="register-note">Untuk pendaftaran akun baru, hubungi langsung Jefri via WhatsApp:</p>
+          <a href="https://wa.me/6282354506569?text=Halo%20Jefri,%20saya%20ingin%20mendaftar%20akun%20member%20Awesome%20English%20Arena" target="_blank" rel="noopener noreferrer" class="btn btn-wa-register">
+            <span class="btn-icon">💬</span> Hubungi Jefri (WA: 082354506569)
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LEADERBOARD & LEARNING MEMORY -->
+  <div class="modal-overlay hidden" id="modal-leaderboard">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <span class="modal-icon">🏆</span>
+          <div>
+            <h3 class="modal-title">Live Cloud Leaderboard & Memory</h3>
+            <p class="modal-subtitle">Peringkat global dan rekap rekaman latihan siswa secara real-time</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-leaderboard" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Tab Navigation -->
+        <div class="modal-tabs">
+          <button type="button" class="modal-tab-btn active" id="tab-leaderboard-btn">🏆 Top Leaderboard</button>
+          <button type="button" class="modal-tab-btn" id="tab-memory-btn">🧠 Memory Belajar</button>
+        </div>
+
+        <div class="leaderboard-toolbar">
+          <button id="btn-refresh-leaderboard" class="btn btn-secondary btn-sm">
+            🔄 Refresh Data
+          </button>
+          <span class="sync-indicator hidden" id="leaderboard-sync-status" style="display: none;"></span>
+        </div>
+        
+        <!-- Table 1: Leaderboard Rankings -->
+        <div class="table-container" id="container-leaderboard-table">
+          <table class="leaderboard-table" id="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Mode</th>
+                <th>Score</th>
+                <th>Accuracy</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody">
+              <tr>
+                <td colspan="6" class="loading-row">Loading leaderboard data...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table 2: Student Learning Memory -->
+        <div class="table-container hidden" id="container-memory-table">
+          <table class="leaderboard-table" id="memory-table">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Arah</th>
+                <th>Target Latihan</th>
+                <th>Suara / Jawaban</th>
+                <th>Akurasi</th>
+                <th>Evaluasi Guru AI</th>
+              </tr>
+            </thead>
+            <tbody id="memory-tbody">
+              <tr>
+                <td colspan="6" class="loading-row">Loading learning memory from Cloud Database...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SETTINGS & INTEGRATIONS -->
+  <div class="modal-overlay hidden" id="modal-settings">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <span class="modal-icon">⚙️</span>
+          <div>
+            <h3 class="modal-title">Configuration & Integrations</h3>
+            <p class="modal-subtitle">Setup Database Webhook & AI Engine API</p>
+          </div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-settings" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="settings-form">
+          <!-- Apps Script URL (Hidden from normal view) -->
+          <div class="form-group hidden" style="display: none;">
+            <label for="cfg-appscript-url" class="form-label">
+              Cloud Database API Webhook URL:
+            </label>
+            <input type="url" id="cfg-appscript-url" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
+            <small class="form-hint">
+              Endpoint cloud database leaderboard & memory.
+            </small>
+          </div>
+
+          <!-- AI Key -->
+          <div class="form-group">
+            <label for="cfg-gemini-key" class="form-label">
+              AI Engine API Key (Opsional untuk AI Teacher & Examiner):
+            </label>
+            <input type="password" id="cfg-gemini-key" class="form-control" placeholder="AIzaSy...">
+            <small class="form-hint">
+              Opsional: Jika dikosongkan, engine pengenal & penilai fonetik lokal bawaan tetap berjalan 100% gratis!
+            </small>
+          </div>
+
+          <!-- Preferred English Accent -->
+          <div class="form-group">
+            <label for="cfg-accent" class="form-label">Default English Accent:</label>
+            <select id="cfg-accent" class="form-control">
+              <option value="en-US">American English (en-US)</option>
+              <option value="en-GB">British English (en-GB)</option>
+            </select>
+          </div>
+
+          <!-- Select Voice Persona -->
+          <div class="form-group">
+            <label for="cfg-voice" class="form-label">Pilihan Suara Native Speaker:</label>
+            <div class="voice-picker-row" style="display: flex; gap: 8px; align-items: center;">
+              <select id="cfg-voice" class="form-control" style="flex: 1;">
+                <option value="auto">🌐 Otomatis (Sistem Rekomendasi)</option>
+                <option value="female_us">👩 Sarah / US Female (American Natural)</option>
+                <option value="male_us">👨 Alex / US Male (American Clear)</option>
+                <option value="female_uk">👩 Emma / UK Female (British Accent)</option>
+                <option value="male_uk">👨 Daniel / UK Male (BBC Style)</option>
+                <option value="female_au">👩 Matilda / AU Female (Australian)</option>
+                <option value="male_in">👨 Rishi / IN Male (Indian English)</option>
+              </select>
+              <button type="button" id="btn-test-voice" class="btn btn-secondary btn-sm" style="white-space: nowrap; padding: 8px 12px;">
+                🔊 Tes Suara
+              </button>
+            </div>
+            <small class="form-hint">Pilih karakter suara native speaker yang paling sesuai dengan preferensi telinga Anda.</small>
+          </div>
+
+          <!-- Speech Rate -->
+          <div class="form-group">
+            <label for="cfg-voice-rate" class="form-label">Kecepatan Pengucapan (Speech Speed):</label>
+            <select id="cfg-voice-rate" class="form-control">
+              <option value="0.6">🐢 0.60x - Sangat Lambat (Artikulasi Ekstra Jelas)</option>
+              <option value="0.7">🐢 0.70x - Lambat (Sangat Ramah Pemula)</option>
+              <option value="0.8" selected>🎯 0.80x - Sedang / Learner Friendly (Rekomendasi)</option>
+              <option value="0.9">⚡ 0.90x - Lancar</option>
+              <option value="1.0">⚡ 1.00x - Normal Native Speed</option>
+              <option value="1.15">🚀 1.15x - Cepat (Advanced Challenge)</option>
+            </select>
+          </div>
+
+          <!-- Question Difficulty / Level Preference -->
+          <div class="form-group">
+            <label for="cfg-level-preference" class="form-label">Tingkat Kesulitan Latihan (Level):</label>
+            <select id="cfg-level-preference" class="form-control">
+              <option value="all">🌐 Semua Tingkatan (All Levels / Campuran)</option>
+              <option value="Beginner">🟢 Beginner (Tingkat Dasar / Pemula)</option>
+              <option value="Intermediate">🟡 Intermediate (Tingkat Menengah)</option>
+              <option value="Upper-Intermediate">🟠 Upper-Intermediate (Menengah Lanjut)</option>
+              <option value="Advanced">🔴 Advanced (Tingkat Mahir)</option>
+            </select>
+            <small class="form-hint">Pilih tingkatan soal yang ingin Anda latih secara default.</small>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="btn-reset-settings">Reset Defaults</button>
+            <button type="submit" class="btn btn-primary" id="btn-save-settings">Save Settings</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Game Script -->
+  <script>
 /**
  * ============================================================================
  * AWESOME ENGLISH ARENA - GAME ENGINE & AI TUTOR
@@ -3755,3 +7227,7 @@ Do NOT return markdown code fences. Return ONLY the raw JSON string.
     window.gameInstance = new EnglishArenaGame();
   });
 })();
+
+</script>
+</body>
+</html>

@@ -174,6 +174,20 @@
           </div>
         </div>
 
+        <!-- Level / Difficulty Filter Bar -->
+        <div class="level-filter-container">
+          <div class="level-filter-title">
+            <span>🎯 Pilih Tingkat Kesulitan:</span>
+          </div>
+          <div class="level-filter-pills" id="level-pills-container">
+            <button type="button" class="btn-level-pill active" data-level="all">🌐 Semua Level</button>
+            <button type="button" class="btn-level-pill" data-level="Beginner">🟢 Beginner</button>
+            <button type="button" class="btn-level-pill" data-level="Intermediate">🟡 Intermediate</button>
+            <button type="button" class="btn-level-pill" data-level="Upper-Intermediate">🟠 Upper-Int</button>
+            <button type="button" class="btn-level-pill" data-level="Advanced">🔴 Advanced</button>
+          </div>
+        </div>
+
         <!-- Mode Selection Cards -->
         <h2 class="section-title">Select Challenge Arena</h2>
         <div class="modes-grid" id="modes-selection-container">
@@ -328,8 +342,18 @@
             <div class="accent-selector">
               <label for="accent-select">Voice:</label>
               <select id="accent-select" class="form-select-sm">
-                <option value="en-US">🇺🇸 US English</option>
-                <option value="en-GB">🇬🇧 UK English</option>
+                <option value="en-US">🇺🇸 US</option>
+                <option value="en-GB">🇬🇧 UK</option>
+              </select>
+            </div>
+            <div class="speed-selector">
+              <label for="arena-speed-select">Speed:</label>
+              <select id="arena-speed-select" class="form-select-sm">
+                <option value="0.6">🐢 0.60x (Slow)</option>
+                <option value="0.7">🐢 0.70x</option>
+                <option value="0.8" selected>🎯 0.80x</option>
+                <option value="0.9">⚡ 0.90x</option>
+                <option value="1.0">⚡ 1.00x</option>
               </select>
             </div>
           </div>
@@ -455,7 +479,7 @@
           <span class="notice-icon">💾</span>
           <div class="notice-text">
             <strong>Skor Anda Tersimpan Permanen!</strong>
-            <span>Progres dan total poin langsung terakumulasi ke akun Google Sheets. Saat Anda kembali besok atau ganti perangkat, skor tetap berlanjut!</span>
+            <span>Progres dan total poin langsung terakumulasi ke akun Anda. Saat Anda kembali besok atau ganti perangkat, skor tetap berlanjut!</span>
           </div>
         </div>
 
@@ -567,7 +591,7 @@
           <button id="btn-refresh-leaderboard" class="btn btn-secondary btn-sm">
             🔄 Refresh Data
           </button>
-          <span class="sync-indicator" id="leaderboard-sync-status">Connected to Cloud Database</span>
+          <span class="sync-indicator hidden" id="leaderboard-sync-status" style="display: none;"></span>
         </div>
         
         <!-- Table 1: Leaderboard Rankings -->
@@ -685,11 +709,26 @@
           <div class="form-group">
             <label for="cfg-voice-rate" class="form-label">Kecepatan Pengucapan (Speech Speed):</label>
             <select id="cfg-voice-rate" class="form-control">
-              <option value="0.75">🐢 0.75x - Lambat (Sangat Ramah Pemula)</option>
-              <option value="0.88">🎯 0.88x - Sedang / Learner Friendly (Rekomendasi)</option>
-              <option value="1.0" selected>⚡ 1.0x - Normal Native Speed</option>
+              <option value="0.6">🐢 0.60x - Sangat Lambat (Artikulasi Ekstra Jelas)</option>
+              <option value="0.7">🐢 0.70x - Lambat (Sangat Ramah Pemula)</option>
+              <option value="0.8" selected>🎯 0.80x - Sedang / Learner Friendly (Rekomendasi)</option>
+              <option value="0.9">⚡ 0.90x - Lancar</option>
+              <option value="1.0">⚡ 1.00x - Normal Native Speed</option>
               <option value="1.15">🚀 1.15x - Cepat (Advanced Challenge)</option>
             </select>
+          </div>
+
+          <!-- Question Difficulty / Level Preference -->
+          <div class="form-group">
+            <label for="cfg-level-preference" class="form-label">Tingkat Kesulitan Latihan (Level):</label>
+            <select id="cfg-level-preference" class="form-control">
+              <option value="all">🌐 Semua Tingkatan (All Levels / Campuran)</option>
+              <option value="Beginner">🟢 Beginner (Tingkat Dasar / Pemula)</option>
+              <option value="Intermediate">🟡 Intermediate (Tingkat Menengah)</option>
+              <option value="Upper-Intermediate">🟠 Upper-Intermediate (Menengah Lanjut)</option>
+              <option value="Advanced">🔴 Advanced (Tingkat Mahir)</option>
+            </select>
+            <small class="form-hint">Pilih tingkatan soal yang ingin Anda latih secara default.</small>
           </div>
 
           <div class="modal-footer">
